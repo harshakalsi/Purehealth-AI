@@ -95,6 +95,8 @@ cv_settings:
     - name: primary
       servers:
         - name: 10.113.5.1
+        - name: 10.113.5.2
+        - name: 10.113.5.3
   terminattr:
     disable_aaa: true
 

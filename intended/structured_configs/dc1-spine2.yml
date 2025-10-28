@@ -37,6 +37,8 @@ config_end: true
 daemon_terminattr:
   cvaddrs:
   - 10.113.5.1:9910
+  - 10.113.5.2:9910
+  - 10.113.5.3:9910
   cvauth:
     method: token
     token_file: /tmp/token

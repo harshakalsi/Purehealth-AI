@@ -37,6 +37,8 @@ config_end: true
 daemon_terminattr:
   cvaddrs:
   - 10.113.5.1:9910
+  - 10.113.5.2:9910
+  - 10.113.5.3:9910
   cvauth:
     method: token
     token_file: /tmp/token
@@ -197,7 +199,7 @@ port_channel_interfaces:
     mode: trunk
     trunk:
       allowed_vlan: 11-12,21-22
-      native_vlan: 999
+      native_vlan: 1000
 prefix_lists:
 - name: PL-LOOPBACKS-EVPN-OVERLAY
   sequence_numbers:

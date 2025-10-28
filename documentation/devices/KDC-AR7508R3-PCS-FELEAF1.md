@@ -298,14 +298,14 @@ aaa accounting commands all default start-stop group PCSAUTHGRP
 
 | CV Compression | CloudVision Servers | VRF | Authentication | Smash Excludes | Ingest Exclude | Bypass AAA |
 | -------------- | ------------------- | --- | -------------- | -------------- | -------------- | ---------- |
-| gzip | 10.113.5.1:9910 | PCS-NETINFRA-OOB | token,/tmp/token | ale,flexCounter,hardware,kni,pulse,strata | - | True |
+| gzip | 10.113.5.1:9910,10.113.5.2:9910,10.113.5.3:9910 | PCS-NETINFRA-OOB | token,/tmp/token | ale,flexCounter,hardware,kni,pulse,strata | - | True |
 
 #### TerminAttr Daemon Device Configuration
 
 ```eos
 !
 daemon TerminAttr
-   exec /usr/bin/TerminAttr -cvaddr=10.113.5.1:9910 -cvauth=token,/tmp/token -cvvrf=PCS-NETINFRA-OOB -disableaaa -smashexcludes=ale,flexCounter,hardware,kni,pulse,strata -taillogs -cvsourceintf=Management1
+   exec /usr/bin/TerminAttr -cvaddr=10.113.5.1:9910,10.113.5.2:9910,10.113.5.3:9910 -cvauth=token,/tmp/token -cvvrf=PCS-NETINFRA-OOB -disableaaa -smashexcludes=ale,flexCounter,hardware,kni,pulse,strata -taillogs -cvsourceintf=Management1
    no shutdown
 ```
 
@@ -780,7 +780,7 @@ vlan 4094
 | --------- | ----------- | ---- | ----- | ----------- | ----------- | ------------- |
 | Ethernet3 | MLAG_KDC-AR7508R3-PCS-FELEAF2_Ethernet3 | *trunk | *- | *- | *MLAG | 3 |
 | Ethernet4 | MLAG_KDC-AR7508R3-PCS-FELEAF2_Ethernet4 | *trunk | *- | *- | *MLAG | 3 |
-| Ethernet5 | SERVER_dc1-leaf1-server1_PCI1 | *trunk | *11-12,21-22 | *999 | *- | 5 |
+| Ethernet5 | SERVER_dc1-leaf1-server1_PCI1 | *trunk | *11-12,21-22 | *1000 | *- | 5 |
 | Ethernet8 | L2_dc1-leaf1c_Ethernet1 | *trunk | *5,7-8,14,17-18,303,1000,1004,1006,1009-1029,1033,1035-1038,1050-1058,1060-1062,1101-1102,1155,1157,1160-1169,1200-1206,1301-1302,1304,1309-1311,1350-1351,1501,2000,2005-2016 | *- | *- | 8 |
 
 *Inherited from Port-Channel Interface
@@ -840,7 +840,7 @@ interface Ethernet8
 | Interface | Description | Mode | VLANs | Native VLAN | Trunk Group | LACP Fallback Timeout | LACP Fallback Mode | MLAG ID | EVPN ESI |
 | --------- | ----------- | ---- | ----- | ----------- | ------------| --------------------- | ------------------ | ------- | -------- |
 | Port-Channel3 | MLAG_KDC-AR7508R3-PCS-FELEAF2_Port-Channel3 | trunk | - | - | MLAG | - | - | - | - |
-| Port-Channel5 | SERVER_dc1-leaf1-server1_Bond1 | trunk | 11-12,21-22 | 999 | - | - | - | 5 | - |
+| Port-Channel5 | SERVER_dc1-leaf1-server1_Bond1 | trunk | 11-12,21-22 | 1000 | - | - | - | 5 | - |
 | Port-Channel8 | L2_dc1-leaf1c_Port-Channel1 | trunk | 5,7-8,14,17-18,303,1000,1004,1006,1009-1029,1033,1035-1038,1050-1058,1060-1062,1101-1102,1155,1157,1160-1169,1200-1206,1301-1302,1304,1309-1311,1350-1351,1501,2000,2005-2016 | - | - | - | - | 8 | - |
 
 #### Port-Channel Interfaces Device Configuration
@@ -857,7 +857,7 @@ interface Port-Channel3
 interface Port-Channel5
    description SERVER_dc1-leaf1-server1_Bond1
    no shutdown
-   switchport trunk native vlan 999
+   switchport trunk native vlan 1000
    switchport trunk allowed vlan 11-12,21-22
    switchport mode trunk
    switchport
