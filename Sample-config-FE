@@ -6,7 +6,7 @@ username admin privilege 15 role network-admin nopassword
 username arista privilege 15 role network-admin secret sha512 $6$Enl0WfE32FthwyiJ$yTyGaEJ2uPKLU.F7314YtB7J1jrzrMi7ogXIRTEHQfLdLgKWWmr1UvNlZLN6AyuxET7G5aH3AI9OYRzxVTkB1.
 !
 daemon TerminAttr
-   exec /usr/bin/TerminAttr -cvaddr=10.113.5.1:9910 -cvauth=token,/tmp/token -cvvrf=PCS-NETINFRA-OOB -disableaaa -smashexcludes=ale,flexCounter,hardware,kni,pulse,strata -taillogs -cvsourceintf=Management1
+   exec /usr/bin/TerminAttr -cvaddr=10.113.5.1:9910,10.113.5.2:9910,10.113.5.3:9910 -cvauth=token,/tmp/token -cvvrf=PCS-NETINFRA-OOB -disableaaa -smashexcludes=ale,flexCounter,hardware,kni,pulse,strata -taillogs -cvsourceintf=Management1
    no shutdown
 !
 vlan internal order ascending range 1006 1199
@@ -16,9 +16,7 @@ transceiver qsfp default-mode 4x10G
 service routing protocols model multi-agent
 !
 hostname KDC-AR7508R3-PCS-FELEAF1
-ip domain lookup vrf PCS-NETINFRA-OOB
-
- source-interface Management1
+ip domain lookup vrf PCS-NETINFRA-OOB source-interface Management1
 ip name-server vrf PCS-NETINFRA-OOB 10.113.200.12
 ip name-server vrf PCS-NETINFRA-OOB 10.118.200.12
 !
@@ -26,30 +24,285 @@ spanning-tree mode mstp
 no spanning-tree vlan-id 4093-4094
 spanning-tree mst 0 priority 4096
 !
-vlan 11
-   name PC-Shared-INT_VLAN11
+vlan 5
+   name PureCS_Network_Infra_nodes_OOB
 !
-vlan 12
-   name VRF10_VLAN12
+vlan 7
+   name MPLS_Outside_DC_firewall
+!
+vlan 8
+   name Internet_HIS_VDOM_outside_DC_Fir
+!
+vlan 14
+   name PURE_VRF_MPLS
 !
 vlan 17
-   name L2_VLAN17_MPLS
+   name PCS_AAN_MPLS
 !
 vlan 18
-   name L2_VLAN17_CPE
+   name EMAC-VLAN-For-Internet
 !
-vlan 21
-   name VRF11_VLAN21
+vlan 303
+   name SEHA_VPLS_HCF
 !
-vlan 22
-   name VRF11_VLAN22
+vlan 1000
+   name native_vlan
+!
+vlan 1004
+   name PC-MGMT-MPLS
+!
+vlan 1006
+   name MPLS_PC-MPLS_VDOM_outside_DC_FW
+!
+vlan 1009
+   name Internet_PC-MGMT_VDOM_Outside_DC
+!
+vlan 1010
+   name Internet_PC-WLD_VDOM_outside_DC_
+!
+vlan 1011
+   name PC-Shared-INT
+!
+vlan 1012
+   name iDRAC-MPLS
+!
+vlan 1013
+   name iDRAC-Internet
+!
+vlan 1014
+   name PC-WLD-MPLS
+!
+vlan 1015
+   name MPLS_Intranet_VDOM_Inside_P_FW
+!
+vlan 1016
+   name Peri-shared-internetVDOM
+!
+vlan 1017
+   name MPLS_Intranet_VDOM_Outside_P_FW_
+!
+vlan 1018
+   name Internet_Internet_VDOM_Outside_P
+!
+vlan 1019
+   name PC-Shared-MPLS
+!
+vlan 1020
+   name KDC-iDRAC-Pcloud
+!
+vlan 1021
+   name pc-mgm-mgmt
+!
+vlan 1022
+   name pcs-mgm-vmotion
+!
+vlan 1023
+   name pcs-mgm-vSAN
+!
+vlan 1024
+   name pcs-mgm-NSX-T_Host_Overlay
+!
+vlan 1025
+   name pcs-mgm-Edge_Uplink_1
+!
+vlan 1026
+   name pcs-mgm-Edge_Uplink_2
+!
+vlan 1027
+   name pcs-mgm-Edge_Overlay
+!
+vlan 1028
+   name ESXi-Host-MGMT
+!
+vlan 1029
+   name PC_BACKUP
+!
+vlan 1033
+   name Seha_CRS_Rep
+!
+vlan 1035
+   name Seha_CRS_CROOM
+!
+vlan 1036
+   name VAULT-OOB
+!
+vlan 1037
+   name FlexAMgmt
+!
+vlan 1038
+   name pcs-mgm-ReplicationVMs
+!
+vlan 1050
+   name pcs-wld-oob
+!
+vlan 1051
+   name pcs-wld-vmotion
+!
+vlan 1052
+   name pcs-wld-vSAN
+!
+vlan 1053
+   name pcs-wld-NSX-T_Host_Overlay
+!
+vlan 1054
+   name pcs-wld-Edge_Uplink_1
+!
+vlan 1055
+   name pcs-wld-Edge_Uplink_2
+!
+vlan 1056
+   name pcs-wld-Edge_Overlay
+!
+vlan 1057
+   name Nutanix-AHV-CVM
+!
+vlan 1058
+   name PCS_CSE_SERVICES_ORG
+!
+vlan 1060
+   name pcs-wld-vcda
+!
+vlan 1061
+   name pcs-wld-Tenant1-Internet-U1
+!
+vlan 1062
+   name pcs-wld-Tenant1-MPLS-U1
+!
+vlan 1101
+   name pcs-idrac-management
+!
+vlan 1102
+   name pcs-esxi-management
+!
+vlan 1155
+   name pcs-his-backups
+!
+vlan 1157
+   name VLAN1157
+!
+vlan 1160
+   name powerstore_NSF
+!
+vlan 1161
+   name iSCSI_ControllerA
+!
+vlan 1162
+   name iSCSI_ControllerB
+!
+vlan 1163
+   name PC_ECS_MGMT
+!
+vlan 1164
+   name PC_ECS_REPLICATION
+!
+vlan 1165
+   name PC_ECS_DATA
+!
+vlan 1166
+   name Dawak_Pura_Callcenter-SBCs
+!
+vlan 1167
+   name Dawak_Pura_Callcenter-Edge
+!
+vlan 1168
+   name PCS_DAWAK_CC_OOB_IDRAC
+!
+vlan 1169
+   name VLAN1169
+!
+vlan 1200
+   name PC-DR_Shared_Domain_Zone
+!
+vlan 1201
+   name PC-DR_Shared_MonBCKUP_Zone
+!
+vlan 1202
+   name PC_Shared_EndSecurity_Zone
+!
+vlan 1203
+   name PC_Shared_SOC_Zone
+!
+vlan 1204
+   name PC-DR_Shared_JumpInfra_Zone
+!
+vlan 1205
+   name PC_Shared_JumpExt_Zone
+!
+vlan 1206
+   name VAULT-DMZ
+!
+vlan 1301
+   name MPLS_NSOC
+!
+vlan 1302
+   name SEHA_VPLS
+!
+vlan 1304
+   name Connected_AL_AIN_MALAFI_MPLS
+!
+vlan 1309
+   name SEHA_CRS_Rep
+!
+vlan 1310
+   name SEHA_CRS_CLEANROOM
+!
+vlan 1311
+   name Riayati_MPLS
+!
+vlan 1350
+   name SD_WAN_TRANSIT
+!
+vlan 1351
+   name SD_WAN_INTERNET
+!
+vlan 1501
+   name mss_and_anycast_test
+!
+vlan 2000
+   name DC_DC_L2
+!
+vlan 2005
+   name VAULT-OOB
+!
+vlan 2006
+   name FlexAMgmt
+!
+vlan 2007
+   name Nutanix-AHV-CVM
+!
+vlan 2008
+   name VM-NuatanixProd
+!
+vlan 2009
+   name Veritas-Daman-Rep
+!
+vlan 2010
+   name Veritas-SEHA-Rep
+!
+vlan 2011
+   name Veritas-Tenant-Rep
+!
+vlan 2012
+   name Veritas-Daman-Mgmt
+!
+vlan 2013
+   name Veritas-SEHA-Mgmt
+!
+vlan 2014
+   name Scan-VMs
+!
+vlan 2015
+   name JS-VLAN
+!
+vlan 2016
+   name NTP-VLAN
 !
 vlan 3009
-   name MLAG_L3_VRF_PC-Shared-INT
+   name MLAG_L3_VRF_PCS-MPLS-INTRANET
    trunk group MLAG
 !
 vlan 3010
-   name MLAG_L3_VRF_VRF11
+   name MLAG_L3_VRF_PCS-SHARED-INTERNET
    trunk group MLAG
 !
 vlan 4093
@@ -60,11 +313,11 @@ vlan 4094
    name MLAG
    trunk group MLAG
 !
+vrf instance PCS-MPLS-INTRANET
+!
 vrf instance PCS-NETINFRA-OOB
 !
-vrf instance PC-Shared-INT
-!
-vrf instance VRF11
+vrf instance PCS-SHARED-INTERNET
 !
 management api http-commands
    protocol https
@@ -72,6 +325,21 @@ management api http-commands
    !
    vrf PCS-NETINFRA-OOB
       no shutdown
+!
+tacacs-server host 10.101.100.50 vrf PCS-NETINFRA-OOB key 7 0230405D350E187306465A1D16
+tacacs-server host 10.100.100.50 vrf PCS-NETINFRA-OOB key 7 03321F0D3807361E04014A0104
+!
+aaa group server tacacs+ PCSAUTHGRP
+   server 10.101.100.50 vrf PCS-NETINFRA-OOB
+   server 10.100.100.50 vrf PCS-NETINFRA-OOB
+!
+aaa authentication login default group PCSAUTHGRP local
+aaa authentication login console local group PCSAUTHGRP
+aaa authentication enable default group PCSAUTHGRP local
+aaa authorization exec default group PCSAUTHGRP local
+aaa authorization commands all default group PCSAUTHGRP local
+aaa accounting exec default start-stop group PCSAUTHGRP local
+aaa accounting commands all default start-stop group PCSAUTHGRP
 !
 interface Port-Channel3
    description MLAG_KDC-AR7508R3-PCS-FELEAF2_Port-Channel3
@@ -83,7 +351,7 @@ interface Port-Channel3
 interface Port-Channel5
    description SERVER_dc1-leaf1-server1_Bond1
    no shutdown
-   switchport trunk native vlan 4092
+   switchport trunk native vlan 1000
    switchport trunk allowed vlan 11-12,21-22
    switchport mode trunk
    switchport
@@ -93,7 +361,7 @@ interface Port-Channel5
 interface Port-Channel8
    description L2_dc1-leaf1c_Port-Channel1
    no shutdown
-   switchport trunk allowed vlan 11-12,17-18,21-22
+   switchport trunk allowed vlan 5,7-8,14,17-18,303,1000,1004,1006,1009-1029,1033,1035-1038,1050-1058,1060-1062,1101-1102,1155,1157,1160-1169,1200-1206,1301-1302,1304,1309-1311,1350-1351,1501,2000,2005-2016
    switchport mode trunk
    switchport
    mlag 8
@@ -101,14 +369,14 @@ interface Port-Channel8
 interface Ethernet1
    description P2P_dc1-spine1_Ethernet1
    no shutdown
-   mtu 1500
+   mtu 9214
    no switchport
    ip address 10.255.255.1/31
 !
 interface Ethernet2
    description P2P_dc1-spine2_Ethernet1
    no shutdown
-   mtu 1500
+   mtu 9214
    no switchport
    ip address 10.255.255.3/31
 !
@@ -142,98 +410,205 @@ interface Loopback1
    no shutdown
    ip address 10.118.1.3/32
 !
-interface Loopback10
-   description DIAG_VRF_PC-Shared-INT
-   no shutdown
-   vrf PC-Shared-INT
-   ip address 10.118.1.131/32
-!
-interface Loopback11
-   description DIAG_VRF_VRF11
-   no shutdown
-   vrf VRF11
-   ip address 10.255.11.3/32
-!
 interface Management1
    description OOB_MANAGEMENT
    no shutdown
    vrf PCS-NETINFRA-OOB
    ip address 10.118.5.16/24
 !
-interface Vlan11
-   description PC-Shared-INT_VLAN11
+interface Vlan1004
+   description PC-MGMT-MPLS
    no shutdown
-   vrf PC-Shared-INT
-   ip address virtual 10.10.11.1/24
+   mtu 9100
+   vrf PCS-MPLS-INTRANET
+   ip address 10.118.2.129/29
+   ip virtual-router address 10.118.2.134
 !
-interface Vlan12
-   description VRF10_VLAN12
+interface Vlan1006
+   description PC-MPLS
    no shutdown
-   vrf PC-Shared-INT
-   ip address virtual 10.10.12.1/24
+   mtu 9100
+   vrf PCS-MPLS-INTRANET
+   ip address 10.118.2.20/29
+   ip virtual-router address 10.118.2.22
 !
-interface Vlan21
-   description VRF11_VLAN21
+interface Vlan1009
+   description PC-MGMT-INT
    no shutdown
-   vrf VRF11
-   ip address virtual 10.10.21.1/24
+   mtu 9100
+   vrf PCS-SHARED-INTERNET
+   ip address 10.118.2.28/29
+   ip virtual-router address 10.118.2.30
 !
-interface Vlan22
-   description VRF11_VLAN22
+interface Vlan1010
+   description PC-WLD-INT
    no shutdown
-   vrf VRF11
-   ip address virtual 10.10.22.1/24
+   mtu 9100
+   vrf PCS-SHARED-INTERNET
+   ip address 10.118.2.36/29
+   ip virtual-router address 10.118.2.38
+!
+interface Vlan1011
+   description PC-Shared-INT
+   no shutdown
+   mtu 9100
+   vrf PCS-SHARED-INTERNET
+   ip address 10.118.2.52/29
+   ip virtual-router address 10.118.2.54
+!
+interface Vlan1012
+   description KDC iDrac-to-MPLS
+   no shutdown
+   mtu 9100
+   vrf PCS-MPLS-INTRANET
+   ip address 10.118.2.60/29
+   ip virtual-router address 10.118.2.62
+!
+interface Vlan1013
+   description KDC iDRAC-to-Internet
+   no shutdown
+   mtu 9100
+   vrf PCS-SHARED-INTERNET
+   ip address 10.118.2.100/29
+   ip virtual-router address 10.118.2.102
+!
+interface Vlan1014
+   description PC-WLD-MPLS
+   no shutdown
+   mtu 9100
+   vrf PCS-MPLS-INTRANET
+   ip address 10.118.2.140/29
+   ip virtual-router address 10.118.2.142
+!
+interface Vlan1015
+   description MPLS_Intranet_VDOM_Inside_P_FW
+   no shutdown
+   mtu 9100
+   vrf PCS-MPLS-INTRANET
+   ip address 10.118.2.68/29
+   ip virtual-router address 10.118.2.70
+!
+interface Vlan1016
+   description Peri-shared-internetVDOM
+   no shutdown
+   mtu 9100
+   vrf PCS-SHARED-INTERNET
+   ip address 10.118.2.76/29
+   ip virtual-router address 10.118.2.78
+!
+interface Vlan1019
+   description PC-Shared-MPLS
+   no shutdown
+   mtu 9100
+   vrf PCS-MPLS-INTRANET
+   ip address 10.118.2.116/29
+   ip virtual-router address 10.118.2.118
+!
+interface Vlan1022
+   description vMotion
+   no shutdown
+   mtu 9100
+   vrf PCS-MPLS-INTRANET
+   ip address 10.118.22.252/24
+   ip virtual-router address 10.118.22.254
+!
+interface Vlan1023
+   description vSAN
+   no shutdown
+   mtu 9100
+   vrf PCS-MPLS-INTRANET
+   ip address 10.118.23.252/24
+   ip virtual-router address 10.118.23.254
+!
+interface Vlan1024
+   description Management Host TEPs
+   no shutdown
+   mtu 9100
+   vrf PCS-MPLS-INTRANET
+   ip address 10.118.24.252/24
+   ip virtual-router address 10.118.24.254
+!
+interface Vlan1027
+   description Management Edge TEPs
+   no shutdown
+   mtu 9100
+   vrf PCS-MPLS-INTRANET
+   ip address 10.118.27.252/24
+   ip virtual-router address 10.118.27.254
+!
+interface Vlan1051
+   description Resource vMotion
+   no shutdown
+   mtu 9100
+   vrf PCS-MPLS-INTRANET
+   ip address 10.118.51.252/24
+   ip virtual-router address 10.118.51.254
+!
+interface Vlan1053
+   description Resource Host TEPs
+   no shutdown
+   mtu 9100
+   vrf PCS-MPLS-INTRANET
+   ip address 10.118.53.252/24
+   ip virtual-router address 10.118.53.254
+!
+interface Vlan1056
+   description Resource Edge TEPs
+   no shutdown
+   mtu 9100
+   vrf PCS-MPLS-INTRANET
+   ip address 10.118.56.252/24
+   ip virtual-router address 10.118.56.254
 !
 interface Vlan3009
-   description MLAG_L3_VRF_PC-Shared-INT
+   description MLAG_L3_VRF_PCS-MPLS-INTRANET
    no shutdown
-   mtu 1500
-   vrf PC-Shared-INT
+   mtu 9214
+   vrf PCS-MPLS-INTRANET
    ip address 10.118.4.224/31
 !
 interface Vlan3010
-   description MLAG_L3_VRF_VRF11
+   description MLAG_L3_VRF_PCS-SHARED-INTERNET
    no shutdown
-   mtu 1500
-   vrf VRF11
+   mtu 9214
+   vrf PCS-SHARED-INTERNET
    ip address 10.118.4.224/31
 !
 interface Vlan4093
    description MLAG_L3
    no shutdown
-   mtu 1500
-   ip address 10.118.4.246/31
+   mtu 9214
+   ip address 10.118.4.224/31
 !
 interface Vlan4094
    description MLAG
    no shutdown
-   mtu 1500
+   mtu 9214
    no autostate
-   ip address 10.118.4.254/31
+   ip address 10.118.4.248/31
 !
 interface Vxlan1
    description KDC-AR7508R3-PCS-FELEAF1_VTEP
    vxlan source-interface Loopback1
-   vxlan virtual-router encapsulation mac-address mlag-system-id
-   vxlan udp-port 4789
 !
 ip virtual-router mac-address 00:1c:73:00:00:99
 !
-ip address virtual source-nat vrf PC-Shared-INT address 10.118.1.131
-ip address virtual source-nat vrf VRF11 address 10.255.11.3
-!
 ip routing
+ip routing vrf PCS-MPLS-INTRANET
 no ip routing vrf PCS-NETINFRA-OOB
-ip routing vrf PC-Shared-INT
-ip routing vrf VRF11
+ip routing vrf PCS-SHARED-INTERNET
+!
+ip prefix-list PL-LOOPBACKS-EVPN-OVERLAY
+   seq 10 permit 10.118.0.0/24 eq 32
+   seq 20 permit 10.118.1.0/25 eq 32
 !
 ip prefix-list PL-MLAG-PEER-VRFS
-   seq 10 permit 10.118.4.255/31
+   seq 10 permit 10.118.4.224/31
 !
 mlag configuration
-   domain-id KDC_FE_LEAF
+   domain-id FE_LEAF
    local-interface Vlan4094
-   peer-address 10.118.4.255
+   peer-address 10.118.4.249
    peer-link Port-Channel3
    reload-delay mlag 300
    reload-delay non-mlag 330
@@ -255,51 +630,32 @@ route-map RM-MLAG-PEER-IN permit 10
    description Make routes learned over MLAG Peer-link less preferred on spines to ensure optimal routing
    set origin incomplete
 !
+router bfd
+   multihop interval 300 min-rx 300 multiplier 3
+!
 router bgp 65371
    router-id 10.118.0.3
    no bgp default ipv4-unicast
    maximum-paths 4 ecmp 4
+   neighbor EVPN-OVERLAY-PEERS peer group
+   neighbor EVPN-OVERLAY-PEERS update-source Loopback0
+   neighbor EVPN-OVERLAY-PEERS bfd
+   neighbor EVPN-OVERLAY-PEERS ebgp-multihop 3
+   neighbor EVPN-OVERLAY-PEERS send-community
+   neighbor EVPN-OVERLAY-PEERS maximum-routes 1000
+   neighbor IPv4-UNDERLAY-PEERS peer group
+   neighbor IPv4-UNDERLAY-PEERS send-community
+   neighbor IPv4-UNDERLAY-PEERS maximum-routes 12000
    neighbor MLAG-IPv4-UNDERLAY-PEER peer group
    neighbor MLAG-IPv4-UNDERLAY-PEER remote-as 65371
    neighbor MLAG-IPv4-UNDERLAY-PEER next-hop-self
    neighbor MLAG-IPv4-UNDERLAY-PEER description KDC-AR7508R3-PCS-FELEAF2
    neighbor MLAG-IPv4-UNDERLAY-PEER route-map RM-MLAG-PEER-IN in
-   neighbor MLAG-IPv4-UNDERLAY-PEER password 7 4b21pAdCvWeAqpcKDFMdWw==
    neighbor MLAG-IPv4-UNDERLAY-PEER send-community
    neighbor MLAG-IPv4-UNDERLAY-PEER maximum-routes 12000
    neighbor 10.118.4.225 peer group MLAG-IPv4-UNDERLAY-PEER
    neighbor 10.118.4.225 description KDC-AR7508R3-PCS-FELEAF2_Vlan4093
    redistribute connected route-map RM-CONN-2-BGP
-   !
-   vlan 11
-      rd 10.118.0.3:10011
-      route-target both 10011:10011
-      redistribute learned
-   !
-   vlan 12
-      rd 10.118.0.3:10012
-      route-target both 10012:10012
-      redistribute learned
-   !
-   vlan 17
-      rd 10.118.0.3:10017
-      route-target both 10017:10017
-      redistribute learned
-   !
-   vlan 18
-      rd 10.118.0.3:10018
-      route-target both 10018:10018
-      redistribute learned
-   !
-   vlan 21
-      rd 10.118.0.3:10021
-      route-target both 10021:10021
-      redistribute learned
-   !
-   vlan 22
-      rd 10.118.0.3:10022
-      route-target both 10022:10022
-      redistribute learned
    !
    address-family evpn
       neighbor EVPN-OVERLAY-PEERS activate
@@ -309,18 +665,24 @@ router bgp 65371
       neighbor IPv4-UNDERLAY-PEERS activate
       neighbor MLAG-IPv4-UNDERLAY-PEER activate
    !
-   vrf PC-Shared-INT
+   vrf PCS-MPLS-INTRANET
       rd 10.118.0.3:10
+      route-target import evpn 10:10
+      route-target export evpn 10:10
       router-id 10.118.0.3
       neighbor 10.118.4.225 peer group MLAG-IPv4-UNDERLAY-PEER
       neighbor 10.118.4.225 description KDC-AR7508R3-PCS-FELEAF2_Vlan3009
       redistribute connected route-map RM-CONN-2-BGP-VRFS
    !
-   vrf VRF11
+   vrf PCS-SHARED-INTERNET
       rd 10.118.0.3:11
+      route-target import evpn 11:11
+      route-target export evpn 11:11
       router-id 10.118.0.3
       neighbor 10.118.4.225 peer group MLAG-IPv4-UNDERLAY-PEER
       neighbor 10.118.4.225 description KDC-AR7508R3-PCS-FELEAF2_Vlan3010
       redistribute connected route-map RM-CONN-2-BGP-VRFS
+!
+ip tacacs vrf PCS-NETINFRA-OOB source-interface Management1
 !
 end
