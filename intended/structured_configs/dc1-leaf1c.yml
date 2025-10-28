@@ -1,0 +1,438 @@
+aaa_accounting:
+  exec:
+    default:
+      type: start-stop
+      methods:
+      - method: group
+        group: PCSAUTHGRP local
+  commands:
+    default:
+    - commands: all
+      type: start-stop
+      methods:
+      - method: group
+        group: PCSAUTHGRP
+aaa_authentication:
+  login:
+    default: group PCSAUTHGRP local
+    console: local group PCSAUTHGRP
+  enable:
+    default: group PCSAUTHGRP local
+aaa_authorization:
+  exec:
+    default: group PCSAUTHGRP local
+  commands:
+    all_default: group PCSAUTHGRP local
+aaa_root:
+  disabled: true
+aaa_server_groups:
+- name: PCSAUTHGRP
+  type: tacacs+
+  servers:
+  - server: 10.101.100.50
+    vrf: PCS-NETINFRA-OOB
+  - server: 10.100.100.50
+    vrf: PCS-NETINFRA-OOB
+config_end: true
+daemon_terminattr:
+  cvaddrs:
+  - 10.113.5.1:9910
+  - 10.113.5.2:9910
+  - 10.113.5.3:9910
+  cvauth:
+    method: token
+    token_file: /tmp/token
+  cvsourceintf: Management1
+  cvvrf: PCS-NETINFRA-OOB
+  disable_aaa: true
+  smashexcludes: ale,flexCounter,hardware,kni,pulse,strata
+enable_password:
+  disabled: true
+ethernet_interfaces:
+- name: Ethernet1
+  description: L2_KDC-AR7508R3-PCS-FELEAF1_Ethernet8
+  shutdown: false
+  channel_group:
+    id: 1
+    mode: active
+  peer: KDC-AR7508R3-PCS-FELEAF1
+  peer_interface: Ethernet8
+  peer_type: l3leaf
+- name: Ethernet2
+  description: L2_KDC-AR7508R3-PCS-FELEAF2_Ethernet8
+  shutdown: false
+  channel_group:
+    id: 1
+    mode: active
+  peer: KDC-AR7508R3-PCS-FELEAF2
+  peer_interface: Ethernet8
+  peer_type: l3leaf
+- name: Ethernet5
+  description: SERVER_dc1-leaf1-server1_iLO
+  shutdown: false
+  spanning_tree_portfast: edge
+  peer: dc1-leaf1-server1
+  peer_interface: iLO
+  peer_type: server
+  switchport:
+    enabled: true
+    mode: access
+    access_vlan: 11
+hostname: dc1-leaf1c
+ip_domain_lookup:
+  source_interfaces:
+  - name: Management1
+    vrf: PCS-NETINFRA-OOB
+ip_igmp_snooping:
+  globally_enabled: true
+ip_name_servers:
+- ip_address: 10.113.200.12
+  vrf: PCS-NETINFRA-OOB
+- ip_address: 10.118.200.12
+  vrf: PCS-NETINFRA-OOB
+ip_tacacs_source_interfaces:
+- name: Management1
+  vrf: PCS-NETINFRA-OOB
+local_users:
+- name: admin
+  privilege: 15
+  role: network-admin
+  no_password: true
+- name: arista
+  privilege: 15
+  role: network-admin
+  sha512_password: $6$Enl0WfE32FthwyiJ$yTyGaEJ2uPKLU.F7314YtB7J1jrzrMi7ogXIRTEHQfLdLgKWWmr1UvNlZLN6AyuxET7G5aH3AI9OYRzxVTkB1.
+management_api_http:
+  enable_https: true
+  enable_vrfs:
+  - name: PCS-NETINFRA-OOB
+management_interfaces:
+- name: Management1
+  description: OOB_MANAGEMENT
+  shutdown: false
+  vrf: PCS-NETINFRA-OOB
+  ip_address: 10.118.5.18/24
+  type: oob
+  gateway: 10.118.5.254
+metadata:
+  is_deployed: true
+  platform: vEOS-lab
+  fabric_name: FABRIC
+ntp:
+  servers:
+  - name: 10.113.200.3
+    preferred: true
+    vrf: PCS-NETINFRA-OOB
+  - name: 10.118.200.3
+    vrf: PCS-NETINFRA-OOB
+port_channel_interfaces:
+- name: Port-Channel1
+  description: L2_FE_LEAF_Port-Channel8
+  shutdown: false
+  switchport:
+    enabled: true
+    mode: trunk
+    trunk:
+      allowed_vlan: 5,7-8,14,17-18,303,1000,1004,1006,1009-1029,1033,1035-1038,1050-1058,1060-1062,1101-1102,1155,1157,1160-1169,1200-1206,1301-1302,1304,1309-1311,1350-1351,1501,2000,2005-2016
+service_routing_protocols_model: multi-agent
+spanning_tree:
+  mode: mstp
+  mst_instances:
+  - id: '0'
+    priority: 32768
+static_routes:
+- vrf: PCS-NETINFRA-OOB
+  prefix: 0.0.0.0/0
+  next_hop: 10.118.5.254
+tacacs_servers:
+  hosts:
+  - host: 10.101.100.50
+    vrf: PCS-NETINFRA-OOB
+    key: 0230405D350E187306465A1D16
+  - host: 10.100.100.50
+    vrf: PCS-NETINFRA-OOB
+    key: 03321F0D3807361E04014A0104
+  policy_unknown_mandatory_attribute_ignore: false
+transceiver_qsfp_default_mode_4x10: true
+vlan_internal_order:
+  allocation: ascending
+  range:
+    beginning: 1006
+    ending: 1199
+vlans:
+- id: 1004
+  name: PC-MGMT-MPLS
+  tenant: TENANT1
+- id: 1006
+  name: MPLS_PC-MPLS_VDOM_outside_DC_FW
+  tenant: TENANT1
+- id: 1012
+  name: iDRAC-MPLS
+  tenant: TENANT1
+- id: 1014
+  name: PC-WLD-MPLS
+  tenant: TENANT1
+- id: 1015
+  name: MPLS_Intranet_VDOM_Inside_P_FW
+  tenant: TENANT1
+- id: 1019
+  name: PC-Shared-MPLS
+  tenant: TENANT1
+- id: 1022
+  name: pcs-mgm-vmotion
+  tenant: TENANT1
+- id: 1023
+  name: pcs-mgm-vSAN
+  tenant: TENANT1
+- id: 1024
+  name: pcs-mgm-NSX-T_Host_Overlay
+  tenant: TENANT1
+- id: 1027
+  name: pcs-mgm-Edge_Overlay
+  tenant: TENANT1
+- id: 1051
+  name: pcs-wld-vmotion
+  tenant: TENANT1
+- id: 1053
+  name: pcs-wld-NSX-T_Host_Overlay
+  tenant: TENANT1
+- id: 1056
+  name: pcs-wld-Edge_Overlay
+  tenant: TENANT1
+- id: 1009
+  name: Internet_PC-MGMT_VDOM_Outside_DC
+  tenant: TENANT1
+- id: 1010
+  name: Internet_PC-WLD_VDOM_outside_DC_
+  tenant: TENANT1
+- id: 1011
+  name: PC-Shared-INT
+  tenant: TENANT1
+- id: 1013
+  name: iDRAC-Internet
+  tenant: TENANT1
+- id: 1016
+  name: Peri-shared-internetVDOM
+  tenant: TENANT1
+- id: 5
+  name: PureCS_Network_Infra_nodes_OOB
+  tenant: TENANT1
+- id: 7
+  name: MPLS_Outside_DC_firewall
+  tenant: TENANT1
+- id: 8
+  name: Internet_HIS_VDOM_outside_DC_Fir
+  tenant: TENANT1
+- id: 14
+  name: PURE_VRF_MPLS
+  tenant: TENANT1
+- id: 17
+  name: PCS_AAN_MPLS
+  tenant: TENANT1
+- id: 18
+  name: EMAC-VLAN-For-Internet
+  tenant: TENANT1
+- id: 303
+  name: SEHA_VPLS_HCF
+  tenant: TENANT1
+- id: 1000
+  name: native_vlan
+  tenant: TENANT1
+- id: 1017
+  name: MPLS_Intranet_VDOM_Outside_P_FW_
+  tenant: TENANT1
+- id: 1018
+  name: Internet_Internet_VDOM_Outside_P
+  tenant: TENANT1
+- id: 1020
+  name: KDC-iDRAC-Pcloud
+  tenant: TENANT1
+- id: 1021
+  name: pc-mgm-mgmt
+  tenant: TENANT1
+- id: 1025
+  name: pcs-mgm-Edge_Uplink_1
+  tenant: TENANT1
+- id: 1026
+  name: pcs-mgm-Edge_Uplink_2
+  tenant: TENANT1
+- id: 1028
+  name: ESXi-Host-MGMT
+  tenant: TENANT1
+- id: 1029
+  name: PC_BACKUP
+  tenant: TENANT1
+- id: 1033
+  name: Seha_CRS_Rep
+  tenant: TENANT1
+- id: 1035
+  name: Seha_CRS_CROOM
+  tenant: TENANT1
+- id: 1036
+  name: VAULT-OOB
+  tenant: TENANT1
+- id: 1037
+  name: FlexAMgmt
+  tenant: TENANT1
+- id: 1038
+  name: pcs-mgm-ReplicationVMs
+  tenant: TENANT1
+- id: 1050
+  name: pcs-wld-oob
+  tenant: TENANT1
+- id: 1052
+  name: pcs-wld-vSAN
+  tenant: TENANT1
+- id: 1054
+  name: pcs-wld-Edge_Uplink_1
+  tenant: TENANT1
+- id: 1055
+  name: pcs-wld-Edge_Uplink_2
+  tenant: TENANT1
+- id: 1057
+  name: Nutanix-AHV-CVM
+  tenant: TENANT1
+- id: 1058
+  name: PCS_CSE_SERVICES_ORG
+  tenant: TENANT1
+- id: 1060
+  name: pcs-wld-vcda
+  tenant: TENANT1
+- id: 1061
+  name: pcs-wld-Tenant1-Internet-U1
+  tenant: TENANT1
+- id: 1062
+  name: pcs-wld-Tenant1-MPLS-U1
+  tenant: TENANT1
+- id: 1101
+  name: pcs-idrac-management
+  tenant: TENANT1
+- id: 1102
+  name: pcs-esxi-management
+  tenant: TENANT1
+- id: 1155
+  name: pcs-his-backups
+  tenant: TENANT1
+- id: 1157
+  name: VLAN1157
+  tenant: TENANT1
+- id: 1160
+  name: powerstore_NSF
+  tenant: TENANT1
+- id: 1161
+  name: iSCSI_ControllerA
+  tenant: TENANT1
+- id: 1162
+  name: iSCSI_ControllerB
+  tenant: TENANT1
+- id: 1163
+  name: PC_ECS_MGMT
+  tenant: TENANT1
+- id: 1164
+  name: PC_ECS_REPLICATION
+  tenant: TENANT1
+- id: 1165
+  name: PC_ECS_DATA
+  tenant: TENANT1
+- id: 1166
+  name: Dawak_Pura_Callcenter-SBCs
+  tenant: TENANT1
+- id: 1167
+  name: Dawak_Pura_Callcenter-Edge
+  tenant: TENANT1
+- id: 1168
+  name: PCS_DAWAK_CC_OOB_IDRAC
+  tenant: TENANT1
+- id: 1169
+  name: VLAN1169
+  tenant: TENANT1
+- id: 1200
+  name: PC-DR_Shared_Domain_Zone
+  tenant: TENANT1
+- id: 1201
+  name: PC-DR_Shared_MonBCKUP_Zone
+  tenant: TENANT1
+- id: 1202
+  name: PC_Shared_EndSecurity_Zone
+  tenant: TENANT1
+- id: 1203
+  name: PC_Shared_SOC_Zone
+  tenant: TENANT1
+- id: 1204
+  name: PC-DR_Shared_JumpInfra_Zone
+  tenant: TENANT1
+- id: 1205
+  name: PC_Shared_JumpExt_Zone
+  tenant: TENANT1
+- id: 1206
+  name: VAULT-DMZ
+  tenant: TENANT1
+- id: 1301
+  name: MPLS_NSOC
+  tenant: TENANT1
+- id: 1302
+  name: SEHA_VPLS
+  tenant: TENANT1
+- id: 1304
+  name: Connected_AL_AIN_MALAFI_MPLS
+  tenant: TENANT1
+- id: 1309
+  name: SEHA_CRS_Rep
+  tenant: TENANT1
+- id: 1310
+  name: SEHA_CRS_CLEANROOM
+  tenant: TENANT1
+- id: 1311
+  name: Riayati_MPLS
+  tenant: TENANT1
+- id: 1350
+  name: SD_WAN_TRANSIT
+  tenant: TENANT1
+- id: 1351
+  name: SD_WAN_INTERNET
+  tenant: TENANT1
+- id: 1501
+  name: mss_and_anycast_test
+  tenant: TENANT1
+- id: 2000
+  name: DC_DC_L2
+  tenant: TENANT1
+- id: 2005
+  name: VAULT-OOB
+  tenant: TENANT1
+- id: 2006
+  name: FlexAMgmt
+  tenant: TENANT1
+- id: 2007
+  name: Nutanix-AHV-CVM
+  tenant: TENANT1
+- id: 2008
+  name: VM-NuatanixProd
+  tenant: TENANT1
+- id: 2009
+  name: Veritas-Daman-Rep
+  tenant: TENANT1
+- id: 2010
+  name: Veritas-SEHA-Rep
+  tenant: TENANT1
+- id: 2011
+  name: Veritas-Tenant-Rep
+  tenant: TENANT1
+- id: 2012
+  name: Veritas-Daman-Mgmt
+  tenant: TENANT1
+- id: 2013
+  name: Veritas-SEHA-Mgmt
+  tenant: TENANT1
+- id: 2014
+  name: Scan-VMs
+  tenant: TENANT1
+- id: 2015
+  name: JS-VLAN
+  tenant: TENANT1
+- id: 2016
+  name: NTP-VLAN
+  tenant: TENANT1
+vrfs:
+- name: PCS-NETINFRA-OOB
+  ip_routing: false

@@ -1,0 +1,460 @@
+---
+tenants:
+  # Definition of tenants. Additional level of abstraction to VRFs
+  - name: TENANT1
+    # Number used to generate the VNI of each VLAN by adding the VLAN number in this tenant.
+    mac_vrf_vni_base: 10000
+    vrfs:
+      # VRF definitions inside the tenant.
+      - name: PCS-MPLS-INTRANET
+        vrf_vni: 10
+        svis:
+          # SVI definitions.
+          - id: 1004
+            mtu: 9100
+            name: PC-MGMT-MPLS
+            ip_virtual_router_addresses: [10.118.2.134]
+            description: PC-MGMT-MPLS
+            enabled: true
+            nodes:
+              - node: KDC-AR7508R3-PCS-FELEAF1
+                enabled: true
+                description: PC-MGMT-MPLS
+                ip_address: 10.118.2.129/29
+              - node: KDC-AR7508R3-PCS-FELEAF2
+                enabled: true
+                description: PC-MGMT-MPLS
+                ip_address: 10.118.2.130/29
+          - id: 1006
+            mtu: 9100
+            name: MPLS_PC-MPLS_VDOM_outside_DC_FW
+            ip_virtual_router_addresses: [10.118.2.22]
+            description: PC-MPLS
+            enabled: true
+            nodes:
+              - node: KDC-AR7508R3-PCS-FELEAF1
+                enabled: true
+                ip_address: 10.118.2.20/29
+              - node: KDC-AR7508R3-PCS-FELEAF2
+                enabled: true
+                ip_address: 10.118.2.21/29
+          -
+            id: 1012
+            name: iDRAC-MPLS
+            enabled: true
+            mtu: 9100
+            ip_virtual_router_addresses: [10.118.2.62]
+            description: "KDC iDrac-to-MPLS"
+            nodes:
+              - node: KDC-AR7508R3-PCS-FELEAF1
+                ip_address: 10.118.2.60/29
+              - node: KDC-AR7508R3-PCS-FELEAF2
+                description: PC-MPLS
+                ip_address: 10.118.2.61/29
+          -
+            id: 1014
+            name: PC-WLD-MPLS
+            enabled: true
+            mtu: 9100
+            ip_virtual_router_addresses: [10.118.2.142]
+            description: PC-WLD-MPLS
+            nodes:
+              - node: KDC-AR7508R3-PCS-FELEAF1
+                ip_address: 10.118.2.140/29
+              - node: KDC-AR7508R3-PCS-FELEAF2
+                ip_address: 10.118.2.141/29
+          -
+            id: 1015
+            name: MPLS_Intranet_VDOM_Inside_P_FW
+            enabled: true
+            mtu: 9100
+            ip_virtual_router_addresses: [10.118.2.70]
+            description: MPLS_Intranet_VDOM_Inside_P_FW
+            nodes:
+              - node: KDC-AR7508R3-PCS-FELEAF1
+                ip_address: 10.118.2.68/29
+              - node: KDC-AR7508R3-PCS-FELEAF2
+                ip_address: 10.118.2.69/29
+          -
+            id: 1019
+            name: PC-Shared-MPLS
+            enabled: true
+            mtu: 9100
+            ip_virtual_router_addresses: [10.118.2.118]
+            description: PC-Shared-MPLS
+            nodes:
+              - node: KDC-AR7508R3-PCS-FELEAF1
+                ip_address: 10.118.2.116/29
+              - node: KDC-AR7508R3-PCS-FELEAF2
+                ip_address: 10.118.2.117/29
+          -
+            id: 1022
+            name: pcs-mgm-vmotion
+            enabled: true
+            mtu: 9100
+            ip_virtual_router_addresses: [10.118.22.254]
+            description: vMotion
+            nodes:
+              - node: KDC-AR7508R3-PCS-FELEAF1
+                ip_address: 10.118.22.252/24
+              - node: KDC-AR7508R3-PCS-FELEAF2
+                ip_address: 10.118.22.253/24
+          -
+            id: 1023
+            name: pcs-mgm-vSAN
+            enabled: true
+            mtu: 9100
+            ip_virtual_router_addresses: [10.118.23.254]
+            description: vSAN
+            nodes:
+              - node: KDC-AR7508R3-PCS-FELEAF1
+                ip_address: 10.118.23.252/24
+              - node: KDC-AR7508R3-PCS-FELEAF2
+                ip_address: 10.118.23.253/24
+          -
+            id: 1024
+            name: pcs-mgm-NSX-T_Host_Overlay
+            enabled: true
+            mtu: 9100
+            ip_virtual_router_addresses: [10.118.24.254]
+            description: "Management Host TEPs"
+            nodes:
+              - node: KDC-AR7508R3-PCS-FELEAF1
+                ip_address: 10.118.24.252/24
+              - node: KDC-AR7508R3-PCS-FELEAF2
+                ip_address: 10.118.24.253/24
+          -
+            id: 1027
+            name: pcs-mgm-Edge_Overlay
+            enabled: true
+            mtu: 9100
+            ip_virtual_router_addresses: [10.118.27.254]
+            description: "Management Edge TEPs"
+            nodes:
+              - node: KDC-AR7508R3-PCS-FELEAF1
+                ip_address: 10.118.27.252/24
+              - node: KDC-AR7508R3-PCS-FELEAF2
+                ip_address: 10.118.27.253/24
+          -
+            id: 1051
+            name: pcs-wld-vmotion
+            enabled: true
+            mtu: 9100
+            ip_virtual_router_addresses: [10.118.51.254]
+            description: "Resource vMotion"
+            nodes:
+              - node: KDC-AR7508R3-PCS-FELEAF1
+                ip_address: 10.118.51.252/24
+              - node: KDC-AR7508R3-PCS-FELEAF2
+                ip_address: 10.118.51.253/24
+          -
+            id: 1053
+            name: pcs-wld-NSX-T_Host_Overlay
+            enabled: true
+            mtu: 9100
+            ip_virtual_router_addresses: [10.118.53.254]
+            description: "Resource Host TEPs"
+            nodes:
+              - node: KDC-AR7508R3-PCS-FELEAF1
+                ip_address: 10.118.53.252/24
+              - node: KDC-AR7508R3-PCS-FELEAF2
+                ip_address: 10.118.53.253/24
+          -
+            id: 1056
+            name: pcs-wld-Edge_Overlay
+            enabled: true
+            mtu: 9100
+            ip_virtual_router_addresses: [10.118.56.254]
+            description: "Resource Edge TEPs"
+            nodes:
+              - node: KDC-AR7508R3-PCS-FELEAF1
+                ip_address: 10.118.56.252/24
+              - node: KDC-AR7508R3-PCS-FELEAF2
+                ip_address: 10.118.56.253/24
+
+      - name: PCS-SHARED-INTERNET
+        vrf_vni: 11
+        svis:
+          -
+            id: 1009
+            name: Internet_PC-MGMT_VDOM_Outside_DC
+            enabled: true
+            description: PC-MGMT-INT
+            mtu: 9100
+            ip_virtual_router_addresses: [10.118.2.30]
+            nodes:
+              - node: KDC-AR7508R3-PCS-FELEAF1
+                ip_address: 10.118.2.28/29
+              - node: KDC-AR7508R3-PCS-FELEAF2
+                ip_address: 10.118.2.29/29
+          -
+            id: 1010
+            name: Internet_PC-WLD_VDOM_outside_DC_
+            enabled: true
+            description: PC-WLD-INT
+            mtu: 9100
+            ip_virtual_router_addresses: [10.118.2.38]
+            nodes:
+              - node: KDC-AR7508R3-PCS-FELEAF1
+                ip_address: 10.118.2.36/29
+              - node: KDC-AR7508R3-PCS-FELEAF2
+                ip_address: 10.118.2.37/29
+          -
+            id: 1011
+            name: PC-Shared-INT
+            enabled: true
+            description: PC-Shared-INT
+            mtu: 9100
+            ip_virtual_router_addresses: [10.118.2.54]
+            nodes:
+              - node: KDC-AR7508R3-PCS-FELEAF1
+                ip_address: 10.118.2.52/29
+              - node: KDC-AR7508R3-PCS-FELEAF2
+                ip_address: 10.118.2.53/29
+          -
+            id: 1013
+            name: iDRAC-Internet
+            enabled: true
+            description: "KDC iDRAC-to-Internet"
+            mtu: 9100
+            ip_virtual_router_addresses: [10.118.2.102]
+            nodes:
+              - node: KDC-AR7508R3-PCS-FELEAF1
+                ip_address: 10.118.2.100/29
+              - node: KDC-AR7508R3-PCS-FELEAF2
+                ip_address: 10.118.2.101/29
+          -
+            id: 1016
+            name: Peri-shared-internetVDOM
+            enabled: true
+            description: Peri-shared-internetVDOM
+            mtu: 9100
+            ip_virtual_router_addresses: [10.118.2.78]
+            nodes:
+              - node: KDC-AR7508R3-PCS-FELEAF1
+                ip_address: 10.118.2.76/29
+              - node: KDC-AR7508R3-PCS-FELEAF2
+                ip_address: 10.118.2.77/29
+
+
+    l2vlans:
+      # These are pure L2 vlans. They do not have a SVI defined in the l3leafs and they will be bridged inside the VXLAN fabric
+    -
+      id: 5
+      name: PureCS_Network_Infra_nodes_OOB
+    -
+      id: 7
+      name: MPLS_Outside_DC_firewall
+    -
+      id: 8
+      name: Internet_HIS_VDOM_outside_DC_Fir
+    -
+      id: 14
+      name: PURE_VRF_MPLS
+    -
+      id: 17
+      name: PCS_AAN_MPLS
+    -
+      id: 18
+      name: EMAC-VLAN-For-Internet
+    -
+      id: 1163
+      name: PC_ECS_MGMT
+    -
+      id: 1164
+      name: PC_ECS_REPLICATION
+    -
+      id: 1165
+      name: PC_ECS_DATA
+    -
+      id: 1166
+      name: Dawak_Pura_Callcenter-SBCs
+    -
+      id: 1167
+      name: Dawak_Pura_Callcenter-Edge
+    -
+      id: 1168
+      name: PCS_DAWAK_CC_OOB_IDRAC
+    -
+      id: 1206
+      name: VAULT-DMZ
+    -
+      id: 1301
+      name: MPLS_NSOC
+    -
+      id: 1302
+      name: SEHA_VPLS
+    -
+      id: 303
+      name: SEHA_VPLS_HCF
+    -
+      id: 1304
+      name: Connected_AL_AIN_MALAFI_MPLS
+    -
+      id: 1309
+      name: SEHA_CRS_Rep
+    -
+      id: 1310
+      name: SEHA_CRS_CLEANROOM
+    -
+      id: 1311
+      name: Riayati_MPLS
+    -
+      id: 1350
+      name: SD_WAN_TRANSIT
+    -
+      id: 1351
+      name: SD_WAN_INTERNET
+    -
+      id: 1501
+      name: mss_and_anycast_test
+    -
+      id: 1000
+      name: native_vlan
+    -
+      id: 1017
+      name: MPLS_Intranet_VDOM_Outside_P_FW_
+    -
+      id: 1018
+      name: Internet_Internet_VDOM_Outside_P
+    -
+      id: 1020
+      name: KDC-iDRAC-Pcloud
+    -
+      id: 1021
+      name: pc-mgm-mgmt
+    -
+      id: 1025
+      name: pcs-mgm-Edge_Uplink_1
+    -
+      id: 1026
+      name: pcs-mgm-Edge_Uplink_2
+    -
+      id: 1028
+      name: ESXi-Host-MGMT
+    -
+      id: 1029
+      name: PC_BACKUP
+    -
+      id: 1033
+      name: Seha_CRS_Rep
+    -
+      id: 1035
+      name: Seha_CRS_CROOM
+    -
+      id: 1036
+      name: VAULT-OOB
+    -
+      id: 1037
+      name: FlexAMgmt
+    -
+      id: 1038
+      name: pcs-mgm-ReplicationVMs
+    -
+      id: 1050
+      name: pcs-wld-oob
+    -
+      id: 1052
+      name: pcs-wld-vSAN
+    -
+      id: 1054
+      name: pcs-wld-Edge_Uplink_1
+    -
+      id: 1055
+      name: pcs-wld-Edge_Uplink_2
+    -
+      id: 1057
+      name: Nutanix-AHV-CVM
+    -
+      id: 1058
+      name: PCS_CSE_SERVICES_ORG
+    -
+      id: 1060
+      name: pcs-wld-vcda
+    -
+      id: 1061
+      name: pcs-wld-Tenant1-Internet-U1
+    -
+      id: 1062
+      name: pcs-wld-Tenant1-MPLS-U1
+    -
+      id: 1101
+      name: pcs-idrac-management
+    -
+      id: 1102
+      name: pcs-esxi-management
+    -
+      id: 1155
+      name: pcs-his-backups
+    -
+      id: 1157
+      name: VLAN1157
+    -
+      id: 1160
+      name: powerstore_NSF
+    -
+      id: 1161
+      name: iSCSI_ControllerA
+    -
+      id: 1162
+      name: iSCSI_ControllerB
+    -
+      id: 1169
+      name: VLAN1169
+    -
+      id: 1200
+      name: PC-DR_Shared_Domain_Zone
+    -
+      id: 1201
+      name: PC-DR_Shared_MonBCKUP_Zone
+    -
+      id: 1202
+      name: PC_Shared_EndSecurity_Zone
+    -
+      id: 1203
+      name: PC_Shared_SOC_Zone
+    -
+      id: 1204
+      name: PC-DR_Shared_JumpInfra_Zone
+    -
+      id: 1205
+      name: PC_Shared_JumpExt_Zone
+    -
+      id: 2000
+      name: DC_DC_L2
+    -
+      id: 2005
+      name: VAULT-OOB
+    -
+      id: 2006
+      name: FlexAMgmt
+    -
+      id: 2007
+      name: Nutanix-AHV-CVM
+    -
+      id: 2008
+      name: VM-NuatanixProd
+    -
+      id: 2009
+      name: Veritas-Daman-Rep
+    -
+      id: 2010
+      name: Veritas-SEHA-Rep
+    -
+      id: 2011
+      name: Veritas-Tenant-Rep
+    -
+      id: 2012
+      name: Veritas-Daman-Mgmt
+    -
+      id: 2013
+      name: Veritas-SEHA-Mgmt
+    -
+      id: 2014
+      name: Scan-VMs
+    -
+      id: 2015
+      name: JS-VLAN
+    -
+      id: 2016
+      name: NTP-VLAN

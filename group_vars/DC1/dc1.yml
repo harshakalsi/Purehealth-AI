@@ -1,0 +1,4 @@
+---
+# Default gateway used for the management interface
+mgmt_gateway: 10.118.5.254
+mgmt_interface_vrf: PCS-NETINFRA-OOB
