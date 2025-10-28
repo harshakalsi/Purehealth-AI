@@ -1,0 +1,53 @@
+---
+# Definition of connected endpoints in the fabric.
+servers:
+  # Name of the defined server.
+  - name: dc1-leaf1-server1
+    # Definition of adapters on the server.
+    adapters:
+        # Name of the server interfaces that will be used in the description of each interface
+      - endpoint_ports: [PCI1, PCI2]
+        # Device ports where the server ports are connected.
+        switch_ports: [Ethernet5, Ethernet5]
+        # Device names where the server ports are connected.
+        switches: [KDC-AR7508R3-PCS-FELEAF1, KDC-AR7508R3-PCS-FELEAF2]
+        # VLANs that will be configured on these ports.
+        vlans: 11-12,21-22
+        # Native VLAN to be used on these ports.
+        native_vlan: 1000
+        # L2 mode of the port.
+        mode: trunk
+        # Spanning tree portfast configuration on this port.
+        spanning_tree_portfast: edge
+        # Definition of the pair of ports as port channel.
+        port_channel:
+          # The port-channel name on the endpoint that will be used in the port-channel description.
+          endpoint_port_channel: Bond1
+          # Port channel mode for LACP.
+          mode: active
+
+      - endpoint_ports: [iLO]
+        switch_ports: [Ethernet5]
+        switches: [dc1-leaf1c]
+        vlans: 11
+        mode: access
+        spanning_tree_portfast: edge
+
+  - name: dc1-leaf2-server1
+    adapters:
+      - endpoint_ports: [PCI1, PCI2]
+        switch_ports: [Ethernet5/1, Ethernet5/1]
+        switches: [KDC-AR7060X6-PCS-BELEAF1, KDC-AR7060X6-PCS-BELEAF2]
+        vlans: 1004, 1006, 1009, 1011–1016, 1019, 1022–1024, 1027, 1051, 1053, 1056
+        native_vlan: 4092
+        mode: trunk
+        spanning_tree_portfast: edge
+        port_channel:
+          mode: active
+
+      - endpoint_ports: [iLO]
+        switch_ports: [Ethernet5]
+        switches: [dc1-leaf2c]
+        vlans: 11
+        mode: access
+        spanning_tree_portfast: edge
