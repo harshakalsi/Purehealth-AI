@@ -4,9 +4,13 @@
 
 - [Management](#management)
   - [Management Interfaces](#management-interfaces)
+  - [DNS Domain](#dns-domain)
   - [IP Name Servers](#ip-name-servers)
   - [Domain Lookup](#domain-lookup)
+  - [Clock Settings](#clock-settings)
   - [NTP](#ntp)
+  - [Management SSH](#management-ssh)
+  - [Management Console](#management-console)
   - [Management API HTTP](#management-api-http)
 - [Authentication](#authentication)
   - [Local Users](#local-users)
@@ -75,6 +79,17 @@ interface Management1
    ip address 10.118.5.12/24
 ```
 
+### DNS Domain
+
+DNS domain: purecloud.ae
+
+#### DNS Domain Device Configuration
+
+```eos
+dns domain purecloud.ae
+!
+```
+
 ### IP Name Servers
 
 #### IP Name Servers Summary
@@ -105,6 +120,19 @@ ip name-server vrf PCS-NETINFRA-OOB 10.118.200.12
 ip domain lookup vrf PCS-NETINFRA-OOB source-interface Management1
 ```
 
+### Clock Settings
+
+#### Clock Timezone Settings
+
+Clock Timezone is set to **Asia/Dubai**.
+
+#### Clock Device Configuration
+
+```eos
+!
+clock timezone Asia/Dubai
+```
+
 ### NTP
 
 #### NTP Summary
@@ -122,6 +150,46 @@ ip domain lookup vrf PCS-NETINFRA-OOB source-interface Management1
 !
 ntp server vrf PCS-NETINFRA-OOB 10.113.200.3 prefer
 ntp server vrf PCS-NETINFRA-OOB 10.118.200.3
+```
+
+### Management SSH
+
+#### VRFs
+
+| VRF | Enabled | IPv4 ACL | IPv6 ACL |
+| --- | ------- | -------- | -------- |
+| PCS-NETINFRA-OOB | True | - | - |
+| default | False | - | - |
+
+#### Other SSH Settings
+
+| Idle Timeout | Connection Limit | Max from a single Host | Ciphers | Key-exchange methods | MAC algorithms | Hostkey server algorithms |
+| ------------ | ---------------- | ---------------------- | ------- | -------------------- | -------------- | ------------------------- |
+| 15 | - | - | default | default | default | default |
+
+#### Management SSH Device Configuration
+
+```eos
+!
+management ssh
+   idle-timeout 15
+   !
+   vrf PCS-NETINFRA-OOB
+      no shutdown
+```
+
+### Management Console
+
+#### Management Console Timeout
+
+Management Console Timeout is set to **20** minutes.
+
+#### Management Console Device Configuration
+
+```eos
+!
+management console
+   idle-timeout 20
 ```
 
 ### Management API HTTP
@@ -420,7 +488,10 @@ ASN Notation: asplain
 
 | BGP Tuning |
 | ---------- |
+| graceful-restart restart-time 300 |
+| graceful-restart |
 | no bgp default ipv4-unicast |
+| distance bgp 20 200 200 |
 | maximum-paths 4 ecmp 4 |
 
 #### Router BGP Peer Groups
@@ -469,6 +540,9 @@ ASN Notation: asplain
 router bgp 65100
    router-id 10.255.0.2
    no bgp default ipv4-unicast
+   distance bgp 20 200 200
+   graceful-restart restart-time 300
+   graceful-restart
    maximum-paths 4 ecmp 4
    neighbor EVPN-OVERLAY-PEERS peer group
    neighbor EVPN-OVERLAY-PEERS next-hop-unchanged

@@ -4,9 +4,13 @@
 
 - [Management](#management)
   - [Management Interfaces](#management-interfaces)
+  - [DNS Domain](#dns-domain)
   - [IP Name Servers](#ip-name-servers)
   - [Domain Lookup](#domain-lookup)
+  - [Clock Settings](#clock-settings)
   - [NTP](#ntp)
+  - [Management SSH](#management-ssh)
+  - [Management Console](#management-console)
   - [Management API HTTP](#management-api-http)
 - [Authentication](#authentication)
   - [Local Users](#local-users)
@@ -88,6 +92,17 @@ interface Management1/1
    ip address 10.118.5.16/24
 ```
 
+### DNS Domain
+
+DNS domain: purecloud.ae
+
+#### DNS Domain Device Configuration
+
+```eos
+dns domain purecloud.ae
+!
+```
+
 ### IP Name Servers
 
 #### IP Name Servers Summary
@@ -118,6 +133,19 @@ ip name-server vrf PCS-NETINFRA-OOB 10.118.200.12
 ip domain lookup vrf PCS-NETINFRA-OOB source-interface Management1/1
 ```
 
+### Clock Settings
+
+#### Clock Timezone Settings
+
+Clock Timezone is set to **Asia/Dubai**.
+
+#### Clock Device Configuration
+
+```eos
+!
+clock timezone Asia/Dubai
+```
+
 ### NTP
 
 #### NTP Summary
@@ -135,6 +163,46 @@ ip domain lookup vrf PCS-NETINFRA-OOB source-interface Management1/1
 !
 ntp server vrf PCS-NETINFRA-OOB 10.113.200.3 prefer
 ntp server vrf PCS-NETINFRA-OOB 10.118.200.3
+```
+
+### Management SSH
+
+#### VRFs
+
+| VRF | Enabled | IPv4 ACL | IPv6 ACL |
+| --- | ------- | -------- | -------- |
+| PCS-NETINFRA-OOB | True | - | - |
+| default | False | - | - |
+
+#### Other SSH Settings
+
+| Idle Timeout | Connection Limit | Max from a single Host | Ciphers | Key-exchange methods | MAC algorithms | Hostkey server algorithms |
+| ------------ | ---------------- | ---------------------- | ------- | -------------------- | -------------- | ------------------------- |
+| 15 | - | - | default | default | default | default |
+
+#### Management SSH Device Configuration
+
+```eos
+!
+management ssh
+   idle-timeout 15
+   !
+   vrf PCS-NETINFRA-OOB
+      no shutdown
+```
+
+### Management Console
+
+#### Management Console Timeout
+
+Management Console Timeout is set to **20** minutes.
+
+#### Management Console Device Configuration
+
+```eos
+!
+management console
+   idle-timeout 20
 ```
 
 ### Management API HTTP
@@ -319,7 +387,7 @@ daemon TerminAttr
 
 | Domain-id | Local-interface | Peer-address | Peer-link |
 | --------- | --------------- | ------------ | --------- |
-| MLAG_FE_LEAF_01 | Vlan4094 | 10.118.4.249 | Port-Channel1000 |
+| MLAG_FE_LEAF_01 | Vlan4094 | 10.118.4.255 | Port-Channel1000 |
 
 Dual primary detection is enabled. The detection delay is 5 seconds.
 
@@ -330,7 +398,7 @@ Dual primary detection is enabled. The detection delay is 5 seconds.
 mlag configuration
    domain-id MLAG_FE_LEAF_01
    local-interface Vlan4094
-   peer-address 10.118.4.249
+   peer-address 10.118.4.255
    peer-address heartbeat 10.118.5.17 vrf PCS-NETINFRA-OOB
    peer-link Port-Channel1000
    dual-primary detection delay 5 action errdisable all-interfaces
@@ -391,7 +459,6 @@ vlan internal order ascending range 1006 1199
 | 17 | PCS_AAN_MPLS | - |
 | 18 | EMAC-VLAN-For-Internet | - |
 | 303 | SEHA_VPLS_HCF | - |
-| 409 | MLAG_L3_VRF_PCS-MPLS-INTRANET | MLAG |
 | 1000 | native_vlan | - |
 | 1004 | PC-MGMT-MPLS | - |
 | 1006 | MPLS_PC-MPLS_VDOM_outside_DC_FW | - |
@@ -477,6 +544,7 @@ vlan internal order ascending range 1006 1199
 | 2015 | JS-VLAN | - |
 | 2016 | NTP-VLAN | - |
 | 4091 | MLAG_L3_VRF_PCS-SHARED-INTERNET | MLAG |
+| 4092 | MLAG_L3_VRF_PCS-MPLS-INTRANET | MLAG |
 | 4093 | MLAG_L3 | MLAG |
 | 4094 | MLAG | MLAG |
 
@@ -504,10 +572,6 @@ vlan 18
 !
 vlan 303
    name SEHA_VPLS_HCF
-!
-vlan 409
-   name MLAG_L3_VRF_PCS-MPLS-INTRANET
-   trunk group MLAG
 !
 vlan 1000
    name native_vlan
@@ -765,6 +829,10 @@ vlan 4091
    name MLAG_L3_VRF_PCS-SHARED-INTERNET
    trunk group MLAG
 !
+vlan 4092
+   name MLAG_L3_VRF_PCS-MPLS-INTRANET
+   trunk group MLAG
+!
 vlan 4093
    name MLAG_L3
    trunk group MLAG
@@ -793,16 +861,19 @@ vlan 4094
 | Ethernet6/41/1 | LOAD_BALANCER_01_5.0 | *trunk | *140 | *1000 | *- | 1640 |
 | Ethernet6/42/1 | LOAD_BALANCER_02_3.0 | *trunk | *140 | *1000 | *- | 1642 |
 | Ethernet6/43/1 | LOAD_BALANCER_02_5.0 | *trunk | *140 | *1000 | *- | 1642 |
-| Ethernet6/44/1 | FIREWALL_DC-01_27 | *trunk | *15-16 | *1000 | *- | 1644 |
+| Ethernet6/44/1 | FIREWALL_DC-01_27 | *trunk | *1004-1006,1009,1011-1013,1025 | *1000 | *- | 1644 |
 | Ethernet6/45/1 | FIREWALL_DC-02_27 | *trunk | *1004-1006,1009,1011-1013,1025 | *1000 | *- | 1645 |
 | Ethernet6/46/1 | FIREWALL_perimerter-02_24 | *trunk | *15-16 | *1000 | *- | 1746 |
+| Ethernet6/47/1 | L2_KDC-AR7010TX-PCS-OOB1_Ethernet49 | *trunk | *5 | *- | *- | 1647 |
+| Ethernet6/48/1 | L2_KDC-AR7010TX-PCS-OOB2_Ethernet49 | *trunk | *5 | *- | *- | 1648 |
 | Ethernet6/49/1 | MLAG_KDC-AR7508R3-PCS-FELEAF2_Ethernet6/49/1 | *trunk | *- | *- | *MLAG | 1000 |
 | Ethernet6/50/1 | MLAG_KDC-AR7508R3-PCS-FELEAF2_Ethernet6/50/1 | *trunk | *- | *- | *MLAG | 1000 |
+| Ethernet7/39/1 | L2_KDC-AR7010TX-PCS-OOB3_Ethernet49 | *trunk | *5 | *- | *- | 1637 |
 | Ethernet7/40/1 | LOAD_BALANCER_01_7.0 | *trunk | *140 | *1000 | *- | 1640 |
 | Ethernet7/41/1 | LOAD_BALANCER_01_9.0 | *trunk | *140 | *1000 | *- | 1640 |
 | Ethernet7/42/1 | LOAD_BALANCER_02_7.0 | *trunk | *140 | *1000 | *- | 1642 |
 | Ethernet7/43/1 | LOAD_BALANCER_02_9.0 | *trunk | *140 | *1000 | *- | 1642 |
-| Ethernet7/44/1 | FIREWALL_DC-01_28 | *trunk | *15-16 | *1000 | *- | 1644 |
+| Ethernet7/44/1 | FIREWALL_DC-01_28 | *trunk | *1004-1006,1009,1011-1013,1025 | *1000 | *- | 1644 |
 | Ethernet7/45/1 | FIREWALL_DC-02_28 | *trunk | *1004-1006,1009,1011-1013,1025 | *1000 | *- | 1645 |
 | Ethernet7/46/1 | FIREWALL_perimerter-01_23 | *trunk | *15-16 | *1000 | *- | 1646 |
 | Ethernet7/47/1 | ROUTER_Internet-CPE-01_2 | access | 18 | - | - | - |
@@ -876,6 +947,16 @@ interface Ethernet6/46/1
    no shutdown
    channel-group 1746 mode active
 !
+interface Ethernet6/47/1
+   description L2_KDC-AR7010TX-PCS-OOB1_Ethernet49
+   no shutdown
+   channel-group 1647 mode active
+!
+interface Ethernet6/48/1
+   description L2_KDC-AR7010TX-PCS-OOB2_Ethernet49
+   no shutdown
+   channel-group 1648 mode active
+!
 interface Ethernet6/49/1
    description MLAG_KDC-AR7508R3-PCS-FELEAF2_Ethernet6/49/1
    no shutdown
@@ -885,6 +966,11 @@ interface Ethernet6/50/1
    description MLAG_KDC-AR7508R3-PCS-FELEAF2_Ethernet6/50/1
    no shutdown
    channel-group 1000 mode active
+!
+interface Ethernet7/39/1
+   description L2_KDC-AR7010TX-PCS-OOB3_Ethernet49
+   no shutdown
+   channel-group 1637 mode active
 !
 interface Ethernet7/40/1
    description LOAD_BALANCER_01_7.0
@@ -956,11 +1042,14 @@ interface Ethernet7/50/1
 | --------- | ----------- | ---- | ----- | ----------- | ------------| --------------------- | ------------------ | ------- | -------- |
 | Port-Channel5 | SERVER_dc1-leaf1-server1_Bond1 | trunk | 11-12,21-22 | 1000 | - | - | - | 5 | - |
 | Port-Channel1000 | MLAG_KDC-AR7508R3-PCS-FELEAF2_Port-Channel1000 | trunk | - | - | MLAG | - | - | - | - |
+| Port-Channel1637 | L2_KDC-AR7010TX-PCS-OOB3_Port-Channel49 | trunk | 5 | - | - | - | - | 1637 | - |
 | Port-Channel1640 | LOAD_BALANCER_01_Bond1 | trunk | 140 | 1000 | - | - | - | 1640 | - |
 | Port-Channel1642 | LOAD_BALANCER_02_Bond1 | trunk | 140 | 1000 | - | - | - | 1642 | - |
-| Port-Channel1644 | FIREWALL_DC-01_Bond1 | trunk | 15-16 | 1000 | - | - | - | 1644 | - |
+| Port-Channel1644 | FIREWALL_DC-01_Bond1 | trunk | 1004-1006,1009,1011-1013,1025 | 1000 | - | - | - | 1644 | - |
 | Port-Channel1645 | FIREWALL_DC-02_Bond1 | trunk | 1004-1006,1009,1011-1013,1025 | 1000 | - | - | - | 1645 | - |
 | Port-Channel1646 | FIREWALL_perimerter-01_Bond1 | trunk | 15-16 | 1000 | - | - | - | 1646 | - |
+| Port-Channel1647 | L2_KDC-AR7010TX-PCS-OOB1_Port-Channel49 | trunk | 5 | - | - | - | - | 1647 | - |
+| Port-Channel1648 | L2_KDC-AR7010TX-PCS-OOB2_Port-Channel49 | trunk | 5 | - | - | - | - | 1648 | - |
 | Port-Channel1746 | FIREWALL_perimerter-02_Bond1 | trunk | 15-16 | 1000 | - | - | - | 1746 | - |
 
 #### Port-Channel Interfaces Device Configuration
@@ -984,6 +1073,14 @@ interface Port-Channel1000
    switchport trunk group MLAG
    switchport
 !
+interface Port-Channel1637
+   description L2_KDC-AR7010TX-PCS-OOB3_Port-Channel49
+   no shutdown
+   switchport trunk allowed vlan 5
+   switchport mode trunk
+   switchport
+   mlag 1637
+!
 interface Port-Channel1640
    description LOAD_BALANCER_01_Bond1
    no shutdown
@@ -1006,7 +1103,7 @@ interface Port-Channel1644
    description FIREWALL_DC-01_Bond1
    no shutdown
    switchport trunk native vlan 1000
-   switchport trunk allowed vlan 15,16
+   switchport trunk allowed vlan 1004-1006,1009,1011-1013,1025
    switchport mode trunk
    switchport
    mlag 1644
@@ -1028,6 +1125,22 @@ interface Port-Channel1646
    switchport mode trunk
    switchport
    mlag 1646
+!
+interface Port-Channel1647
+   description L2_KDC-AR7010TX-PCS-OOB1_Port-Channel49
+   no shutdown
+   switchport trunk allowed vlan 5
+   switchport mode trunk
+   switchport
+   mlag 1647
+!
+interface Port-Channel1648
+   description L2_KDC-AR7010TX-PCS-OOB2_Port-Channel49
+   no shutdown
+   switchport trunk allowed vlan 5
+   switchport mode trunk
+   switchport
+   mlag 1648
 !
 interface Port-Channel1746
    description FIREWALL_perimerter-02_Bond1
@@ -1078,7 +1191,6 @@ interface Loopback1
 
 | Interface | Description | VRF |  MTU | Shutdown |
 | --------- | ----------- | --- | ---- | -------- |
-| Vlan409 | MLAG_L3_VRF_PCS-MPLS-INTRANET | PCS-MPLS-INTRANET | 9214 | False |
 | Vlan1004 | PC-MGMT-MPLS | PCS-MPLS-INTRANET | 9200 | False |
 | Vlan1006 | PC-MPLS | PCS-MPLS-INTRANET | 9200 | False |
 | Vlan1009 | PC-MGMT-INT | PCS-SHARED-INTERNET | 9200 | False |
@@ -1098,6 +1210,7 @@ interface Loopback1
 | Vlan1053 | Resource Host TEPs | PCS-MPLS-INTRANET | 9200 | False |
 | Vlan1056 | Resource Edge TEPs | PCS-MPLS-INTRANET | 9200 | False |
 | Vlan4091 | MLAG_L3_VRF_PCS-SHARED-INTERNET | PCS-SHARED-INTERNET | 9214 | False |
+| Vlan4092 | MLAG_L3_VRF_PCS-MPLS-INTRANET | PCS-MPLS-INTRANET | 9214 | False |
 | Vlan4093 | MLAG_L3 | default | 9214 | False |
 | Vlan4094 | MLAG | default | 9214 | False |
 
@@ -1105,7 +1218,6 @@ interface Loopback1
 
 | Interface | VRF | IP Address | IP Address Virtual | IP Router Virtual Address | ACL In | ACL Out |
 | --------- | --- | ---------- | ------------------ | ------------------------- | ------ | ------- |
-| Vlan409 |  PCS-MPLS-INTRANET  |  10.118.4.250/31  |  -  |  -  |  -  |  -  |
 | Vlan1004 |  PCS-MPLS-INTRANET  |  10.118.2.132/29  |  -  |  10.118.2.134  |  -  |  -  |
 | Vlan1006 |  PCS-MPLS-INTRANET  |  10.118.2.20/29  |  -  |  10.118.2.22  |  -  |  -  |
 | Vlan1009 |  PCS-SHARED-INTERNET  |  10.118.2.28/29  |  -  |  10.118.2.30  |  -  |  -  |
@@ -1125,19 +1237,13 @@ interface Loopback1
 | Vlan1053 |  PCS-MPLS-INTRANET  |  10.118.53.252/24  |  -  |  10.118.53.254  |  -  |  -  |
 | Vlan1056 |  PCS-MPLS-INTRANET  |  10.118.56.252/24  |  -  |  10.118.56.254  |  -  |  -  |
 | Vlan4091 |  PCS-SHARED-INTERNET  |  10.118.4.248/31  |  -  |  -  |  -  |  -  |
+| Vlan4092 |  PCS-MPLS-INTRANET  |  10.118.4.250/31  |  -  |  -  |  -  |  -  |
 | Vlan4093 |  default  |  10.118.4.252/31  |  -  |  -  |  -  |  -  |
-| Vlan4094 |  default  |  10.118.4.248/31  |  -  |  -  |  -  |  -  |
+| Vlan4094 |  default  |  10.118.4.254/31  |  -  |  -  |  -  |  -  |
 
 #### VLAN Interfaces Device Configuration
 
 ```eos
-!
-interface Vlan409
-   description MLAG_L3_VRF_PCS-MPLS-INTRANET
-   no shutdown
-   mtu 9214
-   vrf PCS-MPLS-INTRANET
-   ip address 10.118.4.250/31
 !
 interface Vlan1004
    description PC-MGMT-MPLS
@@ -1290,6 +1396,13 @@ interface Vlan4091
    vrf PCS-SHARED-INTERNET
    ip address 10.118.4.248/31
 !
+interface Vlan4092
+   description MLAG_L3_VRF_PCS-MPLS-INTRANET
+   no shutdown
+   mtu 9214
+   vrf PCS-MPLS-INTRANET
+   ip address 10.118.4.250/31
+!
 interface Vlan4093
    description MLAG_L3
    no shutdown
@@ -1301,7 +1414,7 @@ interface Vlan4094
    no shutdown
    mtu 9214
    no autostate
-   ip address 10.118.4.248/31
+   ip address 10.118.4.254/31
 ```
 
 ### VXLAN Interface
@@ -1604,7 +1717,10 @@ ASN Notation: asplain
 
 | BGP Tuning |
 | ---------- |
+| graceful-restart restart-time 300 |
+| graceful-restart |
 | no bgp default ipv4-unicast |
+| distance bgp 20 200 200 |
 | maximum-paths 4 ecmp 4 |
 
 #### Router BGP Peer Groups
@@ -1766,6 +1882,9 @@ ASN Notation: asplain
 router bgp 65371
    router-id 10.118.0.3
    no bgp default ipv4-unicast
+   distance bgp 20 200 200
+   graceful-restart restart-time 300
+   graceful-restart
    maximum-paths 4 ecmp 4
    neighbor EVPN-OVERLAY-PEERS peer group
    neighbor EVPN-OVERLAY-PEERS update-source Loopback0
@@ -2265,7 +2384,7 @@ router bgp 65371
       route-target export evpn 10:10
       router-id 10.118.0.3
       neighbor 10.118.4.251 peer group MLAG-IPv4-UNDERLAY-PEER
-      neighbor 10.118.4.251 description KDC-AR7508R3-PCS-FELEAF2_Vlan409
+      neighbor 10.118.4.251 description KDC-AR7508R3-PCS-FELEAF2_Vlan4092
       redistribute connected route-map RM-CONN-2-BGP-VRFS
    !
    vrf PCS-SHARED-INTERNET

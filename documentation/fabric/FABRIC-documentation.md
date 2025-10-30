@@ -38,6 +38,12 @@
 
 | Type | Node | Node Interface | Peer Type | Peer Node | Peer Interface |
 | ---- | ---- | -------------- | --------- | ----------| -------------- |
+| l2leaf | KDC-AR7010TX-PCS-OOB1 | Ethernet49 | l3leaf | KDC-AR7508R3-PCS-FELEAF1 | Ethernet6/47/1 |
+| l2leaf | KDC-AR7010TX-PCS-OOB1 | Ethernet50 | l3leaf | KDC-AR7508R3-PCS-FELEAF2 | Ethernet6/47/1 |
+| l2leaf | KDC-AR7010TX-PCS-OOB2 | Ethernet49 | l3leaf | KDC-AR7508R3-PCS-FELEAF1 | Ethernet6/48/1 |
+| l2leaf | KDC-AR7010TX-PCS-OOB2 | Ethernet50 | l3leaf | KDC-AR7508R3-PCS-FELEAF2 | Ethernet6/48/1 |
+| l2leaf | KDC-AR7010TX-PCS-OOB3 | Ethernet49 | l3leaf | KDC-AR7508R3-PCS-FELEAF1 | Ethernet7/39/1 |
+| l2leaf | KDC-AR7010TX-PCS-OOB3 | Ethernet50 | l3leaf | KDC-AR7508R3-PCS-FELEAF2 | Ethernet7/37/1 |
 | l3leaf | KDC-AR7060X6-PCS-BELEAF1 | Ethernet23/1 | mlag_peer | KDC-AR7060X6-PCS-BELEAF2 | Ethernet23/1 |
 | l3leaf | KDC-AR7060X6-PCS-BELEAF1 | Ethernet24/1 | mlag_peer | KDC-AR7060X6-PCS-BELEAF2 | Ethernet24/1 |
 | l3leaf | KDC-AR7060X6-PCS-BELEAF1 | Ethernet25/1 | mlag_peer | KDC-AR7060X6-PCS-BELEAF2 | Ethernet25/1 |

@@ -9,7 +9,7 @@ tenants:
       - name: PCS-MPLS-INTRANET
         vrf_vni: 10
         mlag_ibgp_peering_ipv4_pool: 10.118.4.250-10.118.4.251
-        mlag_ibgp_peering_vlan: 409
+        mlag_ibgp_peering_vlan: 4092
         svis:
           # SVI definitions.
           - id: 1004

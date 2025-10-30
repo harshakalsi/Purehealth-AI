@@ -4,9 +4,13 @@
 
 - [Management](#management)
   - [Management Interfaces](#management-interfaces)
+  - [DNS Domain](#dns-domain)
   - [IP Name Servers](#ip-name-servers)
   - [Domain Lookup](#domain-lookup)
+  - [Clock Settings](#clock-settings)
   - [NTP](#ntp)
+  - [Management SSH](#management-ssh)
+  - [Management Console](#management-console)
   - [Management API HTTP](#management-api-http)
 - [Authentication](#authentication)
   - [Local Users](#local-users)
@@ -28,6 +32,9 @@
 - [VLANs](#vlans)
   - [VLANs Summary](#vlans-summary)
   - [VLANs Device Configuration](#vlans-device-configuration)
+- [Interfaces](#interfaces)
+  - [Ethernet Interfaces](#ethernet-interfaces)
+  - [Port-Channel Interfaces](#port-channel-interfaces)
 - [Routing](#routing)
   - [Service Routing Protocols Model](#service-routing-protocols-model)
   - [IP Routing](#ip-routing)
@@ -72,6 +79,17 @@ interface Management1
    ip address 10.118.5.41/24
 ```
 
+### DNS Domain
+
+DNS domain: purecloud.ae
+
+#### DNS Domain Device Configuration
+
+```eos
+dns domain purecloud.ae
+!
+```
+
 ### IP Name Servers
 
 #### IP Name Servers Summary
@@ -102,6 +120,19 @@ ip name-server vrf PCS-NETINFRA-OOB 10.118.200.12
 ip domain lookup vrf PCS-NETINFRA-OOB source-interface Management1
 ```
 
+### Clock Settings
+
+#### Clock Timezone Settings
+
+Clock Timezone is set to **Asia/Dubai**.
+
+#### Clock Device Configuration
+
+```eos
+!
+clock timezone Asia/Dubai
+```
+
 ### NTP
 
 #### NTP Summary
@@ -119,6 +150,46 @@ ip domain lookup vrf PCS-NETINFRA-OOB source-interface Management1
 !
 ntp server vrf PCS-NETINFRA-OOB 10.113.200.3 prefer
 ntp server vrf PCS-NETINFRA-OOB 10.118.200.3
+```
+
+### Management SSH
+
+#### VRFs
+
+| VRF | Enabled | IPv4 ACL | IPv6 ACL |
+| --- | ------- | -------- | -------- |
+| PCS-NETINFRA-OOB | True | - | - |
+| default | False | - | - |
+
+#### Other SSH Settings
+
+| Idle Timeout | Connection Limit | Max from a single Host | Ciphers | Key-exchange methods | MAC algorithms | Hostkey server algorithms |
+| ------------ | ---------------- | ---------------------- | ------- | -------------------- | -------------- | ------------------------- |
+| 15 | - | - | default | default | default | default |
+
+#### Management SSH Device Configuration
+
+```eos
+!
+management ssh
+   idle-timeout 15
+   !
+   vrf PCS-NETINFRA-OOB
+      no shutdown
+```
+
+### Management Console
+
+#### Management Console Timeout
+
+Management Console Timeout is set to **20** minutes.
+
+#### Management Console Device Configuration
+
+```eos
+!
+management console
+   idle-timeout 20
 ```
 
 ### Management API HTTP
@@ -346,6 +417,68 @@ vlan internal order ascending range 1006 1199
 !
 vlan 5
    name PureCS_Network_Infra_nodes_OOB
+```
+
+## Interfaces
+
+### Ethernet Interfaces
+
+#### Ethernet Interfaces Summary
+
+##### L2
+
+| Interface | Description | Mode | VLANs | Native VLAN | Trunk Group | Channel-Group |
+| --------- | ----------- | ---- | ----- | ----------- | ----------- | ------------- |
+| Ethernet1 | SERVER_be-leaf1_0 | access | 5 | - | - | - |
+| Ethernet49 | L2_KDC-AR7508R3-PCS-FELEAF1_Ethernet6/47/1 | *trunk | *5 | *- | *- | 49 |
+| Ethernet50 | L2_KDC-AR7508R3-PCS-FELEAF2_Ethernet6/47/1 | *trunk | *5 | *- | *- | 49 |
+
+*Inherited from Port-Channel Interface
+
+#### Ethernet Interfaces Device Configuration
+
+```eos
+!
+interface Ethernet1
+   description SERVER_be-leaf1_0
+   no shutdown
+   switchport access vlan 5
+   switchport mode access
+   switchport
+   spanning-tree portfast
+   spanning-tree bpduguard enable
+!
+interface Ethernet49
+   description L2_KDC-AR7508R3-PCS-FELEAF1_Ethernet6/47/1
+   no shutdown
+   channel-group 49 mode active
+!
+interface Ethernet50
+   description L2_KDC-AR7508R3-PCS-FELEAF2_Ethernet6/47/1
+   no shutdown
+   channel-group 49 mode active
+```
+
+### Port-Channel Interfaces
+
+#### Port-Channel Interfaces Summary
+
+##### L2
+
+| Interface | Description | Mode | VLANs | Native VLAN | Trunk Group | LACP Fallback Timeout | LACP Fallback Mode | MLAG ID | EVPN ESI |
+| --------- | ----------- | ---- | ----- | ----------- | ------------| --------------------- | ------------------ | ------- | -------- |
+| Port-Channel49 | L2_FE_LEAF_Port-Channel1647 | trunk | 5 | - | - | - | - | - | - |
+
+#### Port-Channel Interfaces Device Configuration
+
+```eos
+!
+interface Port-Channel49
+   description L2_FE_LEAF_Port-Channel1647
+   no shutdown
+   switchport trunk allowed vlan 5
+   switchport mode trunk
+   switchport
 ```
 
 ## Routing

@@ -33,6 +33,8 @@ aaa_server_groups:
     vrf: PCS-NETINFRA-OOB
   - server: 10.100.100.50
     vrf: PCS-NETINFRA-OOB
+clock:
+  timezone: Asia/Dubai
 config_end: true
 daemon_terminattr:
   cvaddrs:
@@ -48,6 +50,25 @@ daemon_terminattr:
   smashexcludes: ale,flexCounter,hardware,kni,pulse,strata
 enable_password:
   disabled: true
+ethernet_interfaces:
+- name: Ethernet49
+  description: L2_KDC-AR7508R3-PCS-FELEAF1_Ethernet7/39/1
+  shutdown: false
+  channel_group:
+    id: 49
+    mode: active
+  peer: KDC-AR7508R3-PCS-FELEAF1
+  peer_interface: Ethernet7/39/1
+  peer_type: l3leaf
+- name: Ethernet50
+  description: L2_KDC-AR7508R3-PCS-FELEAF2_Ethernet7/37/1
+  shutdown: false
+  channel_group:
+    id: 49
+    mode: active
+  peer: KDC-AR7508R3-PCS-FELEAF2
+  peer_interface: Ethernet7/37/1
+  peer_type: l3leaf
 hostname: KDC-AR7010TX-PCS-OOB3
 ip_domain_lookup:
   source_interfaces:
@@ -84,6 +105,11 @@ management_interfaces:
   ip_address: 10.118.5.43/24
   type: oob
   gateway: 10.118.5.254
+management_ssh:
+  idle_timeout: 15
+  vrfs:
+  - name: PCS-NETINFRA-OOB
+    enable: true
 metadata:
   is_deployed: true
   platform: vEOS-lab
@@ -95,6 +121,15 @@ ntp:
     vrf: PCS-NETINFRA-OOB
   - name: 10.118.200.3
     vrf: PCS-NETINFRA-OOB
+port_channel_interfaces:
+- name: Port-Channel49
+  description: L2_FE_LEAF_Port-Channel1637
+  shutdown: false
+  switchport:
+    enabled: true
+    mode: trunk
+    trunk:
+      allowed_vlan: '5'
 queue_monitor_length:
   enabled: true
   log: 30

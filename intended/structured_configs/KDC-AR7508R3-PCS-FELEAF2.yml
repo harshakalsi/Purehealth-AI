@@ -33,6 +33,8 @@ aaa_server_groups:
     vrf: PCS-NETINFRA-OOB
   - server: 10.100.100.50
     vrf: PCS-NETINFRA-OOB
+clock:
+  timezone: Asia/Dubai
 config_end: true
 daemon_terminattr:
   cvaddrs:
@@ -121,6 +123,33 @@ ethernet_interfaces:
   peer: KDC-AR7508R3-PCS-FELEAF1
   peer_interface: Ethernet7/50/1
   peer_type: mlag_peer
+- name: Ethernet6/47/1
+  description: L2_KDC-AR7010TX-PCS-OOB1_Ethernet50
+  shutdown: false
+  channel_group:
+    id: 1647
+    mode: active
+  peer: KDC-AR7010TX-PCS-OOB1
+  peer_interface: Ethernet50
+  peer_type: l2leaf
+- name: Ethernet6/48/1
+  description: L2_KDC-AR7010TX-PCS-OOB2_Ethernet50
+  shutdown: false
+  channel_group:
+    id: 1648
+    mode: active
+  peer: KDC-AR7010TX-PCS-OOB2
+  peer_interface: Ethernet50
+  peer_type: l2leaf
+- name: Ethernet7/37/1
+  description: L2_KDC-AR7010TX-PCS-OOB3_Ethernet50
+  shutdown: false
+  channel_group:
+    id: 1637
+    mode: active
+  peer: KDC-AR7010TX-PCS-OOB3
+  peer_interface: Ethernet50
+  peer_type: l2leaf
 - name: Ethernet5
   description: SERVER_dc1-leaf1-server1_PCI2
   shutdown: false
@@ -159,7 +188,7 @@ ethernet_interfaces:
   peer: DC-01
   peer_interface: '29'
   peer_type: firewall
-  port_profile: Perimeter_FW
+  port_profile: DC-FW
 - name: Ethernet7/44/1
   description: FIREWALL_DC-01_30
   shutdown: false
@@ -169,7 +198,7 @@ ethernet_interfaces:
   peer: DC-01
   peer_interface: '30'
   peer_type: firewall
-  port_profile: Perimeter_FW
+  port_profile: DC-FW
 - name: Ethernet6/45/1
   description: FIREWALL_DC-02_29
   shutdown: false
@@ -339,6 +368,11 @@ management_interfaces:
   ip_address: 10.118.5.17/24
   type: oob
   gateway: 10.118.5.254
+management_ssh:
+  idle_timeout: 15
+  vrfs:
+  - name: PCS-NETINFRA-OOB
+    enable: true
 metadata:
   is_deployed: true
   platform: vEOS-lab
@@ -346,7 +380,7 @@ metadata:
 mlag_configuration:
   domain_id: MLAG_FE_LEAF_01
   local_interface: Vlan4094
-  peer_address: 10.118.4.248
+  peer_address: 10.118.4.254
   peer_address_heartbeat:
     peer_ip: 10.118.5.16
     vrf: PCS-NETINFRA-OOB
@@ -371,6 +405,33 @@ port_channel_interfaces:
     trunk:
       groups:
       - MLAG
+- name: Port-Channel1647
+  description: L2_KDC-AR7010TX-PCS-OOB1_Port-Channel49
+  shutdown: false
+  mlag: 1647
+  switchport:
+    enabled: true
+    mode: trunk
+    trunk:
+      allowed_vlan: '5'
+- name: Port-Channel1648
+  description: L2_KDC-AR7010TX-PCS-OOB2_Port-Channel49
+  shutdown: false
+  mlag: 1648
+  switchport:
+    enabled: true
+    mode: trunk
+    trunk:
+      allowed_vlan: '5'
+- name: Port-Channel1637
+  description: L2_KDC-AR7010TX-PCS-OOB3_Port-Channel49
+  shutdown: false
+  mlag: 1637
+  switchport:
+    enabled: true
+    mode: trunk
+    trunk:
+      allowed_vlan: '5'
 - name: Port-Channel5
   description: SERVER_dc1-leaf1-server1_Bond1
   shutdown: false
@@ -410,7 +471,7 @@ port_channel_interfaces:
     enabled: true
     mode: trunk
     trunk:
-      allowed_vlan: 15,16
+      allowed_vlan: 1004-1006,1009,1011-1013,1025
       native_vlan: 1000
 - name: Port-Channel1645
   description: FIREWALL_DC-02_Bond1
@@ -490,6 +551,13 @@ router_bfd:
 router_bgp:
   as: '65371'
   router_id: 10.118.0.4
+  distance:
+    external_routes: 20
+    internal_routes: 200
+    local_routes: 200
+  graceful_restart:
+    enabled: true
+    restart_time: 300
   maximum_paths:
     paths: 4
     ecmp: 4
@@ -1295,7 +1363,7 @@ router_bgp:
     neighbors:
     - ip_address: 10.118.4.250
       peer_group: MLAG-IPv4-UNDERLAY-PEER
-      description: KDC-AR7508R3-PCS-FELEAF1_Vlan409
+      description: KDC-AR7508R3-PCS-FELEAF1_Vlan4092
     redistribute:
       connected:
         enabled: true
@@ -1350,7 +1418,7 @@ vlan_interfaces:
 - name: Vlan4094
   description: MLAG
   shutdown: false
-  ip_address: 10.118.4.249/31
+  ip_address: 10.118.4.255/31
   mtu: 9214
   no_autostate: true
 - name: Vlan1004
@@ -1496,7 +1564,7 @@ vlan_interfaces:
   tenant: TENANT1
   tags:
   - FE-Leaf
-- name: Vlan409
+- name: Vlan4092
   description: MLAG_L3_VRF_PCS-MPLS-INTRANET
   shutdown: false
   vrf: PCS-MPLS-INTRANET
@@ -1622,7 +1690,7 @@ vlans:
 - id: 1056
   name: pcs-wld-Edge_Overlay
   tenant: TENANT1
-- id: 409
+- id: 4092
   name: MLAG_L3_VRF_PCS-MPLS-INTRANET
   trunk_groups:
   - MLAG

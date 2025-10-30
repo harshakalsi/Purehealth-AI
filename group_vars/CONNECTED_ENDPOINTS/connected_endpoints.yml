@@ -1,10 +1,4 @@
 ---
-network_ports:
-  - switches: [KDC-AR7508R3-PCS-FELEAF1, KDC-AR7508R3-PCS-FELEAF2]
-    platforms: [7508R3, 7508R3]
-  - switches: [KDC-AR7060X6-PCS-BELEAF1, KDC-AR7060X6-PCS-BELEAF2]
-    platforms: [7060X6, 7060X6]
-
 port_profiles:
 
   - profile: Perimeter_FW
@@ -45,7 +39,15 @@ port_profiles:
     storm_control:
       all: 
         level: 10
-    
+
+  - profile: oob-ports
+    vlans: 5
+    mode: access
+    storm_control:
+      all: 
+        level: 5
+    spanning_tree_portfast: edge
+    spanning_tree_bpduguard: enabled
 
 # Definition of connected endpoints in the fabric.
 routers:
@@ -158,7 +160,7 @@ firewalls:
         switch_ports: [Ethernet6/44/1, Ethernet7/44/1, Ethernet6/44/1, Ethernet7/44/1]
         # Device names where the server ports are connected.
         switches: [KDC-AR7508R3-PCS-FELEAF1, KDC-AR7508R3-PCS-FELEAF1,KDC-AR7508R3-PCS-FELEAF2, KDC-AR7508R3-PCS-FELEAF2]
-        profile: Perimeter_FW
+        profile: DC-FW
         port_channel:
         # The port-channel name on the endpoint that will be used in the port-channel description.
           endpoint_port_channel: Bond1
@@ -235,3 +237,10 @@ servers:
         switch_ports: [Ethernet9/1, Ethernet8/1, Ethernet7/1, Ethernet6/1]
         switches: [KDC-AR7060X6-PCS-BELEAF1, KDC-AR7060X6-PCS-BELEAF1, KDC-AR7060X6-PCS-BELEAF1, KDC-AR7060X6-PCS-BELEAF1]
         profile: back-end-gpu-ports
+
+  - name: be-leaf1
+    adapters:
+      - endpoint_ports: ['0']
+        switch_ports: [Ethernet1]
+        switches: [KDC-AR7010TX-PCS-OOB1]
+        profile: oob-ports

@@ -1,7 +1,15 @@
 ---
 # Common AVD group variables
 fabric_name: FABRIC
+#BGP
+bgp_distance:
+  external_routes: 20
+  internal_routes: 200
+  local_routes: 200
 
+bgp_graceful_restart:
+  # Enable or disable graceful-restart for all BGP peers.
+  enabled: true
 # Generate CSVs with fabric link info.
 eos_designs_documentation:
   topology_csv: true
@@ -80,11 +88,11 @@ default_interfaces:
     uplink_interfaces: []
     downlink_interfaces: [Ethernet1-8]
   - types: [l3leaf]
-    platforms: ['7508R3','7060X6']
+    platforms: [default]
     uplink_interfaces: []
-    downlink_interfaces: [Ethernet3/1/1-6/44/1]
+    downlink_interfaces: [Ethernet6/47/1, Ethernet6/48/1,Ethernet7/39/1, Ethernet7/37/1, ]
   - types: [l2leaf]
-    platforms: [7010TX]
+    platforms: [default]
     uplink_interfaces: [Ethernet49-50]
 
 # CloudVision Portal definitions
@@ -99,6 +107,7 @@ cv_settings:
     disable_aaa: true
 
 # DNS Server
+dns_domain: 'purecloud.ae'
 dns_settings:
   servers:
     - ip_address: 10.113.200.12
@@ -110,3 +119,12 @@ ntp_settings:
   servers:
     - name: 10.113.200.3
     - name: 10.118.200.3
+
+ssh_settings:
+  vrfs: 
+    - name: PCS-NETINFRA-OOB
+      enabled: true
+  idle_timeout: 15
+
+# Clock timezone like "CET" or "US/Pacific".
+timezone: Asia/Dubai

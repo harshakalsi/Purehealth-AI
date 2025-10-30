@@ -19,7 +19,7 @@ l3leaf:
     # Definition of pool of IPs to be used in P2P links
     uplink_ipv4_pool: 10.255.255.0/26
     # Definition of pool of IPs to be used for MLAG peer-link connectivity
-    mlag_peer_ipv4_pool: 10.118.4.248/29
+    mlag_peer_ipv4_pool: 10.118.4.250/29
     # iBGP Peering between MLAG peers
     # Virtual router mac for VNIs assigned to Leaf switches in format xx:xx:xx:xx:xx:xx
     virtual_router_mac_address: 00:1c:73:00:00:99
@@ -47,7 +47,7 @@ l3leaf:
           mgmt_ip: 10.118.5.16/24
           uplink_switch_interfaces: []
           mlag_domain_id: "MLAG_FE_LEAF_01"
-          
+          mlag_peer_ipv4_pool: 10.118.4.254/31
           mlag_interfaces: [Ethernet3/21/1, Ethernet3/22/1, Ethernet3/23/1, Ethernet3/24/1, Ethernet6/49/1, Ethernet6/50/1, Ethernet7/49/1, Ethernet7/50/1]
         - name: KDC-AR7508R3-PCS-FELEAF2
           id: 2
@@ -55,6 +55,7 @@ l3leaf:
           mgmt_interface: Management1/1
           uplink_switch_interfaces: []
           mlag_domain_id: "MLAG_FE_LEAF_01"
+          mlag_peer_ipv4_pool: 10.118.4.255/31
           mlag_interfaces: [Ethernet3/21/1, Ethernet3/22/1, Ethernet3/23/1, Ethernet3/24/1, Ethernet6/49/1, Ethernet6/50/1, Ethernet7/49/1, Ethernet7/50/1]
     - group: BE_LEAF
       bgp_as: 65372
@@ -76,6 +77,5 @@ l3leaf:
             deny_vrfs: [PCS-MPLS-INTRANET,PCS-SHARED-INTERNET]
           mgmt_ip: 10.118.5.117/24
           uplink_switch_interfaces: []
-          mlag_dual_primary_detection: true
           mlag_domain_id: "MLAG_BE_LEAF_01"
           mlag_interfaces: [Ethernet23/1, Ethernet24/1, Ethernet25/1, Ethernet26/1, Ethernet27/1, Ethernet28/1, Ethernet29/1, Ethernet30/1, Ethernet31/1, Ethernet32/1]

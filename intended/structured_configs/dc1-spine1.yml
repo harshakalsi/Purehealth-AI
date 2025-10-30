@@ -33,6 +33,8 @@ aaa_server_groups:
     vrf: PCS-NETINFRA-OOB
   - server: 10.100.100.50
     vrf: PCS-NETINFRA-OOB
+clock:
+  timezone: Asia/Dubai
 config_end: true
 daemon_terminattr:
   cvaddrs:
@@ -88,6 +90,11 @@ management_interfaces:
   ip_address: 10.118.5.11/24
   type: oob
   gateway: 10.118.5.254
+management_ssh:
+  idle_timeout: 15
+  vrfs:
+  - name: PCS-NETINFRA-OOB
+    enable: true
 metadata:
   is_deployed: true
   platform: vEOS-lab
@@ -124,6 +131,13 @@ router_bfd:
 router_bgp:
   as: '65100'
   router_id: 10.255.0.1
+  distance:
+    external_routes: 20
+    internal_routes: 200
+    local_routes: 200
+  graceful_restart:
+    enabled: true
+    restart_time: 300
   maximum_paths:
     paths: 4
     ecmp: 4
