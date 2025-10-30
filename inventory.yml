@@ -35,10 +35,12 @@ all:
                   ansible_host: 10.118.5.117
             DC1_L2_LEAVES:
               hosts:
-                dc1-leaf1c:
-                  ansible_host: 10.118.5.18
-                dc1-leaf2c:
-                  ansible_host: 10.118.5.19
+                KDC-AR7010TX-PCS-OOB1:
+                  ansible_host: 10.118.5.41
+                KDC-AR7010TX-PCS-OOB2:
+                  ansible_host: 10.118.5.42
+                KDC-AR7010TX-PCS-OOB3:
+                  ansible_host: 10.118.5.43
 
     NETWORK_SERVICES:
       children:

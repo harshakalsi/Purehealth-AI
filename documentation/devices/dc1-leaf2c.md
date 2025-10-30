@@ -25,9 +25,9 @@
 - [Internal VLAN Allocation Policy](#internal-vlan-allocation-policy)
   - [Internal VLAN Allocation Policy Summary](#internal-vlan-allocation-policy-summary)
   - [Internal VLAN Allocation Policy Device Configuration](#internal-vlan-allocation-policy-device-configuration)
-- [Interfaces](#interfaces)
-  - [Ethernet Interfaces](#ethernet-interfaces)
-  - [Port-Channel Interfaces](#port-channel-interfaces)
+- [VLANs](#vlans)
+  - [VLANs Summary](#vlans-summary)
+  - [VLANs Device Configuration](#vlans-device-configuration)
 - [Routing](#routing)
   - [Service Routing Protocols Model](#service-routing-protocols-model)
   - [IP Routing](#ip-routing)
@@ -328,65 +328,24 @@ spanning-tree mst 0 priority 32768
 vlan internal order ascending range 1006 1199
 ```
 
-## Interfaces
+## VLANs
 
-### Ethernet Interfaces
+### VLANs Summary
 
-#### Ethernet Interfaces Summary
+| VLAN ID | Name | Trunk Groups |
+| ------- | ---- | ------------ |
+| 1000 | native_vlan | - |
+| 1300 | BE_TEST-VLAN | - |
 
-##### L2
-
-| Interface | Description | Mode | VLANs | Native VLAN | Trunk Group | Channel-Group |
-| --------- | ----------- | ---- | ----- | ----------- | ----------- | ------------- |
-| Ethernet1 | L2_KDC-AR7060X6-PCS-BELEAF1_Ethernet8 | *trunk | *none | *- | *- | 1 |
-| Ethernet2 | L2_KDC-AR7060X6-PCS-BELEAF2_Ethernet8 | *trunk | *none | *- | *- | 1 |
-| Ethernet5 | SERVER_dc1-leaf2-server1_iLO | access | 11 | - | - | - |
-
-*Inherited from Port-Channel Interface
-
-#### Ethernet Interfaces Device Configuration
+### VLANs Device Configuration
 
 ```eos
 !
-interface Ethernet1
-   description L2_KDC-AR7060X6-PCS-BELEAF1_Ethernet8
-   no shutdown
-   channel-group 1 mode active
+vlan 1000
+   name native_vlan
 !
-interface Ethernet2
-   description L2_KDC-AR7060X6-PCS-BELEAF2_Ethernet8
-   no shutdown
-   channel-group 1 mode active
-!
-interface Ethernet5
-   description SERVER_dc1-leaf2-server1_iLO
-   no shutdown
-   switchport access vlan 11
-   switchport mode access
-   switchport
-   spanning-tree portfast
-```
-
-### Port-Channel Interfaces
-
-#### Port-Channel Interfaces Summary
-
-##### L2
-
-| Interface | Description | Mode | VLANs | Native VLAN | Trunk Group | LACP Fallback Timeout | LACP Fallback Mode | MLAG ID | EVPN ESI |
-| --------- | ----------- | ---- | ----- | ----------- | ------------| --------------------- | ------------------ | ------- | -------- |
-| Port-Channel1 | L2_BE_LEAF_Port-Channel8 | trunk | none | - | - | - | - | - | - |
-
-#### Port-Channel Interfaces Device Configuration
-
-```eos
-!
-interface Port-Channel1
-   description L2_BE_LEAF_Port-Channel8
-   no shutdown
-   switchport trunk allowed vlan none
-   switchport mode trunk
-   switchport
+vlan 1300
+   name BE_TEST-VLAN
 ```
 
 ## Routing

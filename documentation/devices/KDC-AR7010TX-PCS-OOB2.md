@@ -1,4 +1,4 @@
-# dc1-leaf1c
+# KDC-AR7010TX-PCS-OOB2
 
 ## Table of Contents
 
@@ -28,13 +28,15 @@
 - [VLANs](#vlans)
   - [VLANs Summary](#vlans-summary)
   - [VLANs Device Configuration](#vlans-device-configuration)
-- [Interfaces](#interfaces)
-  - [Ethernet Interfaces](#ethernet-interfaces)
 - [Routing](#routing)
   - [Service Routing Protocols Model](#service-routing-protocols-model)
   - [IP Routing](#ip-routing)
   - [IPv6 Routing](#ipv6-routing)
   - [Static Routes](#static-routes)
+- [Queue Monitor](#queue-monitor)
+  - [Queue Monitor Length](#queue-monitor-length)
+  - [Queue Monitor Streaming](#queue-monitor-streaming)
+  - [Queue Monitor Configuration](#queue-monitor-configuration)
 - [Multicast](#multicast)
   - [IP IGMP Snooping](#ip-igmp-snooping)
 - [VRF Instances](#vrf-instances)
@@ -51,7 +53,7 @@
 
 | Management Interface | Description | Type | VRF | IP Address | Gateway |
 | -------------------- | ----------- | ---- | --- | ---------- | ------- |
-| Management1 | OOB_MANAGEMENT | oob | PCS-NETINFRA-OOB | 10.118.5.18/24 | 10.118.5.254 |
+| Management1 | OOB_MANAGEMENT | oob | PCS-NETINFRA-OOB | 10.118.5.42/24 | 10.118.5.254 |
 
 ##### IPv6
 
@@ -67,7 +69,7 @@ interface Management1
    description OOB_MANAGEMENT
    no shutdown
    vrf PCS-NETINFRA-OOB
-   ip address 10.118.5.18/24
+   ip address 10.118.5.42/24
 ```
 
 ### IP Name Servers
@@ -337,96 +339,6 @@ vlan internal order ascending range 1006 1199
 | VLAN ID | Name | Trunk Groups |
 | ------- | ---- | ------------ |
 | 5 | PureCS_Network_Infra_nodes_OOB | - |
-| 7 | MPLS_Outside_DC_firewall | - |
-| 8 | Internet_HIS_VDOM_outside_DC_Fir | - |
-| 14 | PURE_VRF_MPLS | - |
-| 17 | PCS_AAN_MPLS | - |
-| 18 | EMAC-VLAN-For-Internet | - |
-| 303 | SEHA_VPLS_HCF | - |
-| 1000 | native_vlan | - |
-| 1004 | PC-MGMT-MPLS | - |
-| 1006 | MPLS_PC-MPLS_VDOM_outside_DC_FW | - |
-| 1009 | Internet_PC-MGMT_VDOM_Outside_DC | - |
-| 1010 | Internet_PC-WLD_VDOM_outside_DC_ | - |
-| 1011 | PC-Shared-INT | - |
-| 1012 | iDRAC-MPLS | - |
-| 1013 | iDRAC-Internet | - |
-| 1014 | PC-WLD-MPLS | - |
-| 1015 | MPLS_Intranet_VDOM_Inside_P_FW | - |
-| 1016 | Peri-shared-internetVDOM | - |
-| 1017 | MPLS_Intranet_VDOM_Outside_P_FW_ | - |
-| 1018 | Internet_Internet_VDOM_Outside_P | - |
-| 1019 | PC-Shared-MPLS | - |
-| 1020 | KDC-iDRAC-Pcloud | - |
-| 1021 | pc-mgm-mgmt | - |
-| 1022 | pcs-mgm-vmotion | - |
-| 1023 | pcs-mgm-vSAN | - |
-| 1024 | pcs-mgm-NSX-T_Host_Overlay | - |
-| 1025 | pcs-mgm-Edge_Uplink_1 | - |
-| 1026 | pcs-mgm-Edge_Uplink_2 | - |
-| 1027 | pcs-mgm-Edge_Overlay | - |
-| 1028 | ESXi-Host-MGMT | - |
-| 1029 | PC_BACKUP | - |
-| 1033 | Seha_CRS_Rep | - |
-| 1035 | Seha_CRS_CROOM | - |
-| 1036 | VAULT-OOB | - |
-| 1037 | FlexAMgmt | - |
-| 1038 | pcs-mgm-ReplicationVMs | - |
-| 1050 | pcs-wld-oob | - |
-| 1051 | pcs-wld-vmotion | - |
-| 1052 | pcs-wld-vSAN | - |
-| 1053 | pcs-wld-NSX-T_Host_Overlay | - |
-| 1054 | pcs-wld-Edge_Uplink_1 | - |
-| 1055 | pcs-wld-Edge_Uplink_2 | - |
-| 1056 | pcs-wld-Edge_Overlay | - |
-| 1057 | Nutanix-AHV-CVM | - |
-| 1058 | PCS_CSE_SERVICES_ORG | - |
-| 1060 | pcs-wld-vcda | - |
-| 1061 | pcs-wld-Tenant1-Internet-U1 | - |
-| 1062 | pcs-wld-Tenant1-MPLS-U1 | - |
-| 1101 | pcs-idrac-management | - |
-| 1102 | pcs-esxi-management | - |
-| 1155 | pcs-his-backups | - |
-| 1157 | VLAN1157 | - |
-| 1160 | powerstore_NSF | - |
-| 1161 | iSCSI_ControllerA | - |
-| 1162 | iSCSI_ControllerB | - |
-| 1163 | PC_ECS_MGMT | - |
-| 1164 | PC_ECS_REPLICATION | - |
-| 1165 | PC_ECS_DATA | - |
-| 1166 | Dawak_Pura_Callcenter-SBCs | - |
-| 1167 | Dawak_Pura_Callcenter-Edge | - |
-| 1168 | PCS_DAWAK_CC_OOB_IDRAC | - |
-| 1169 | VLAN1169 | - |
-| 1200 | PC-DR_Shared_Domain_Zone | - |
-| 1201 | PC-DR_Shared_MonBCKUP_Zone | - |
-| 1202 | PC_Shared_EndSecurity_Zone | - |
-| 1203 | PC_Shared_SOC_Zone | - |
-| 1204 | PC-DR_Shared_JumpInfra_Zone | - |
-| 1205 | PC_Shared_JumpExt_Zone | - |
-| 1206 | VAULT-DMZ | - |
-| 1301 | MPLS_NSOC | - |
-| 1302 | SEHA_VPLS | - |
-| 1304 | Connected_AL_AIN_MALAFI_MPLS | - |
-| 1309 | SEHA_CRS_Rep | - |
-| 1310 | SEHA_CRS_CLEANROOM | - |
-| 1311 | Riayati_MPLS | - |
-| 1350 | SD_WAN_TRANSIT | - |
-| 1351 | SD_WAN_INTERNET | - |
-| 1501 | mss_and_anycast_test | - |
-| 2000 | DC_DC_L2 | - |
-| 2005 | VAULT-OOB | - |
-| 2006 | FlexAMgmt | - |
-| 2007 | Nutanix-AHV-CVM | - |
-| 2008 | VM-NuatanixProd | - |
-| 2009 | Veritas-Daman-Rep | - |
-| 2010 | Veritas-SEHA-Rep | - |
-| 2011 | Veritas-Tenant-Rep | - |
-| 2012 | Veritas-Daman-Mgmt | - |
-| 2013 | Veritas-SEHA-Mgmt | - |
-| 2014 | Scan-VMs | - |
-| 2015 | JS-VLAN | - |
-| 2016 | NTP-VLAN | - |
 
 ### VLANs Device Configuration
 
@@ -434,303 +346,6 @@ vlan internal order ascending range 1006 1199
 !
 vlan 5
    name PureCS_Network_Infra_nodes_OOB
-!
-vlan 7
-   name MPLS_Outside_DC_firewall
-!
-vlan 8
-   name Internet_HIS_VDOM_outside_DC_Fir
-!
-vlan 14
-   name PURE_VRF_MPLS
-!
-vlan 17
-   name PCS_AAN_MPLS
-!
-vlan 18
-   name EMAC-VLAN-For-Internet
-!
-vlan 303
-   name SEHA_VPLS_HCF
-!
-vlan 1000
-   name native_vlan
-!
-vlan 1004
-   name PC-MGMT-MPLS
-!
-vlan 1006
-   name MPLS_PC-MPLS_VDOM_outside_DC_FW
-!
-vlan 1009
-   name Internet_PC-MGMT_VDOM_Outside_DC
-!
-vlan 1010
-   name Internet_PC-WLD_VDOM_outside_DC_
-!
-vlan 1011
-   name PC-Shared-INT
-!
-vlan 1012
-   name iDRAC-MPLS
-!
-vlan 1013
-   name iDRAC-Internet
-!
-vlan 1014
-   name PC-WLD-MPLS
-!
-vlan 1015
-   name MPLS_Intranet_VDOM_Inside_P_FW
-!
-vlan 1016
-   name Peri-shared-internetVDOM
-!
-vlan 1017
-   name MPLS_Intranet_VDOM_Outside_P_FW_
-!
-vlan 1018
-   name Internet_Internet_VDOM_Outside_P
-!
-vlan 1019
-   name PC-Shared-MPLS
-!
-vlan 1020
-   name KDC-iDRAC-Pcloud
-!
-vlan 1021
-   name pc-mgm-mgmt
-!
-vlan 1022
-   name pcs-mgm-vmotion
-!
-vlan 1023
-   name pcs-mgm-vSAN
-!
-vlan 1024
-   name pcs-mgm-NSX-T_Host_Overlay
-!
-vlan 1025
-   name pcs-mgm-Edge_Uplink_1
-!
-vlan 1026
-   name pcs-mgm-Edge_Uplink_2
-!
-vlan 1027
-   name pcs-mgm-Edge_Overlay
-!
-vlan 1028
-   name ESXi-Host-MGMT
-!
-vlan 1029
-   name PC_BACKUP
-!
-vlan 1033
-   name Seha_CRS_Rep
-!
-vlan 1035
-   name Seha_CRS_CROOM
-!
-vlan 1036
-   name VAULT-OOB
-!
-vlan 1037
-   name FlexAMgmt
-!
-vlan 1038
-   name pcs-mgm-ReplicationVMs
-!
-vlan 1050
-   name pcs-wld-oob
-!
-vlan 1051
-   name pcs-wld-vmotion
-!
-vlan 1052
-   name pcs-wld-vSAN
-!
-vlan 1053
-   name pcs-wld-NSX-T_Host_Overlay
-!
-vlan 1054
-   name pcs-wld-Edge_Uplink_1
-!
-vlan 1055
-   name pcs-wld-Edge_Uplink_2
-!
-vlan 1056
-   name pcs-wld-Edge_Overlay
-!
-vlan 1057
-   name Nutanix-AHV-CVM
-!
-vlan 1058
-   name PCS_CSE_SERVICES_ORG
-!
-vlan 1060
-   name pcs-wld-vcda
-!
-vlan 1061
-   name pcs-wld-Tenant1-Internet-U1
-!
-vlan 1062
-   name pcs-wld-Tenant1-MPLS-U1
-!
-vlan 1101
-   name pcs-idrac-management
-!
-vlan 1102
-   name pcs-esxi-management
-!
-vlan 1155
-   name pcs-his-backups
-!
-vlan 1157
-   name VLAN1157
-!
-vlan 1160
-   name powerstore_NSF
-!
-vlan 1161
-   name iSCSI_ControllerA
-!
-vlan 1162
-   name iSCSI_ControllerB
-!
-vlan 1163
-   name PC_ECS_MGMT
-!
-vlan 1164
-   name PC_ECS_REPLICATION
-!
-vlan 1165
-   name PC_ECS_DATA
-!
-vlan 1166
-   name Dawak_Pura_Callcenter-SBCs
-!
-vlan 1167
-   name Dawak_Pura_Callcenter-Edge
-!
-vlan 1168
-   name PCS_DAWAK_CC_OOB_IDRAC
-!
-vlan 1169
-   name VLAN1169
-!
-vlan 1200
-   name PC-DR_Shared_Domain_Zone
-!
-vlan 1201
-   name PC-DR_Shared_MonBCKUP_Zone
-!
-vlan 1202
-   name PC_Shared_EndSecurity_Zone
-!
-vlan 1203
-   name PC_Shared_SOC_Zone
-!
-vlan 1204
-   name PC-DR_Shared_JumpInfra_Zone
-!
-vlan 1205
-   name PC_Shared_JumpExt_Zone
-!
-vlan 1206
-   name VAULT-DMZ
-!
-vlan 1301
-   name MPLS_NSOC
-!
-vlan 1302
-   name SEHA_VPLS
-!
-vlan 1304
-   name Connected_AL_AIN_MALAFI_MPLS
-!
-vlan 1309
-   name SEHA_CRS_Rep
-!
-vlan 1310
-   name SEHA_CRS_CLEANROOM
-!
-vlan 1311
-   name Riayati_MPLS
-!
-vlan 1350
-   name SD_WAN_TRANSIT
-!
-vlan 1351
-   name SD_WAN_INTERNET
-!
-vlan 1501
-   name mss_and_anycast_test
-!
-vlan 2000
-   name DC_DC_L2
-!
-vlan 2005
-   name VAULT-OOB
-!
-vlan 2006
-   name FlexAMgmt
-!
-vlan 2007
-   name Nutanix-AHV-CVM
-!
-vlan 2008
-   name VM-NuatanixProd
-!
-vlan 2009
-   name Veritas-Daman-Rep
-!
-vlan 2010
-   name Veritas-SEHA-Rep
-!
-vlan 2011
-   name Veritas-Tenant-Rep
-!
-vlan 2012
-   name Veritas-Daman-Mgmt
-!
-vlan 2013
-   name Veritas-SEHA-Mgmt
-!
-vlan 2014
-   name Scan-VMs
-!
-vlan 2015
-   name JS-VLAN
-!
-vlan 2016
-   name NTP-VLAN
-```
-
-## Interfaces
-
-### Ethernet Interfaces
-
-#### Ethernet Interfaces Summary
-
-##### L2
-
-| Interface | Description | Mode | VLANs | Native VLAN | Trunk Group | Channel-Group |
-| --------- | ----------- | ---- | ----- | ----------- | ----------- | ------------- |
-| Ethernet5 | SERVER_dc1-leaf1-server1_iLO | access | 11 | - | - | - |
-
-*Inherited from Port-Channel Interface
-
-#### Ethernet Interfaces Device Configuration
-
-```eos
-!
-interface Ethernet5
-   description SERVER_dc1-leaf1-server1_iLO
-   no shutdown
-   switchport access vlan 11
-   switchport mode access
-   switchport
-   spanning-tree portfast
 ```
 
 ## Routing
@@ -781,6 +396,32 @@ no ip routing vrf PCS-NETINFRA-OOB
 ```eos
 !
 ip route vrf PCS-NETINFRA-OOB 0.0.0.0/0 10.118.5.254
+```
+
+## Queue Monitor
+
+### Queue Monitor Length
+
+| Enabled | Logging Interval | Default Thresholds High | Default Thresholds Low | Notifying | TX Latency | CPU Thresholds High | CPU Thresholds Low | Mirroring Enabled | Mirror destinations |
+| ------- | ---------------- | ----------------------- | ---------------------- | --------- | ---------- | ------------------- | ------------------ | ----------------- | ------------------ |
+| True | 30 | - | - | disabled | disabled | - | - | - | - |
+
+### Queue Monitor Streaming
+
+| Enabled | IP Access Group | IPv6 Access Group | Max Connections | VRF |
+| ------- | --------------- | ----------------- | --------------- | --- |
+| True | - | - | - | - |
+
+### Queue Monitor Configuration
+
+```eos
+!
+queue-monitor length
+!
+queue-monitor length log 30
+!
+queue-monitor streaming
+   no shutdown
 ```
 
 ## Multicast

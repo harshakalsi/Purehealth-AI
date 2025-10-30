@@ -42,60 +42,85 @@ daemon_terminattr:
   cvauth:
     method: token
     token_file: /tmp/token
-  cvsourceintf: Management1
+  cvsourceintf: Management1/1
   cvvrf: PCS-NETINFRA-OOB
   disable_aaa: true
   smashexcludes: ale,flexCounter,hardware,kni,pulse,strata
 enable_password:
   disabled: true
 ethernet_interfaces:
-- name: Ethernet3
-  description: MLAG_KDC-AR7508R3-PCS-FELEAF2_Ethernet3
+- name: Ethernet3/21/1
+  description: MLAG_KDC-AR7508R3-PCS-FELEAF2_Ethernet3/21/1
   shutdown: false
   channel_group:
-    id: 3
+    id: 1000
     mode: active
   peer: KDC-AR7508R3-PCS-FELEAF2
-  peer_interface: Ethernet3
+  peer_interface: Ethernet3/21/1
   peer_type: mlag_peer
-- name: Ethernet4
-  description: MLAG_KDC-AR7508R3-PCS-FELEAF2_Ethernet4
+- name: Ethernet3/22/1
+  description: MLAG_KDC-AR7508R3-PCS-FELEAF2_Ethernet3/22/1
   shutdown: false
   channel_group:
-    id: 3
+    id: 1000
     mode: active
   peer: KDC-AR7508R3-PCS-FELEAF2
-  peer_interface: Ethernet4
+  peer_interface: Ethernet3/22/1
   peer_type: mlag_peer
-- name: Ethernet1
-  description: P2P_dc1-spine1_Ethernet1
-  shutdown: false
-  mtu: 9214
-  ip_address: 10.255.255.1/31
-  peer: dc1-spine1
-  peer_interface: Ethernet1
-  peer_type: spine
-  switchport:
-    enabled: false
-- name: Ethernet2
-  description: P2P_dc1-spine2_Ethernet1
-  shutdown: false
-  mtu: 9214
-  ip_address: 10.255.255.3/31
-  peer: dc1-spine2
-  peer_interface: Ethernet1
-  peer_type: spine
-  switchport:
-    enabled: false
-- name: Ethernet8
-  description: L2_dc1-leaf1c_Ethernet1
+- name: Ethernet3/23/1
+  description: MLAG_KDC-AR7508R3-PCS-FELEAF2_Ethernet3/23/1
   shutdown: false
   channel_group:
-    id: 8
+    id: 1000
     mode: active
-  peer: dc1-leaf1c
-  peer_interface: Ethernet1
-  peer_type: l2leaf
+  peer: KDC-AR7508R3-PCS-FELEAF2
+  peer_interface: Ethernet3/23/1
+  peer_type: mlag_peer
+- name: Ethernet3/24/1
+  description: MLAG_KDC-AR7508R3-PCS-FELEAF2_Ethernet3/24/1
+  shutdown: false
+  channel_group:
+    id: 1000
+    mode: active
+  peer: KDC-AR7508R3-PCS-FELEAF2
+  peer_interface: Ethernet3/24/1
+  peer_type: mlag_peer
+- name: Ethernet6/49/1
+  description: MLAG_KDC-AR7508R3-PCS-FELEAF2_Ethernet6/49/1
+  shutdown: false
+  channel_group:
+    id: 1000
+    mode: active
+  peer: KDC-AR7508R3-PCS-FELEAF2
+  peer_interface: Ethernet6/49/1
+  peer_type: mlag_peer
+- name: Ethernet6/50/1
+  description: MLAG_KDC-AR7508R3-PCS-FELEAF2_Ethernet6/50/1
+  shutdown: false
+  channel_group:
+    id: 1000
+    mode: active
+  peer: KDC-AR7508R3-PCS-FELEAF2
+  peer_interface: Ethernet6/50/1
+  peer_type: mlag_peer
+- name: Ethernet7/49/1
+  description: MLAG_KDC-AR7508R3-PCS-FELEAF2_Ethernet7/49/1
+  shutdown: false
+  channel_group:
+    id: 1000
+    mode: active
+  peer: KDC-AR7508R3-PCS-FELEAF2
+  peer_interface: Ethernet7/49/1
+  peer_type: mlag_peer
+- name: Ethernet7/50/1
+  description: MLAG_KDC-AR7508R3-PCS-FELEAF2_Ethernet7/50/1
+  shutdown: false
+  channel_group:
+    id: 1000
+    mode: active
+  peer: KDC-AR7508R3-PCS-FELEAF2
+  peer_interface: Ethernet7/50/1
+  peer_type: mlag_peer
 - name: Ethernet5
   description: SERVER_dc1-leaf1-server1_PCI1
   shutdown: false
@@ -105,10 +130,172 @@ ethernet_interfaces:
   peer: dc1-leaf1-server1
   peer_interface: PCI1
   peer_type: server
+- name: Ethernet7/46/1
+  description: FIREWALL_perimerter-01_23
+  shutdown: false
+  channel_group:
+    id: 1646
+    mode: active
+  peer: perimerter-01
+  peer_interface: '23'
+  peer_type: firewall
+  port_profile: Perimeter_FW
+- name: Ethernet6/46/1
+  description: FIREWALL_perimerter-02_24
+  shutdown: false
+  channel_group:
+    id: 1746
+    mode: active
+  peer: perimerter-02
+  peer_interface: '24'
+  peer_type: firewall
+  port_profile: Perimeter_FW
+- name: Ethernet6/44/1
+  description: FIREWALL_DC-01_27
+  shutdown: false
+  channel_group:
+    id: 1644
+    mode: active
+  peer: DC-01
+  peer_interface: '27'
+  peer_type: firewall
+  port_profile: Perimeter_FW
+- name: Ethernet7/44/1
+  description: FIREWALL_DC-01_28
+  shutdown: false
+  channel_group:
+    id: 1644
+    mode: active
+  peer: DC-01
+  peer_interface: '28'
+  peer_type: firewall
+  port_profile: Perimeter_FW
+- name: Ethernet6/45/1
+  description: FIREWALL_DC-02_27
+  shutdown: false
+  channel_group:
+    id: 1645
+    mode: active
+  peer: DC-02
+  peer_interface: '27'
+  peer_type: firewall
+  port_profile: DC-FW
+- name: Ethernet7/45/1
+  description: FIREWALL_DC-02_28
+  shutdown: false
+  channel_group:
+    id: 1645
+    mode: active
+  peer: DC-02
+  peer_interface: '28'
+  peer_type: firewall
+  port_profile: DC-FW
+- name: Ethernet7/47/1
+  description: ROUTER_Internet-CPE-01_2
+  shutdown: false
+  peer: Internet-CPE-01
+  peer_interface: '2'
+  peer_type: router
+  port_profile: CPE
+  switchport:
+    enabled: true
+    mode: access
+    access_vlan: 18
+- name: Ethernet7/48/1
+  description: ROUTER_MPLS-CPE-01_5
+  shutdown: false
+  peer: MPLS-CPE-01
+  peer_interface: '5'
+  peer_type: router
+  port_profile: CPE
+  switchport:
+    enabled: true
+    mode: access
+    access_vlan: 17
+- name: Ethernet6/40/1
+  description: LOAD_BALANCER_01_3.0
+  shutdown: false
+  channel_group:
+    id: 1640
+    mode: active
+  peer: '01'
+  peer_interface: '3.0'
+  peer_type: load_balancer
+  port_profile: loadbalancer
+- name: Ethernet6/41/1
+  description: LOAD_BALANCER_01_5.0
+  shutdown: false
+  channel_group:
+    id: 1640
+    mode: active
+  peer: '01'
+  peer_interface: '5.0'
+  peer_type: load_balancer
+  port_profile: loadbalancer
+- name: Ethernet7/40/1
+  description: LOAD_BALANCER_01_7.0
+  shutdown: false
+  channel_group:
+    id: 1640
+    mode: active
+  peer: '01'
+  peer_interface: '7.0'
+  peer_type: load_balancer
+  port_profile: loadbalancer
+- name: Ethernet7/41/1
+  description: LOAD_BALANCER_01_9.0
+  shutdown: false
+  channel_group:
+    id: 1640
+    mode: active
+  peer: '01'
+  peer_interface: '9.0'
+  peer_type: load_balancer
+  port_profile: loadbalancer
+- name: Ethernet6/42/1
+  description: LOAD_BALANCER_02_3.0
+  shutdown: false
+  channel_group:
+    id: 1642
+    mode: active
+  peer: '02'
+  peer_interface: '3.0'
+  peer_type: load_balancer
+  port_profile: loadbalancer
+- name: Ethernet6/43/1
+  description: LOAD_BALANCER_02_5.0
+  shutdown: false
+  channel_group:
+    id: 1642
+    mode: active
+  peer: '02'
+  peer_interface: '5.0'
+  peer_type: load_balancer
+  port_profile: loadbalancer
+- name: Ethernet7/42/1
+  description: LOAD_BALANCER_02_7.0
+  shutdown: false
+  channel_group:
+    id: 1642
+    mode: active
+  peer: '02'
+  peer_interface: '7.0'
+  peer_type: load_balancer
+  port_profile: loadbalancer
+- name: Ethernet7/43/1
+  description: LOAD_BALANCER_02_9.0
+  shutdown: false
+  channel_group:
+    id: 1642
+    mode: active
+  peer: '02'
+  peer_interface: '9.0'
+  peer_type: load_balancer
+  port_profile: loadbalancer
 hostname: KDC-AR7508R3-PCS-FELEAF1
 ip_domain_lookup:
   source_interfaces:
-  - name: Management1
+  - name: Management1/1
     vrf: PCS-NETINFRA-OOB
 ip_igmp_snooping:
   globally_enabled: true
@@ -119,7 +306,7 @@ ip_name_servers:
   vrf: PCS-NETINFRA-OOB
 ip_routing: true
 ip_tacacs_source_interfaces:
-- name: Management1
+- name: Management1/1
   vrf: PCS-NETINFRA-OOB
 ip_virtual_router_mac_address: 00:1c:73:00:00:99
 local_users:
@@ -145,7 +332,7 @@ management_api_http:
   enable_vrfs:
   - name: PCS-NETINFRA-OOB
 management_interfaces:
-- name: Management1
+- name: Management1/1
   description: OOB_MANAGEMENT
   shutdown: false
   vrf: PCS-NETINFRA-OOB
@@ -157,10 +344,14 @@ metadata:
   platform: vEOS-lab
   fabric_name: FABRIC
 mlag_configuration:
-  domain_id: FE_LEAF
+  domain_id: MLAG_FE_LEAF_01
   local_interface: Vlan4094
   peer_address: 10.118.4.249
-  peer_link: Port-Channel3
+  peer_address_heartbeat:
+    peer_ip: 10.118.5.17
+    vrf: PCS-NETINFRA-OOB
+  dual_primary_detection_delay: 5
+  peer_link: Port-Channel1000
   reload_delay_mlag: '300'
   reload_delay_non_mlag: '330'
 ntp:
@@ -171,8 +362,8 @@ ntp:
   - name: 10.118.200.3
     vrf: PCS-NETINFRA-OOB
 port_channel_interfaces:
-- name: Port-Channel3
-  description: MLAG_KDC-AR7508R3-PCS-FELEAF2_Port-Channel3
+- name: Port-Channel1000
+  description: MLAG_KDC-AR7508R3-PCS-FELEAF2_Port-Channel1000
   shutdown: false
   switchport:
     enabled: true
@@ -180,15 +371,6 @@ port_channel_interfaces:
     trunk:
       groups:
       - MLAG
-- name: Port-Channel8
-  description: L2_dc1-leaf1c_Port-Channel1
-  shutdown: false
-  mlag: 8
-  switchport:
-    enabled: true
-    mode: trunk
-    trunk:
-      allowed_vlan: 5,7-8,14,17-18,303,1000,1004,1006,1009-1029,1033,1035-1038,1050-1058,1060-1062,1101-1102,1155,1157,1160-1169,1200-1206,1301-1302,1304,1309-1311,1350-1351,1501,2000,2005-2016
 - name: Port-Channel5
   description: SERVER_dc1-leaf1-server1_Bond1
   shutdown: false
@@ -200,6 +382,66 @@ port_channel_interfaces:
     trunk:
       allowed_vlan: 11-12,21-22
       native_vlan: 1000
+- name: Port-Channel1646
+  description: FIREWALL_perimerter-01_Bond1
+  shutdown: false
+  mlag: 1646
+  switchport:
+    enabled: true
+    mode: trunk
+    trunk:
+      allowed_vlan: 15,16
+      native_vlan: 1000
+- name: Port-Channel1746
+  description: FIREWALL_perimerter-02_Bond1
+  shutdown: false
+  mlag: 1746
+  switchport:
+    enabled: true
+    mode: trunk
+    trunk:
+      allowed_vlan: 15,16
+      native_vlan: 1000
+- name: Port-Channel1644
+  description: FIREWALL_DC-01_Bond1
+  shutdown: false
+  mlag: 1644
+  switchport:
+    enabled: true
+    mode: trunk
+    trunk:
+      allowed_vlan: 15,16
+      native_vlan: 1000
+- name: Port-Channel1645
+  description: FIREWALL_DC-02_Bond1
+  shutdown: false
+  mlag: 1645
+  switchport:
+    enabled: true
+    mode: trunk
+    trunk:
+      allowed_vlan: 1004-1006,1009,1011-1013,1025
+      native_vlan: 1000
+- name: Port-Channel1640
+  description: LOAD_BALANCER_01_Bond1
+  shutdown: false
+  mlag: 1640
+  switchport:
+    enabled: true
+    mode: trunk
+    trunk:
+      allowed_vlan: '140'
+      native_vlan: 1000
+- name: Port-Channel1642
+  description: LOAD_BALANCER_02_Bond1
+  shutdown: false
+  mlag: 1642
+  switchport:
+    enabled: true
+    mode: trunk
+    trunk:
+      allowed_vlan: '140'
+      native_vlan: 1000
 prefix_lists:
 - name: PL-LOOPBACKS-EVPN-OVERLAY
   sequence_numbers:
@@ -210,7 +452,14 @@ prefix_lists:
 - name: PL-MLAG-PEER-VRFS
   sequence_numbers:
   - sequence: 10
-    action: permit 10.118.4.224/31
+    action: permit 10.118.4.248/31
+  - sequence: 20
+    action: permit 10.118.4.250/31
+queue_monitor_length:
+  enabled: true
+  log: 30
+queue_monitor_streaming:
+  enable: true
 route_maps:
 - name: RM-MLAG-PEER-IN
   sequence_numbers:
@@ -271,20 +520,10 @@ router_bgp:
     send_community: all
     maximum_routes: 0
   neighbors:
-  - ip_address: 10.118.4.225
+  - ip_address: 10.118.4.253
     peer_group: MLAG-IPv4-UNDERLAY-PEER
     peer: KDC-AR7508R3-PCS-FELEAF2
     description: KDC-AR7508R3-PCS-FELEAF2_Vlan4093
-  - ip_address: 10.255.255.0
-    peer_group: IPv4-UNDERLAY-PEERS
-    remote_as: '65100'
-    peer: dc1-spine1
-    description: dc1-spine1_Ethernet1
-  - ip_address: 10.255.255.2
-    peer_group: IPv4-UNDERLAY-PEERS
-    remote_as: '65100'
-    peer: dc1-spine2
-    description: dc1-spine2_Ethernet1
   - ip_address: 10.255.0.1
     peer_group: EVPN-OVERLAY-PEERS
     remote_as: '65100'
@@ -1054,9 +1293,9 @@ router_bgp:
         - '10:10'
     router_id: 10.118.0.3
     neighbors:
-    - ip_address: 10.118.4.225
+    - ip_address: 10.118.4.251
       peer_group: MLAG-IPv4-UNDERLAY-PEER
-      description: KDC-AR7508R3-PCS-FELEAF2_Vlan3009
+      description: KDC-AR7508R3-PCS-FELEAF2_Vlan409
     redistribute:
       connected:
         enabled: true
@@ -1074,9 +1313,9 @@ router_bgp:
         - '11:11'
     router_id: 10.118.0.3
     neighbors:
-    - ip_address: 10.118.4.225
+    - ip_address: 10.118.4.249
       peer_group: MLAG-IPv4-UNDERLAY-PEER
-      description: KDC-AR7508R3-PCS-FELEAF2_Vlan3010
+      description: KDC-AR7508R3-PCS-FELEAF2_Vlan4091
     redistribute:
       connected:
         enabled: true
@@ -1106,7 +1345,7 @@ vlan_interfaces:
 - name: Vlan4093
   description: MLAG_L3
   shutdown: false
-  ip_address: 10.118.4.224/31
+  ip_address: 10.118.4.252/31
   mtu: 9214
 - name: Vlan4094
   description: MLAG
@@ -1118,11 +1357,13 @@ vlan_interfaces:
   description: PC-MGMT-MPLS
   shutdown: false
   vrf: PCS-MPLS-INTRANET
-  ip_address: 10.118.2.129/29
+  ip_address: 10.118.2.132/29
   ip_virtual_router_addresses:
   - 10.118.2.134
-  mtu: 9100
+  mtu: 9200
   tenant: TENANT1
+  tags:
+  - FE-Leaf
 - name: Vlan1006
   description: PC-MPLS
   shutdown: false
@@ -1130,8 +1371,10 @@ vlan_interfaces:
   ip_address: 10.118.2.20/29
   ip_virtual_router_addresses:
   - 10.118.2.22
-  mtu: 9100
+  mtu: 9200
   tenant: TENANT1
+  tags:
+  - FE-Leaf
 - name: Vlan1012
   description: KDC iDrac-to-MPLS
   shutdown: false
@@ -1139,8 +1382,10 @@ vlan_interfaces:
   ip_address: 10.118.2.60/29
   ip_virtual_router_addresses:
   - 10.118.2.62
-  mtu: 9100
+  mtu: 9200
   tenant: TENANT1
+  tags:
+  - FE-Leaf
 - name: Vlan1014
   description: PC-WLD-MPLS
   shutdown: false
@@ -1148,8 +1393,10 @@ vlan_interfaces:
   ip_address: 10.118.2.140/29
   ip_virtual_router_addresses:
   - 10.118.2.142
-  mtu: 9100
+  mtu: 9200
   tenant: TENANT1
+  tags:
+  - FE-Leaf
 - name: Vlan1015
   description: MPLS_Intranet_VDOM_Inside_P_FW
   shutdown: false
@@ -1157,8 +1404,10 @@ vlan_interfaces:
   ip_address: 10.118.2.68/29
   ip_virtual_router_addresses:
   - 10.118.2.70
-  mtu: 9100
+  mtu: 9200
   tenant: TENANT1
+  tags:
+  - FE-Leaf
 - name: Vlan1019
   description: PC-Shared-MPLS
   shutdown: false
@@ -1166,8 +1415,10 @@ vlan_interfaces:
   ip_address: 10.118.2.116/29
   ip_virtual_router_addresses:
   - 10.118.2.118
-  mtu: 9100
+  mtu: 9200
   tenant: TENANT1
+  tags:
+  - FE-Leaf
 - name: Vlan1022
   description: vMotion
   shutdown: false
@@ -1175,8 +1426,10 @@ vlan_interfaces:
   ip_address: 10.118.22.252/24
   ip_virtual_router_addresses:
   - 10.118.22.254
-  mtu: 9100
+  mtu: 9200
   tenant: TENANT1
+  tags:
+  - FE-Leaf
 - name: Vlan1023
   description: vSAN
   shutdown: false
@@ -1184,8 +1437,10 @@ vlan_interfaces:
   ip_address: 10.118.23.252/24
   ip_virtual_router_addresses:
   - 10.118.23.254
-  mtu: 9100
+  mtu: 9200
   tenant: TENANT1
+  tags:
+  - FE-Leaf
 - name: Vlan1024
   description: Management Host TEPs
   shutdown: false
@@ -1193,8 +1448,10 @@ vlan_interfaces:
   ip_address: 10.118.24.252/24
   ip_virtual_router_addresses:
   - 10.118.24.254
-  mtu: 9100
+  mtu: 9200
   tenant: TENANT1
+  tags:
+  - FE-Leaf
 - name: Vlan1027
   description: Management Edge TEPs
   shutdown: false
@@ -1202,8 +1459,10 @@ vlan_interfaces:
   ip_address: 10.118.27.252/24
   ip_virtual_router_addresses:
   - 10.118.27.254
-  mtu: 9100
+  mtu: 9200
   tenant: TENANT1
+  tags:
+  - FE-Leaf
 - name: Vlan1051
   description: Resource vMotion
   shutdown: false
@@ -1211,8 +1470,10 @@ vlan_interfaces:
   ip_address: 10.118.51.252/24
   ip_virtual_router_addresses:
   - 10.118.51.254
-  mtu: 9100
+  mtu: 9200
   tenant: TENANT1
+  tags:
+  - FE-Leaf
 - name: Vlan1053
   description: Resource Host TEPs
   shutdown: false
@@ -1220,8 +1481,10 @@ vlan_interfaces:
   ip_address: 10.118.53.252/24
   ip_virtual_router_addresses:
   - 10.118.53.254
-  mtu: 9100
+  mtu: 9200
   tenant: TENANT1
+  tags:
+  - FE-Leaf
 - name: Vlan1056
   description: Resource Edge TEPs
   shutdown: false
@@ -1229,13 +1492,15 @@ vlan_interfaces:
   ip_address: 10.118.56.252/24
   ip_virtual_router_addresses:
   - 10.118.56.254
-  mtu: 9100
+  mtu: 9200
   tenant: TENANT1
-- name: Vlan3009
+  tags:
+  - FE-Leaf
+- name: Vlan409
   description: MLAG_L3_VRF_PCS-MPLS-INTRANET
   shutdown: false
   vrf: PCS-MPLS-INTRANET
-  ip_address: 10.118.4.224/31
+  ip_address: 10.118.4.250/31
   mtu: 9214
   tenant: TENANT1
   type: underlay_peering
@@ -1246,8 +1511,10 @@ vlan_interfaces:
   ip_address: 10.118.2.28/29
   ip_virtual_router_addresses:
   - 10.118.2.30
-  mtu: 9100
+  mtu: 9200
   tenant: TENANT1
+  tags:
+  - FE-Leaf
 - name: Vlan1010
   description: PC-WLD-INT
   shutdown: false
@@ -1255,8 +1522,10 @@ vlan_interfaces:
   ip_address: 10.118.2.36/29
   ip_virtual_router_addresses:
   - 10.118.2.38
-  mtu: 9100
+  mtu: 9200
   tenant: TENANT1
+  tags:
+  - FE-Leaf
 - name: Vlan1011
   description: PC-Shared-INT
   shutdown: false
@@ -1264,8 +1533,10 @@ vlan_interfaces:
   ip_address: 10.118.2.52/29
   ip_virtual_router_addresses:
   - 10.118.2.54
-  mtu: 9100
+  mtu: 9200
   tenant: TENANT1
+  tags:
+  - FE-Leaf
 - name: Vlan1013
   description: KDC iDRAC-to-Internet
   shutdown: false
@@ -1273,8 +1544,10 @@ vlan_interfaces:
   ip_address: 10.118.2.100/29
   ip_virtual_router_addresses:
   - 10.118.2.102
-  mtu: 9100
+  mtu: 9200
   tenant: TENANT1
+  tags:
+  - FE-Leaf
 - name: Vlan1016
   description: Peri-shared-internetVDOM
   shutdown: false
@@ -1282,13 +1555,15 @@ vlan_interfaces:
   ip_address: 10.118.2.76/29
   ip_virtual_router_addresses:
   - 10.118.2.78
-  mtu: 9100
+  mtu: 9200
   tenant: TENANT1
-- name: Vlan3010
+  tags:
+  - FE-Leaf
+- name: Vlan4091
   description: MLAG_L3_VRF_PCS-SHARED-INTERNET
   shutdown: false
   vrf: PCS-SHARED-INTERNET
-  ip_address: 10.118.4.224/31
+  ip_address: 10.118.4.248/31
   mtu: 9214
   tenant: TENANT1
   type: underlay_peering
@@ -1347,7 +1622,7 @@ vlans:
 - id: 1056
   name: pcs-wld-Edge_Overlay
   tenant: TENANT1
-- id: 3009
+- id: 409
   name: MLAG_L3_VRF_PCS-MPLS-INTRANET
   trunk_groups:
   - MLAG
@@ -1367,7 +1642,7 @@ vlans:
 - id: 1016
   name: Peri-shared-internetVDOM
   tenant: TENANT1
-- id: 3010
+- id: 4091
   name: MLAG_L3_VRF_PCS-SHARED-INTERNET
   trunk_groups:
   - MLAG

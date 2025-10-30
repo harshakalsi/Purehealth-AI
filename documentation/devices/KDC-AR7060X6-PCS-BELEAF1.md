@@ -46,6 +46,10 @@
   - [Router BGP](#router-bgp)
 - [BFD](#bfd)
   - [Router BFD](#router-bfd)
+- [Queue Monitor](#queue-monitor)
+  - [Queue Monitor Length](#queue-monitor-length)
+  - [Queue Monitor Streaming](#queue-monitor-streaming)
+  - [Queue Monitor Configuration](#queue-monitor-configuration)
 - [Multicast](#multicast)
   - [IP IGMP Snooping](#ip-igmp-snooping)
 - [Filters](#filters)
@@ -315,19 +319,21 @@ daemon TerminAttr
 
 | Domain-id | Local-interface | Peer-address | Peer-link |
 | --------- | --------------- | ------------ | --------- |
-| BE_LEAF | Vlan4094 | 10.118.4.253 | Port-Channel3 |
+| MLAG_BE_LEAF_01 | Vlan4094 | 10.118.4.253 | Port-Channel1000 |
 
-Dual primary detection is disabled.
+Dual primary detection is enabled. The detection delay is 5 seconds.
 
 ### MLAG Device Configuration
 
 ```eos
 !
 mlag configuration
-   domain-id BE_LEAF
+   domain-id MLAG_BE_LEAF_01
    local-interface Vlan4094
    peer-address 10.118.4.253
-   peer-link Port-Channel3
+   peer-address heartbeat 10.118.5.117 vrf PCS-NETINFRA-OOB
+   peer-link Port-Channel1000
+   dual-primary detection delay 5 action errdisable all-interfaces
    reload-delay mlag 300
    reload-delay non-mlag 330
 ```
@@ -378,12 +384,20 @@ vlan internal order ascending range 1006 1199
 
 | VLAN ID | Name | Trunk Groups |
 | ------- | ---- | ------------ |
+| 1000 | native_vlan | - |
+| 1300 | BE_TEST-VLAN | - |
 | 4093 | MLAG_L3 | MLAG |
 | 4094 | MLAG | MLAG |
 
 ### VLANs Device Configuration
 
 ```eos
+!
+vlan 1000
+   name native_vlan
+!
+vlan 1300
+   name BE_TEST-VLAN
 !
 vlan 4093
    name MLAG_L3
@@ -404,57 +418,138 @@ vlan 4094
 
 | Interface | Description | Mode | VLANs | Native VLAN | Trunk Group | Channel-Group |
 | --------- | ----------- | ---- | ----- | ----------- | ----------- | ------------- |
-| Ethernet3 | MLAG_KDC-AR7060X6-PCS-BELEAF2_Ethernet3 | *trunk | *- | *- | *MLAG | 3 |
-| Ethernet4 | MLAG_KDC-AR7060X6-PCS-BELEAF2_Ethernet4 | *trunk | *- | *- | *MLAG | 3 |
-| Ethernet5/1 | SERVER_dc1-leaf2-server1_PCI1 | *trunk | *1004,1006,1009,1011,1019,1022,1027,1051,1053,1056 | *4092 | *- | 51 |
-| Ethernet8 | L2_dc1-leaf2c_Ethernet1 | *trunk | *none | *- | *- | 8 |
+| Ethernet1/1 | SERVER_gpu1-01_2/1 | trunk | 1300 | 1000 | - | - |
+| Ethernet1/2 | SERVER_gpu1-02_2/1 | trunk | 1300 | 1000 | - | - |
+| Ethernet6/1 | SERVER_gpu2-01_35/1 | trunk | 1300 | 1000 | - | - |
+| Ethernet7/1 | SERVER_gpu2-01_34/1 | trunk | 1300 | 1000 | - | - |
+| Ethernet8/1 | SERVER_gpu2-01_33/1 | trunk | 1300 | 1000 | - | - |
+| Ethernet9/1 | SERVER_gpu2-01_32/1 | trunk | 1300 | 1000 | - | - |
+| Ethernet23/1 | MLAG_KDC-AR7060X6-PCS-BELEAF2_Ethernet23/1 | *trunk | *- | *- | *MLAG | 1000 |
+| Ethernet24/1 | MLAG_KDC-AR7060X6-PCS-BELEAF2_Ethernet24/1 | *trunk | *- | *- | *MLAG | 1000 |
+| Ethernet25/1 | MLAG_KDC-AR7060X6-PCS-BELEAF2_Ethernet25/1 | *trunk | *- | *- | *MLAG | 1000 |
+| Ethernet26/1 | MLAG_KDC-AR7060X6-PCS-BELEAF2_Ethernet26/1 | *trunk | *- | *- | *MLAG | 1000 |
+| Ethernet27/1 | MLAG_KDC-AR7060X6-PCS-BELEAF2_Ethernet27/1 | *trunk | *- | *- | *MLAG | 1000 |
+| Ethernet28/1 | MLAG_KDC-AR7060X6-PCS-BELEAF2_Ethernet28/1 | *trunk | *- | *- | *MLAG | 1000 |
+| Ethernet29/1 | MLAG_KDC-AR7060X6-PCS-BELEAF2_Ethernet29/1 | *trunk | *- | *- | *MLAG | 1000 |
+| Ethernet30/1 | MLAG_KDC-AR7060X6-PCS-BELEAF2_Ethernet30/1 | *trunk | *- | *- | *MLAG | 1000 |
+| Ethernet31/1 | MLAG_KDC-AR7060X6-PCS-BELEAF2_Ethernet31/1 | *trunk | *- | *- | *MLAG | 1000 |
+| Ethernet32/1 | MLAG_KDC-AR7060X6-PCS-BELEAF2_Ethernet32/1 | *trunk | *- | *- | *MLAG | 1000 |
 
 *Inherited from Port-Channel Interface
-
-##### IPv4
-
-| Interface | Description | Channel Group | IP Address | VRF |  MTU | Shutdown | ACL In | ACL Out |
-| --------- | ----------- | ------------- | ---------- | ----| ---- | -------- | ------ | ------- |
-| Ethernet1 | P2P_dc1-spine1_Ethernet3 | - | 10.255.255.9/31 | default | 9214 | False | - | - |
-| Ethernet2 | P2P_dc1-spine2_Ethernet3 | - | 10.255.255.11/31 | default | 9214 | False | - | - |
 
 #### Ethernet Interfaces Device Configuration
 
 ```eos
 !
-interface Ethernet1
-   description P2P_dc1-spine1_Ethernet3
+interface Ethernet1/1
+   description SERVER_gpu1-01_2/1
    no shutdown
-   mtu 9214
-   no switchport
-   ip address 10.255.255.9/31
+   switchport trunk native vlan 1000
+   switchport trunk allowed vlan 1300
+   switchport mode trunk
+   switchport
+   service-profile RDMA-QOS-TH-FABRIC-PROFILE-1
+   spanning-tree portfast
 !
-interface Ethernet2
-   description P2P_dc1-spine2_Ethernet3
+interface Ethernet1/2
+   description SERVER_gpu1-02_2/1
    no shutdown
-   mtu 9214
-   no switchport
-   ip address 10.255.255.11/31
+   switchport trunk native vlan 1000
+   switchport trunk allowed vlan 1300
+   switchport mode trunk
+   switchport
+   service-profile RDMA-QOS-TH-FABRIC-PROFILE-1
+   spanning-tree portfast
 !
-interface Ethernet3
-   description MLAG_KDC-AR7060X6-PCS-BELEAF2_Ethernet3
+interface Ethernet6/1
+   description SERVER_gpu2-01_35/1
    no shutdown
-   channel-group 3 mode active
+   switchport trunk native vlan 1000
+   switchport trunk allowed vlan 1300
+   switchport mode trunk
+   switchport
+   service-profile RDMA-QOS-TH-FABRIC-PROFILE-1
+   spanning-tree portfast
 !
-interface Ethernet4
-   description MLAG_KDC-AR7060X6-PCS-BELEAF2_Ethernet4
+interface Ethernet7/1
+   description SERVER_gpu2-01_34/1
    no shutdown
-   channel-group 3 mode active
+   switchport trunk native vlan 1000
+   switchport trunk allowed vlan 1300
+   switchport mode trunk
+   switchport
+   service-profile RDMA-QOS-TH-FABRIC-PROFILE-1
+   spanning-tree portfast
 !
-interface Ethernet5/1
-   description SERVER_dc1-leaf2-server1_PCI1
+interface Ethernet8/1
+   description SERVER_gpu2-01_33/1
    no shutdown
-   channel-group 51 mode active
+   switchport trunk native vlan 1000
+   switchport trunk allowed vlan 1300
+   switchport mode trunk
+   switchport
+   service-profile RDMA-QOS-TH-FABRIC-PROFILE-1
+   spanning-tree portfast
 !
-interface Ethernet8
-   description L2_dc1-leaf2c_Ethernet1
+interface Ethernet9/1
+   description SERVER_gpu2-01_32/1
    no shutdown
-   channel-group 8 mode active
+   switchport trunk native vlan 1000
+   switchport trunk allowed vlan 1300
+   switchport mode trunk
+   switchport
+   service-profile RDMA-QOS-TH-FABRIC-PROFILE-1
+   spanning-tree portfast
+!
+interface Ethernet23/1
+   description MLAG_KDC-AR7060X6-PCS-BELEAF2_Ethernet23/1
+   no shutdown
+   channel-group 1000 mode active
+!
+interface Ethernet24/1
+   description MLAG_KDC-AR7060X6-PCS-BELEAF2_Ethernet24/1
+   no shutdown
+   channel-group 1000 mode active
+!
+interface Ethernet25/1
+   description MLAG_KDC-AR7060X6-PCS-BELEAF2_Ethernet25/1
+   no shutdown
+   channel-group 1000 mode active
+!
+interface Ethernet26/1
+   description MLAG_KDC-AR7060X6-PCS-BELEAF2_Ethernet26/1
+   no shutdown
+   channel-group 1000 mode active
+!
+interface Ethernet27/1
+   description MLAG_KDC-AR7060X6-PCS-BELEAF2_Ethernet27/1
+   no shutdown
+   channel-group 1000 mode active
+!
+interface Ethernet28/1
+   description MLAG_KDC-AR7060X6-PCS-BELEAF2_Ethernet28/1
+   no shutdown
+   channel-group 1000 mode active
+!
+interface Ethernet29/1
+   description MLAG_KDC-AR7060X6-PCS-BELEAF2_Ethernet29/1
+   no shutdown
+   channel-group 1000 mode active
+!
+interface Ethernet30/1
+   description MLAG_KDC-AR7060X6-PCS-BELEAF2_Ethernet30/1
+   no shutdown
+   channel-group 1000 mode active
+!
+interface Ethernet31/1
+   description MLAG_KDC-AR7060X6-PCS-BELEAF2_Ethernet31/1
+   no shutdown
+   channel-group 1000 mode active
+!
+interface Ethernet32/1
+   description MLAG_KDC-AR7060X6-PCS-BELEAF2_Ethernet32/1
+   no shutdown
+   channel-group 1000 mode active
 ```
 
 ### Port-Channel Interfaces
@@ -465,38 +560,18 @@ interface Ethernet8
 
 | Interface | Description | Mode | VLANs | Native VLAN | Trunk Group | LACP Fallback Timeout | LACP Fallback Mode | MLAG ID | EVPN ESI |
 | --------- | ----------- | ---- | ----- | ----------- | ------------| --------------------- | ------------------ | ------- | -------- |
-| Port-Channel3 | MLAG_KDC-AR7060X6-PCS-BELEAF2_Port-Channel3 | trunk | - | - | MLAG | - | - | - | - |
-| Port-Channel8 | L2_dc1-leaf2c_Port-Channel1 | trunk | none | - | - | - | - | 8 | - |
-| Port-Channel51 | SERVER_dc1-leaf2-server1 | trunk | 1004,1006,1009,1011,1019,1022,1027,1051,1053,1056 | 4092 | - | - | - | 51 | - |
+| Port-Channel1000 | MLAG_KDC-AR7060X6-PCS-BELEAF2_Port-Channel1000 | trunk | - | - | MLAG | - | - | - | - |
 
 #### Port-Channel Interfaces Device Configuration
 
 ```eos
 !
-interface Port-Channel3
-   description MLAG_KDC-AR7060X6-PCS-BELEAF2_Port-Channel3
+interface Port-Channel1000
+   description MLAG_KDC-AR7060X6-PCS-BELEAF2_Port-Channel1000
    no shutdown
    switchport mode trunk
    switchport trunk group MLAG
    switchport
-!
-interface Port-Channel8
-   description L2_dc1-leaf2c_Port-Channel1
-   no shutdown
-   switchport trunk allowed vlan none
-   switchport mode trunk
-   switchport
-   mlag 8
-!
-interface Port-Channel51
-   description SERVER_dc1-leaf2-server1
-   no shutdown
-   switchport trunk native vlan 4092
-   switchport trunk allowed vlan 1004, 1006, 1009, 1011–1016, 1019, 1022–1024, 1027, 1051, 1053, 1056
-   switchport mode trunk
-   switchport
-   mlag 51
-   spanning-tree portfast
 ```
 
 ### Loopback Interfaces
@@ -545,7 +620,7 @@ interface Loopback1
 
 | Interface | VRF | IP Address | IP Address Virtual | IP Router Virtual Address | ACL In | ACL Out |
 | --------- | --- | ---------- | ------------------ | ------------------------- | ------ | ------- |
-| Vlan4093 |  default  |  10.118.4.228/31  |  -  |  -  |  -  |  -  |
+| Vlan4093 |  default  |  10.118.4.244/31  |  -  |  -  |  -  |  -  |
 | Vlan4094 |  default  |  10.118.4.252/31  |  -  |  -  |  -  |  -  |
 
 #### VLAN Interfaces Device Configuration
@@ -556,7 +631,7 @@ interface Vlan4093
    description MLAG_L3
    no shutdown
    mtu 9214
-   ip address 10.118.4.228/31
+   ip address 10.118.4.244/31
 !
 interface Vlan4094
    description MLAG
@@ -576,6 +651,13 @@ interface Vlan4094
 | UDP port | 4789 |
 | EVPN MLAG Shared Router MAC | mlag-system-id |
 
+##### VLAN to VNI, Flood List and Multicast Group Mappings
+
+| VLAN | VNI | Flood List | Multicast Group |
+| ---- | --- | ---------- | --------------- |
+| 1000 | 11000 | - | - |
+| 1300 | 11300 | - | - |
+
 #### VXLAN Interface Device Configuration
 
 ```eos
@@ -585,6 +667,8 @@ interface Vxlan1
    vxlan source-interface Loopback1
    vxlan virtual-router encapsulation mac-address mlag-system-id
    vxlan udp-port 4789
+   vxlan vlan 1000 vni 11000
+   vxlan vlan 1300 vni 11300
 ```
 
 ## Routing
@@ -702,11 +786,9 @@ ASN Notation: asplain
 
 | Neighbor | Remote AS | VRF | Shutdown | Send-community | Maximum-routes | Allowas-in | BFD | RIB Pre-Policy Retain | Route-Reflector Client | Passive | TTL Max Hops |
 | -------- | --------- | --- | -------- | -------------- | -------------- | ---------- | --- | --------------------- | ---------------------- | ------- | ------------ |
-| 10.118.4.229 | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | default | - | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | - | - | - | - | - | - |
+| 10.118.4.245 | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | default | - | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | Inherited from peer group MLAG-IPv4-UNDERLAY-PEER | - | - | - | - | - | - |
 | 10.255.0.1 | 65100 | default | - | Inherited from peer group EVPN-OVERLAY-PEERS | Inherited from peer group EVPN-OVERLAY-PEERS | - | Inherited from peer group EVPN-OVERLAY-PEERS | - | - | - | - |
 | 10.255.0.2 | 65100 | default | - | Inherited from peer group EVPN-OVERLAY-PEERS | Inherited from peer group EVPN-OVERLAY-PEERS | - | Inherited from peer group EVPN-OVERLAY-PEERS | - | - | - | - |
-| 10.255.255.8 | 65100 | default | - | Inherited from peer group IPv4-UNDERLAY-PEERS | Inherited from peer group IPv4-UNDERLAY-PEERS | - | - | - | - | - | - |
-| 10.255.255.10 | 65100 | default | - | Inherited from peer group IPv4-UNDERLAY-PEERS | Inherited from peer group IPv4-UNDERLAY-PEERS | - | - | - | - | - | - |
 
 #### Router BGP EVPN Address Family
 
@@ -715,6 +797,13 @@ ASN Notation: asplain
 | Peer Group | Activate | Route-map In | Route-map Out | Peer-tag In | Peer-tag Out | Encapsulation | Next-hop-self Source Interface |
 | ---------- | -------- | ------------ | ------------- | ----------- | ------------ | ------------- | ------------------------------ |
 | EVPN-OVERLAY-PEERS | True | - | - | - | - | default | - |
+
+#### Router BGP VLANs
+
+| VLAN | Route-Distinguisher | Both Route-Target | Import Route Target | Export Route-Target | Redistribute |
+| ---- | ------------------- | ----------------- | ------------------- | ------------------- | ------------ |
+| 1000 | 10.118.0.5:11000 | 11000:11000 | - | - | learned |
+| 1300 | 10.118.0.5:11300 | 11300:11300 | - | - | learned |
 
 #### Router BGP Device Configuration
 
@@ -743,21 +832,25 @@ router bgp 65372
    neighbor MLAG-IPv4-UNDERLAY-PEER password 7 <removed>
    neighbor MLAG-IPv4-UNDERLAY-PEER send-community
    neighbor MLAG-IPv4-UNDERLAY-PEER maximum-routes 12000
-   neighbor 10.118.4.229 peer group MLAG-IPv4-UNDERLAY-PEER
-   neighbor 10.118.4.229 description KDC-AR7060X6-PCS-BELEAF2_Vlan4093
+   neighbor 10.118.4.245 peer group MLAG-IPv4-UNDERLAY-PEER
+   neighbor 10.118.4.245 description KDC-AR7060X6-PCS-BELEAF2_Vlan4093
    neighbor 10.255.0.1 peer group EVPN-OVERLAY-PEERS
    neighbor 10.255.0.1 remote-as 65100
    neighbor 10.255.0.1 description dc1-spine1_Loopback0
    neighbor 10.255.0.2 peer group EVPN-OVERLAY-PEERS
    neighbor 10.255.0.2 remote-as 65100
    neighbor 10.255.0.2 description dc1-spine2_Loopback0
-   neighbor 10.255.255.8 peer group IPv4-UNDERLAY-PEERS
-   neighbor 10.255.255.8 remote-as 65100
-   neighbor 10.255.255.8 description dc1-spine1_Ethernet3
-   neighbor 10.255.255.10 peer group IPv4-UNDERLAY-PEERS
-   neighbor 10.255.255.10 remote-as 65100
-   neighbor 10.255.255.10 description dc1-spine2_Ethernet3
    redistribute connected route-map RM-CONN-2-BGP
+   !
+   vlan 1000
+      rd 10.118.0.5:11000
+      route-target both 11000:11000
+      redistribute learned
+   !
+   vlan 1300
+      rd 10.118.0.5:11300
+      route-target both 11300:11300
+      redistribute learned
    !
    address-family evpn
       neighbor EVPN-OVERLAY-PEERS activate
@@ -784,6 +877,32 @@ router bgp 65372
 !
 router bfd
    multihop interval 300 min-rx 300 multiplier 3
+```
+
+## Queue Monitor
+
+### Queue Monitor Length
+
+| Enabled | Logging Interval | Default Thresholds High | Default Thresholds Low | Notifying | TX Latency | CPU Thresholds High | CPU Thresholds Low | Mirroring Enabled | Mirror destinations |
+| ------- | ---------------- | ----------------------- | ---------------------- | --------- | ---------- | ------------------- | ------------------ | ----------------- | ------------------ |
+| True | 30 | - | - | disabled | disabled | - | - | - | - |
+
+### Queue Monitor Streaming
+
+| Enabled | IP Access Group | IPv6 Access Group | Max Connections | VRF |
+| ------- | --------------- | ----------------- | --------------- | --- |
+| True | - | - | - | - |
+
+### Queue Monitor Configuration
+
+```eos
+!
+queue-monitor length
+!
+queue-monitor length log 30
+!
+queue-monitor streaming
+   no shutdown
 ```
 
 ## Multicast

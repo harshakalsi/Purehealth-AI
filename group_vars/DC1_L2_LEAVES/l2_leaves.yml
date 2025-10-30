@@ -7,17 +7,33 @@ l2leaf:
     spanning_tree_mode: mstp
 
   node_groups:
-    - group: DC1_L2_LEAF1
+    - group: OOB_LEAF1
       uplink_switches: [KDC-AR7508R3-PCS-FELEAF1, KDC-AR7508R3-PCS-FELEAF2]
       nodes:
-        - name: dc1-leaf1c
+        - name: KDC-AR7010TX-PCS-OOB1
+          filter:
+            tags: [MGMT]
           id: 1
-          mgmt_ip: 10.118.5.18/24
-          uplink_switch_interfaces: [Ethernet8, Ethernet8]
-    - group: DC1_L2_LEAF2
-      uplink_switches: [KDC-AR7060X6-PCS-BELEAF1, KDC-AR7060X6-PCS-BELEAF2]
+          mgmt_ip: 10.118.5.41/24
+          uplink_switch_interfaces: [Ethernet6/47/1, Ethernet6/47/1]
+          uplink_switch_port_channel_id: 1647
+    - group: OOB_LEAF2
+      uplink_switches: [KDC-AR7508R3-PCS-FELEAF1, KDC-AR7508R3-PCS-FELEAF2]
       nodes:
-        - name: dc1-leaf2c
+        - name: KDC-AR7010TX-PCS-OOB2
+          filter:
+            tags: [MGMT]
           id: 2
-          mgmt_ip: 10.118.5.19/24
-          uplink_switch_interfaces: [Ethernet8, Ethernet8]
+          mgmt_ip: 10.118.5.42/24
+          uplink_switch_interfaces: [Ethernet6/48/1, Ethernet6/48/1]
+          uplink_switch_port_channel_id: 1648
+    - group: OOB_LEAF3
+      uplink_switches: [KDC-AR7508R3-PCS-FELEAF1, KDC-AR7508R3-PCS-FELEAF2]
+      nodes:
+        - name: KDC-AR7010TX-PCS-OOB3
+          filter:
+            tags: [MGMT]
+          id: 3
+          mgmt_ip: 10.118.5.43/24
+          uplink_switch_interfaces: [Ethernet7/39/1, Ethernet7/37/1]
+          uplink_switch_port_channel_id: 1637

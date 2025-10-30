@@ -8,10 +8,13 @@ tenants:
       # VRF definitions inside the tenant.
       - name: PCS-MPLS-INTRANET
         vrf_vni: 10
+        mlag_ibgp_peering_ipv4_pool: 10.118.4.250-10.118.4.251
+        mlag_ibgp_peering_vlan: 409
         svis:
           # SVI definitions.
           - id: 1004
-            mtu: 9100
+            mtu: 9200
+            tags: [FE-Leaf]
             name: PC-MGMT-MPLS
             ip_virtual_router_addresses: [10.118.2.134]
             description: PC-MGMT-MPLS
@@ -20,13 +23,14 @@ tenants:
               - node: KDC-AR7508R3-PCS-FELEAF1
                 enabled: true
                 description: PC-MGMT-MPLS
-                ip_address: 10.118.2.129/29
+                ip_address: 10.118.2.132/29
               - node: KDC-AR7508R3-PCS-FELEAF2
                 enabled: true
                 description: PC-MGMT-MPLS
-                ip_address: 10.118.2.130/29
+                ip_address: 10.118.2.133/29
           - id: 1006
-            mtu: 9100
+            mtu: 9200
+            tags: [FE-Leaf]
             name: MPLS_PC-MPLS_VDOM_outside_DC_FW
             ip_virtual_router_addresses: [10.118.2.22]
             description: PC-MPLS
@@ -42,7 +46,8 @@ tenants:
             id: 1012
             name: iDRAC-MPLS
             enabled: true
-            mtu: 9100
+            mtu: 9200
+            tags: [FE-Leaf]
             ip_virtual_router_addresses: [10.118.2.62]
             description: "KDC iDrac-to-MPLS"
             nodes:
@@ -55,7 +60,8 @@ tenants:
             id: 1014
             name: PC-WLD-MPLS
             enabled: true
-            mtu: 9100
+            mtu: 9200
+            tags: [FE-Leaf]
             ip_virtual_router_addresses: [10.118.2.142]
             description: PC-WLD-MPLS
             nodes:
@@ -67,7 +73,8 @@ tenants:
             id: 1015
             name: MPLS_Intranet_VDOM_Inside_P_FW
             enabled: true
-            mtu: 9100
+            mtu: 9200
+            tags: [FE-Leaf]
             ip_virtual_router_addresses: [10.118.2.70]
             description: MPLS_Intranet_VDOM_Inside_P_FW
             nodes:
@@ -79,7 +86,8 @@ tenants:
             id: 1019
             name: PC-Shared-MPLS
             enabled: true
-            mtu: 9100
+            mtu: 9200
+            tags: [FE-Leaf]
             ip_virtual_router_addresses: [10.118.2.118]
             description: PC-Shared-MPLS
             nodes:
@@ -91,7 +99,8 @@ tenants:
             id: 1022
             name: pcs-mgm-vmotion
             enabled: true
-            mtu: 9100
+            mtu: 9200
+            tags: [FE-Leaf]
             ip_virtual_router_addresses: [10.118.22.254]
             description: vMotion
             nodes:
@@ -103,7 +112,8 @@ tenants:
             id: 1023
             name: pcs-mgm-vSAN
             enabled: true
-            mtu: 9100
+            mtu: 9200
+            tags: [FE-Leaf]
             ip_virtual_router_addresses: [10.118.23.254]
             description: vSAN
             nodes:
@@ -115,7 +125,8 @@ tenants:
             id: 1024
             name: pcs-mgm-NSX-T_Host_Overlay
             enabled: true
-            mtu: 9100
+            mtu: 9200
+            tags: [FE-Leaf]
             ip_virtual_router_addresses: [10.118.24.254]
             description: "Management Host TEPs"
             nodes:
@@ -127,7 +138,8 @@ tenants:
             id: 1027
             name: pcs-mgm-Edge_Overlay
             enabled: true
-            mtu: 9100
+            mtu: 9200
+            tags: [FE-Leaf]
             ip_virtual_router_addresses: [10.118.27.254]
             description: "Management Edge TEPs"
             nodes:
@@ -139,7 +151,8 @@ tenants:
             id: 1051
             name: pcs-wld-vmotion
             enabled: true
-            mtu: 9100
+            mtu: 9200
+            tags: [FE-Leaf]
             ip_virtual_router_addresses: [10.118.51.254]
             description: "Resource vMotion"
             nodes:
@@ -151,7 +164,8 @@ tenants:
             id: 1053
             name: pcs-wld-NSX-T_Host_Overlay
             enabled: true
-            mtu: 9100
+            mtu: 9200
+            tags: [FE-Leaf]
             ip_virtual_router_addresses: [10.118.53.254]
             description: "Resource Host TEPs"
             nodes:
@@ -163,7 +177,8 @@ tenants:
             id: 1056
             name: pcs-wld-Edge_Overlay
             enabled: true
-            mtu: 9100
+            mtu: 9200
+            tags: [FE-Leaf]
             ip_virtual_router_addresses: [10.118.56.254]
             description: "Resource Edge TEPs"
             nodes:
@@ -174,13 +189,16 @@ tenants:
 
       - name: PCS-SHARED-INTERNET
         vrf_vni: 11
+        mlag_ibgp_peering_ipv4_pool: 10.118.4.248-10.118.4.249
+        mlag_ibgp_peering_vlan: 4091
         svis:
           -
             id: 1009
             name: Internet_PC-MGMT_VDOM_Outside_DC
             enabled: true
             description: PC-MGMT-INT
-            mtu: 9100
+            mtu: 9200
+            tags: [FE-Leaf]
             ip_virtual_router_addresses: [10.118.2.30]
             nodes:
               - node: KDC-AR7508R3-PCS-FELEAF1
@@ -192,7 +210,8 @@ tenants:
             name: Internet_PC-WLD_VDOM_outside_DC_
             enabled: true
             description: PC-WLD-INT
-            mtu: 9100
+            mtu: 9200
+            tags: [FE-Leaf]
             ip_virtual_router_addresses: [10.118.2.38]
             nodes:
               - node: KDC-AR7508R3-PCS-FELEAF1
@@ -204,7 +223,8 @@ tenants:
             name: PC-Shared-INT
             enabled: true
             description: PC-Shared-INT
-            mtu: 9100
+            mtu: 9200
+            tags: [FE-Leaf]
             ip_virtual_router_addresses: [10.118.2.54]
             nodes:
               - node: KDC-AR7508R3-PCS-FELEAF1
@@ -216,7 +236,8 @@ tenants:
             name: iDRAC-Internet
             enabled: true
             description: "KDC iDRAC-to-Internet"
-            mtu: 9100
+            mtu: 9200
+            tags: [FE-Leaf]
             ip_virtual_router_addresses: [10.118.2.102]
             nodes:
               - node: KDC-AR7508R3-PCS-FELEAF1
@@ -228,7 +249,8 @@ tenants:
             name: Peri-shared-internetVDOM
             enabled: true
             description: Peri-shared-internetVDOM
-            mtu: 9100
+            mtu: 9200
+            tags: [FE-Leaf]
             ip_virtual_router_addresses: [10.118.2.78]
             nodes:
               - node: KDC-AR7508R3-PCS-FELEAF1
@@ -240,221 +262,298 @@ tenants:
     l2vlans:
       # These are pure L2 vlans. They do not have a SVI defined in the l3leafs and they will be bridged inside the VXLAN fabric
     -
+      id: 1300
+      tags: [BE-Leaf]
+      name: BE_TEST-VLAN
+    -
       id: 5
       name: PureCS_Network_Infra_nodes_OOB
+      tags: [FE-Leaf, MGMT]
     -
       id: 7
       name: MPLS_Outside_DC_firewall
+      tags: [FE-Leaf]
     -
       id: 8
       name: Internet_HIS_VDOM_outside_DC_Fir
+      tags: [FE-Leaf]
     -
       id: 14
       name: PURE_VRF_MPLS
+      tags: [FE-Leaf]
     -
       id: 17
       name: PCS_AAN_MPLS
+      tags: [FE-Leaf]
     -
       id: 18
       name: EMAC-VLAN-For-Internet
+      tags: [FE-Leaf]
     -
       id: 1163
       name: PC_ECS_MGMT
+      tags: [FE-Leaf]
     -
       id: 1164
       name: PC_ECS_REPLICATION
+      tags: [FE-Leaf]
     -
       id: 1165
       name: PC_ECS_DATA
+      tags: [FE-Leaf]
     -
       id: 1166
       name: Dawak_Pura_Callcenter-SBCs
+      tags: [FE-Leaf]
     -
       id: 1167
       name: Dawak_Pura_Callcenter-Edge
+      tags: [FE-Leaf]
     -
       id: 1168
       name: PCS_DAWAK_CC_OOB_IDRAC
+      tags: [FE-Leaf]
     -
       id: 1206
       name: VAULT-DMZ
+      tags: [FE-Leaf]
     -
       id: 1301
       name: MPLS_NSOC
+      tags: [FE-Leaf]
     -
       id: 1302
       name: SEHA_VPLS
+      tags: [FE-Leaf]
     -
       id: 303
       name: SEHA_VPLS_HCF
+      tags: [FE-Leaf]
     -
       id: 1304
       name: Connected_AL_AIN_MALAFI_MPLS
+      tags: [FE-Leaf]
     -
       id: 1309
       name: SEHA_CRS_Rep
+      tags: [FE-Leaf]
     -
       id: 1310
       name: SEHA_CRS_CLEANROOM
+      tags: [FE-Leaf]
     -
       id: 1311
       name: Riayati_MPLS
+      tags: [FE-Leaf]
     -
       id: 1350
       name: SD_WAN_TRANSIT
+      tags: [FE-Leaf]
     -
       id: 1351
       name: SD_WAN_INTERNET
+      tags: [FE-Leaf]
     -
       id: 1501
       name: mss_and_anycast_test
+      tags: [FE-Leaf]
     -
       id: 1000
       name: native_vlan
+      tags: [FE-Leaf, BE-Leaf]
     -
       id: 1017
       name: MPLS_Intranet_VDOM_Outside_P_FW_
+      tags: [FE-Leaf]
     -
       id: 1018
       name: Internet_Internet_VDOM_Outside_P
+      tags: [FE-Leaf]
     -
       id: 1020
       name: KDC-iDRAC-Pcloud
+      tags: [FE-Leaf]
     -
       id: 1021
       name: pc-mgm-mgmt
+      tags: [FE-Leaf]
     -
       id: 1025
       name: pcs-mgm-Edge_Uplink_1
+      tags: [FE-Leaf]
     -
       id: 1026
       name: pcs-mgm-Edge_Uplink_2
+      tags: [FE-Leaf]
     -
       id: 1028
       name: ESXi-Host-MGMT
+      tags: [FE-Leaf]
     -
       id: 1029
       name: PC_BACKUP
+      tags: [FE-Leaf]
     -
       id: 1033
       name: Seha_CRS_Rep
+      tags: [FE-Leaf]
     -
       id: 1035
       name: Seha_CRS_CROOM
+      tags: [FE-Leaf]
     -
       id: 1036
       name: VAULT-OOB
+      tags: [FE-Leaf]
     -
       id: 1037
       name: FlexAMgmt
+      tags: [FE-Leaf]
     -
       id: 1038
       name: pcs-mgm-ReplicationVMs
+      tags: [FE-Leaf]
     -
       id: 1050
       name: pcs-wld-oob
+      tags: [FE-Leaf]
     -
       id: 1052
       name: pcs-wld-vSAN
+      tags: [FE-Leaf]
     -
       id: 1054
       name: pcs-wld-Edge_Uplink_1
+      tags: [FE-Leaf]
     -
       id: 1055
       name: pcs-wld-Edge_Uplink_2
+      tags: [FE-Leaf]
     -
       id: 1057
       name: Nutanix-AHV-CVM
+      tags: [FE-Leaf]
     -
       id: 1058
       name: PCS_CSE_SERVICES_ORG
+      tags: [FE-Leaf]
     -
       id: 1060
       name: pcs-wld-vcda
+      tags: [FE-Leaf]
     -
       id: 1061
       name: pcs-wld-Tenant1-Internet-U1
+      tags: [FE-Leaf]
     -
       id: 1062
       name: pcs-wld-Tenant1-MPLS-U1
+      tags: [FE-Leaf]
     -
       id: 1101
       name: pcs-idrac-management
+      tags: [FE-Leaf]
     -
       id: 1102
       name: pcs-esxi-management
+      tags: [FE-Leaf]
     -
       id: 1155
       name: pcs-his-backups
+      tags: [FE-Leaf]
     -
       id: 1157
       name: VLAN1157
+      tags: [FE-Leaf]
     -
       id: 1160
       name: powerstore_NSF
+      tags: [FE-Leaf]
     -
       id: 1161
       name: iSCSI_ControllerA
+      tags: [FE-Leaf]
     -
       id: 1162
       name: iSCSI_ControllerB
+      tags: [FE-Leaf]
     -
       id: 1169
       name: VLAN1169
+      tags: [FE-Leaf]
     -
       id: 1200
       name: PC-DR_Shared_Domain_Zone
+      tags: [FE-Leaf]
     -
       id: 1201
       name: PC-DR_Shared_MonBCKUP_Zone
+      tags: [FE-Leaf]
     -
       id: 1202
       name: PC_Shared_EndSecurity_Zone
+      tags: [FE-Leaf]
     -
       id: 1203
       name: PC_Shared_SOC_Zone
+      tags: [FE-Leaf]
     -
       id: 1204
       name: PC-DR_Shared_JumpInfra_Zone
+      tags: [FE-Leaf]
     -
       id: 1205
       name: PC_Shared_JumpExt_Zone
+      tags: [FE-Leaf]
     -
       id: 2000
       name: DC_DC_L2
+      tags: [FE-Leaf]
     -
       id: 2005
       name: VAULT-OOB
+      tags: [FE-Leaf]
     -
       id: 2006
       name: FlexAMgmt
+      tags: [FE-Leaf]
     -
       id: 2007
       name: Nutanix-AHV-CVM
+      tags: [FE-Leaf]
     -
       id: 2008
       name: VM-NuatanixProd
+      tags: [FE-Leaf]
     -
       id: 2009
       name: Veritas-Daman-Rep
+      tags: [FE-Leaf]
     -
       id: 2010
       name: Veritas-SEHA-Rep
+      tags: [FE-Leaf]
     -
       id: 2011
       name: Veritas-Tenant-Rep
+      tags: [FE-Leaf]
     -
       id: 2012
       name: Veritas-Daman-Mgmt
+      tags: [FE-Leaf]
     -
       id: 2013
       name: Veritas-SEHA-Mgmt
+      tags: [FE-Leaf]
     -
       id: 2014
       name: Scan-VMs
+      tags: [FE-Leaf]
     -
       id: 2015
       name: JS-VLAN
+      tags: [FE-Leaf]
     -
       id: 2016
       name: NTP-VLAN
+      tags: [FE-Leaf]

@@ -26,7 +26,6 @@
   - [Internal VLAN Allocation Policy Summary](#internal-vlan-allocation-policy-summary)
   - [Internal VLAN Allocation Policy Device Configuration](#internal-vlan-allocation-policy-device-configuration)
 - [Interfaces](#interfaces)
-  - [Ethernet Interfaces](#ethernet-interfaces)
   - [Loopback Interfaces](#loopback-interfaces)
 - [Routing](#routing)
   - [Service Routing Protocols Model](#service-routing-protocols-model)
@@ -36,6 +35,10 @@
   - [Router BGP](#router-bgp)
 - [BFD](#bfd)
   - [Router BFD](#router-bfd)
+- [Queue Monitor](#queue-monitor)
+  - [Queue Monitor Length](#queue-monitor-length)
+  - [Queue Monitor Streaming](#queue-monitor-streaming)
+  - [Queue Monitor Configuration](#queue-monitor-configuration)
 - [Filters](#filters)
   - [Prefix-lists](#prefix-lists)
   - [Route-maps](#route-maps)
@@ -327,59 +330,6 @@ vlan internal order ascending range 1006 1199
 
 ## Interfaces
 
-### Ethernet Interfaces
-
-#### Ethernet Interfaces Summary
-
-##### L2
-
-| Interface | Description | Mode | VLANs | Native VLAN | Trunk Group | Channel-Group |
-| --------- | ----------- | ---- | ----- | ----------- | ----------- | ------------- |
-
-*Inherited from Port-Channel Interface
-
-##### IPv4
-
-| Interface | Description | Channel Group | IP Address | VRF |  MTU | Shutdown | ACL In | ACL Out |
-| --------- | ----------- | ------------- | ---------- | ----| ---- | -------- | ------ | ------- |
-| Ethernet1 | P2P_KDC-AR7508R3-PCS-FELEAF1_Ethernet1 | - | 10.255.255.0/31 | default | 9214 | False | - | - |
-| Ethernet2 | P2P_KDC-AR7508R3-PCS-FELEAF2_Ethernet1 | - | 10.255.255.4/31 | default | 9214 | False | - | - |
-| Ethernet3 | P2P_KDC-AR7060X6-PCS-BELEAF1_Ethernet1 | - | 10.255.255.8/31 | default | 9214 | False | - | - |
-| Ethernet4 | P2P_KDC-AR7060X6-PCS-BELEAF2_Ethernet1 | - | 10.255.255.12/31 | default | 9214 | False | - | - |
-
-#### Ethernet Interfaces Device Configuration
-
-```eos
-!
-interface Ethernet1
-   description P2P_KDC-AR7508R3-PCS-FELEAF1_Ethernet1
-   no shutdown
-   mtu 9214
-   no switchport
-   ip address 10.255.255.0/31
-!
-interface Ethernet2
-   description P2P_KDC-AR7508R3-PCS-FELEAF2_Ethernet1
-   no shutdown
-   mtu 9214
-   no switchport
-   ip address 10.255.255.4/31
-!
-interface Ethernet3
-   description P2P_KDC-AR7060X6-PCS-BELEAF1_Ethernet1
-   no shutdown
-   mtu 9214
-   no switchport
-   ip address 10.255.255.8/31
-!
-interface Ethernet4
-   description P2P_KDC-AR7060X6-PCS-BELEAF2_Ethernet1
-   no shutdown
-   mtu 9214
-   no switchport
-   ip address 10.255.255.12/31
-```
-
 ### Loopback Interfaces
 
 #### Loopback Interfaces Summary
@@ -503,10 +453,6 @@ ASN Notation: asplain
 | 10.118.0.4 | 65371 | default | - | Inherited from peer group EVPN-OVERLAY-PEERS | Inherited from peer group EVPN-OVERLAY-PEERS | - | Inherited from peer group EVPN-OVERLAY-PEERS | - | - | - | - |
 | 10.118.0.5 | 65372 | default | - | Inherited from peer group EVPN-OVERLAY-PEERS | Inherited from peer group EVPN-OVERLAY-PEERS | - | Inherited from peer group EVPN-OVERLAY-PEERS | - | - | - | - |
 | 10.118.0.6 | 65372 | default | - | Inherited from peer group EVPN-OVERLAY-PEERS | Inherited from peer group EVPN-OVERLAY-PEERS | - | Inherited from peer group EVPN-OVERLAY-PEERS | - | - | - | - |
-| 10.255.255.1 | 65371 | default | - | Inherited from peer group IPv4-UNDERLAY-PEERS | Inherited from peer group IPv4-UNDERLAY-PEERS | - | - | - | - | - | - |
-| 10.255.255.5 | 65371 | default | - | Inherited from peer group IPv4-UNDERLAY-PEERS | Inherited from peer group IPv4-UNDERLAY-PEERS | - | - | - | - | - | - |
-| 10.255.255.9 | 65372 | default | - | Inherited from peer group IPv4-UNDERLAY-PEERS | Inherited from peer group IPv4-UNDERLAY-PEERS | - | - | - | - | - | - |
-| 10.255.255.13 | 65372 | default | - | Inherited from peer group IPv4-UNDERLAY-PEERS | Inherited from peer group IPv4-UNDERLAY-PEERS | - | - | - | - | - | - |
 
 #### Router BGP EVPN Address Family
 
@@ -548,18 +494,6 @@ router bgp 65100
    neighbor 10.118.0.6 peer group EVPN-OVERLAY-PEERS
    neighbor 10.118.0.6 remote-as 65372
    neighbor 10.118.0.6 description KDC-AR7060X6-PCS-BELEAF2_Loopback0
-   neighbor 10.255.255.1 peer group IPv4-UNDERLAY-PEERS
-   neighbor 10.255.255.1 remote-as 65371
-   neighbor 10.255.255.1 description KDC-AR7508R3-PCS-FELEAF1_Ethernet1
-   neighbor 10.255.255.5 peer group IPv4-UNDERLAY-PEERS
-   neighbor 10.255.255.5 remote-as 65371
-   neighbor 10.255.255.5 description KDC-AR7508R3-PCS-FELEAF2_Ethernet1
-   neighbor 10.255.255.9 peer group IPv4-UNDERLAY-PEERS
-   neighbor 10.255.255.9 remote-as 65372
-   neighbor 10.255.255.9 description KDC-AR7060X6-PCS-BELEAF1_Ethernet1
-   neighbor 10.255.255.13 peer group IPv4-UNDERLAY-PEERS
-   neighbor 10.255.255.13 remote-as 65372
-   neighbor 10.255.255.13 description KDC-AR7060X6-PCS-BELEAF2_Ethernet1
    redistribute connected route-map RM-CONN-2-BGP
    !
    address-family evpn
@@ -586,6 +520,32 @@ router bgp 65100
 !
 router bfd
    multihop interval 300 min-rx 300 multiplier 3
+```
+
+## Queue Monitor
+
+### Queue Monitor Length
+
+| Enabled | Logging Interval | Default Thresholds High | Default Thresholds Low | Notifying | TX Latency | CPU Thresholds High | CPU Thresholds Low | Mirroring Enabled | Mirror destinations |
+| ------- | ---------------- | ----------------------- | ---------------------- | --------- | ---------- | ------------------- | ------------------ | ----------------- | ------------------ |
+| True | 30 | - | - | disabled | disabled | - | - | - | - |
+
+### Queue Monitor Streaming
+
+| Enabled | IP Access Group | IPv6 Access Group | Max Connections | VRF |
+| ------- | --------------- | ----------------- | --------------- | --- |
+| True | - | - | - | - |
+
+### Queue Monitor Configuration
+
+```eos
+!
+queue-monitor length
+!
+queue-monitor length log 30
+!
+queue-monitor streaming
+   no shutdown
 ```
 
 ## Filters

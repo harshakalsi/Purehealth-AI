@@ -1,4 +1,10 @@
 ---
+queue_monitor_length:
+  enabled: true
+  log: 30
+  notifying: true
+queue_monitor_streaming:
+  enable: true
 # Default gateway used for the management interface
 mgmt_gateway: 10.118.5.254
 mgmt_interface_vrf: PCS-NETINFRA-OOB

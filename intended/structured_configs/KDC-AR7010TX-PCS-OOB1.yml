@@ -48,37 +48,7 @@ daemon_terminattr:
   smashexcludes: ale,flexCounter,hardware,kni,pulse,strata
 enable_password:
   disabled: true
-ethernet_interfaces:
-- name: Ethernet1
-  description: L2_KDC-AR7060X6-PCS-BELEAF1_Ethernet8
-  shutdown: false
-  channel_group:
-    id: 1
-    mode: active
-  peer: KDC-AR7060X6-PCS-BELEAF1
-  peer_interface: Ethernet8
-  peer_type: l3leaf
-- name: Ethernet2
-  description: L2_KDC-AR7060X6-PCS-BELEAF2_Ethernet8
-  shutdown: false
-  channel_group:
-    id: 1
-    mode: active
-  peer: KDC-AR7060X6-PCS-BELEAF2
-  peer_interface: Ethernet8
-  peer_type: l3leaf
-- name: Ethernet5
-  description: SERVER_dc1-leaf2-server1_iLO
-  shutdown: false
-  spanning_tree_portfast: edge
-  peer: dc1-leaf2-server1
-  peer_interface: iLO
-  peer_type: server
-  switchport:
-    enabled: true
-    mode: access
-    access_vlan: 11
-hostname: dc1-leaf2c
+hostname: KDC-AR7010TX-PCS-OOB1
 ip_domain_lookup:
   source_interfaces:
   - name: Management1
@@ -111,7 +81,7 @@ management_interfaces:
   description: OOB_MANAGEMENT
   shutdown: false
   vrf: PCS-NETINFRA-OOB
-  ip_address: 10.118.5.19/24
+  ip_address: 10.118.5.41/24
   type: oob
   gateway: 10.118.5.254
 metadata:
@@ -125,15 +95,11 @@ ntp:
     vrf: PCS-NETINFRA-OOB
   - name: 10.118.200.3
     vrf: PCS-NETINFRA-OOB
-port_channel_interfaces:
-- name: Port-Channel1
-  description: L2_BE_LEAF_Port-Channel8
-  shutdown: false
-  switchport:
-    enabled: true
-    mode: trunk
-    trunk:
-      allowed_vlan: none
+queue_monitor_length:
+  enabled: true
+  log: 30
+queue_monitor_streaming:
+  enable: true
 service_routing_protocols_model: multi-agent
 spanning_tree:
   mode: mstp
@@ -159,6 +125,10 @@ vlan_internal_order:
   range:
     beginning: 1006
     ending: 1199
+vlans:
+- id: 5
+  name: PureCS_Network_Infra_nodes_OOB
+  tenant: TENANT1
 vrfs:
 - name: PCS-NETINFRA-OOB
   ip_routing: false

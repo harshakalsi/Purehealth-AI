@@ -48,17 +48,18 @@ daemon_terminattr:
   smashexcludes: ale,flexCounter,hardware,kni,pulse,strata
 enable_password:
   disabled: true
-hostname: dc1-spine2
+hostname: KDC-AR7010TX-PCS-OOB2
 ip_domain_lookup:
   source_interfaces:
   - name: Management1
     vrf: PCS-NETINFRA-OOB
+ip_igmp_snooping:
+  globally_enabled: true
 ip_name_servers:
 - ip_address: 10.113.200.12
   vrf: PCS-NETINFRA-OOB
 - ip_address: 10.118.200.12
   vrf: PCS-NETINFRA-OOB
-ip_routing: true
 ip_tacacs_source_interfaces:
 - name: Management1
   vrf: PCS-NETINFRA-OOB
@@ -71,11 +72,6 @@ local_users:
   privilege: 15
   role: network-admin
   sha512_password: $6$Enl0WfE32FthwyiJ$yTyGaEJ2uPKLU.F7314YtB7J1jrzrMi7ogXIRTEHQfLdLgKWWmr1UvNlZLN6AyuxET7G5aH3AI9OYRzxVTkB1.
-loopback_interfaces:
-- name: Loopback0
-  description: ROUTER_ID
-  shutdown: false
-  ip_address: 10.255.0.2/32
 management_api_http:
   enable_https: true
   enable_vrfs:
@@ -85,7 +81,7 @@ management_interfaces:
   description: OOB_MANAGEMENT
   shutdown: false
   vrf: PCS-NETINFRA-OOB
-  ip_address: 10.118.5.12/24
+  ip_address: 10.118.5.42/24
   type: oob
   gateway: 10.118.5.254
 metadata:
@@ -99,90 +95,17 @@ ntp:
     vrf: PCS-NETINFRA-OOB
   - name: 10.118.200.3
     vrf: PCS-NETINFRA-OOB
-prefix_lists:
-- name: PL-LOOPBACKS-EVPN-OVERLAY
-  sequence_numbers:
-  - sequence: 10
-    action: permit 10.255.0.0/27 eq 32
 queue_monitor_length:
   enabled: true
   log: 30
 queue_monitor_streaming:
   enable: true
-route_maps:
-- name: RM-CONN-2-BGP
-  sequence_numbers:
-  - sequence: 10
-    type: permit
-    match:
-    - ip address prefix-list PL-LOOPBACKS-EVPN-OVERLAY
-router_bfd:
-  multihop:
-    interval: 300
-    min_rx: 300
-    multiplier: 3
-router_bgp:
-  as: '65100'
-  router_id: 10.255.0.2
-  maximum_paths:
-    paths: 4
-    ecmp: 4
-  bgp:
-    default:
-      ipv4_unicast: false
-  peer_groups:
-  - name: IPv4-UNDERLAY-PEERS
-    type: ipv4
-    password: 7x4B4rnJhZB438m9+BrBfQ==
-    send_community: all
-    maximum_routes: 12000
-  - name: EVPN-OVERLAY-PEERS
-    type: evpn
-    next_hop_unchanged: true
-    update_source: Loopback0
-    bfd: true
-    ebgp_multihop: 3
-    password: Q4fqtbqcZ7oQuKfuWtNGRQ==
-    send_community: all
-    maximum_routes: 0
-  neighbors:
-  - ip_address: 10.118.0.5
-    peer_group: EVPN-OVERLAY-PEERS
-    remote_as: '65372'
-    peer: KDC-AR7060X6-PCS-BELEAF1
-    description: KDC-AR7060X6-PCS-BELEAF1_Loopback0
-  - ip_address: 10.118.0.6
-    peer_group: EVPN-OVERLAY-PEERS
-    remote_as: '65372'
-    peer: KDC-AR7060X6-PCS-BELEAF2
-    description: KDC-AR7060X6-PCS-BELEAF2_Loopback0
-  - ip_address: 10.118.0.3
-    peer_group: EVPN-OVERLAY-PEERS
-    remote_as: '65371'
-    peer: KDC-AR7508R3-PCS-FELEAF1
-    description: KDC-AR7508R3-PCS-FELEAF1_Loopback0
-  - ip_address: 10.118.0.4
-    peer_group: EVPN-OVERLAY-PEERS
-    remote_as: '65371'
-    peer: KDC-AR7508R3-PCS-FELEAF2
-    description: KDC-AR7508R3-PCS-FELEAF2_Loopback0
-  redistribute:
-    connected:
-      enabled: true
-      route_map: RM-CONN-2-BGP
-  address_family_evpn:
-    peer_groups:
-    - name: EVPN-OVERLAY-PEERS
-      activate: true
-  address_family_ipv4:
-    peer_groups:
-    - name: IPv4-UNDERLAY-PEERS
-      activate: true
-    - name: EVPN-OVERLAY-PEERS
-      activate: false
 service_routing_protocols_model: multi-agent
 spanning_tree:
-  mode: none
+  mode: mstp
+  mst_instances:
+  - id: '0'
+    priority: 32768
 static_routes:
 - vrf: PCS-NETINFRA-OOB
   prefix: 0.0.0.0/0
@@ -202,6 +125,10 @@ vlan_internal_order:
   range:
     beginning: 1006
     ending: 1199
+vlans:
+- id: 5
+  name: PureCS_Network_Infra_nodes_OOB
+  tenant: TENANT1
 vrfs:
 - name: PCS-NETINFRA-OOB
   ip_routing: false

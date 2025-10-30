@@ -1,9 +1,1 @@
 Type,Node,Node Interface,Leaf IP Address,Peer Type,Peer Node,Peer Interface,Peer IP Address
-spine,dc1-spine1,Ethernet1,10.255.255.0/31,l3leaf,KDC-AR7508R3-PCS-FELEAF1,Ethernet1,10.255.255.1/31
-spine,dc1-spine1,Ethernet2,10.255.255.4/31,l3leaf,KDC-AR7508R3-PCS-FELEAF2,Ethernet1,10.255.255.5/31
-spine,dc1-spine1,Ethernet3,10.255.255.8/31,l3leaf,KDC-AR7060X6-PCS-BELEAF1,Ethernet1,10.255.255.9/31
-spine,dc1-spine1,Ethernet4,10.255.255.12/31,l3leaf,KDC-AR7060X6-PCS-BELEAF2,Ethernet1,10.255.255.13/31
-spine,dc1-spine2,Ethernet1,10.255.255.2/31,l3leaf,KDC-AR7508R3-PCS-FELEAF1,Ethernet2,10.255.255.3/31
-spine,dc1-spine2,Ethernet2,10.255.255.6/31,l3leaf,KDC-AR7508R3-PCS-FELEAF2,Ethernet2,10.255.255.7/31
-spine,dc1-spine2,Ethernet3,10.255.255.10/31,l3leaf,KDC-AR7060X6-PCS-BELEAF1,Ethernet2,10.255.255.11/31
-spine,dc1-spine2,Ethernet4,10.255.255.14/31,l3leaf,KDC-AR7060X6-PCS-BELEAF2,Ethernet2,10.255.255.15/31

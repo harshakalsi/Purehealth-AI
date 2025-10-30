@@ -1,5 +1,186 @@
 ---
+network_ports:
+  - switches: [KDC-AR7508R3-PCS-FELEAF1, KDC-AR7508R3-PCS-FELEAF2]
+    platforms: [7508R3, 7508R3]
+  - switches: [KDC-AR7060X6-PCS-BELEAF1, KDC-AR7060X6-PCS-BELEAF2]
+    platforms: [7060X6, 7060X6]
+
+port_profiles:
+
+  - profile: Perimeter_FW
+    mode: trunk
+    native_vlan: 1000
+    vlans: "15,16"
+    storm_control:
+      broadcast: 
+        level: 10
+      unknown_unicast:
+        level: 10
+
+  - profile: DC-FW
+    mode: trunk
+    native_vlan: 1000
+    vlans: "1004-1006,1009,1011-1013,1025"
+    storm_control:
+      broadcast: 
+        level: 10
+      unknown_unicast:
+        level: 10
+
+  - profile: loadbalancer
+    mode: trunk
+    native_vlan: 1000
+    vlans: "140"
+  
+  - profile: CPE
+    mode: access
+    native_vlan: 1000
+  
+  - profile: back-end-gpu-ports
+    vlans: 1300
+    native_vlan: 1000
+    mode: trunk
+    qos_profile: RDMA-QOS-TH-FABRIC-PROFILE-1
+    spanning_tree_portfast: edge
+    storm_control:
+      all: 
+        level: 10
+    
+
 # Definition of connected endpoints in the fabric.
+routers:
+  - name: Internet-CPE-01
+    adapters:
+      - endpoint_ports: ['2']
+        switch_ports: [Ethernet7/47/1]
+        # Device names where the server ports are connected.
+        switches: [KDC-AR7508R3-PCS-FELEAF1]
+        profile: CPE
+        vlans: "18"
+  
+  - name: Internet-CPE-02
+    adapters:
+      - endpoint_ports: ['2']
+        switch_ports: [Ethernet7/47/1]
+        # Device names where the server ports are connected.
+        switches: [KDC-AR7508R3-PCS-FELEAF2]
+        profile: CPE
+        vlans: "18"
+
+  - name: MPLS-CPE-01
+    adapters:
+      - endpoint_ports: ['5']
+        switch_ports: [Ethernet7/48/1]
+        # Device names where the server ports are connected.
+        switches: [KDC-AR7508R3-PCS-FELEAF1]
+        profile: CPE
+        vlans: "17"
+  
+  - name: MPLS-CPE-02
+    adapters:
+      - endpoint_ports: ['5']
+        switch_ports: [Ethernet7/48/1]
+        # Device names where the server ports are connected.
+        switches: [KDC-AR7508R3-PCS-FELEAF2]
+        profile: CPE
+        vlans: "17"
+
+load_balancers:
+  - name: '01'
+    adapters:
+      - endpoint_ports: ['3.0', '5.0', '7.0', '9.0', '4.0', '6.0', '8.0', '10.0']
+        switch_ports: [Ethernet6/40/1, Ethernet6/41/1, Ethernet7/40/1, Ethernet7/41/1, Ethernet6/40/1, Ethernet6/41/1, Ethernet7/40/1, Ethernet7/41/1]
+        # Device names where the server ports are connected.
+        switches: [KDC-AR7508R3-PCS-FELEAF1, KDC-AR7508R3-PCS-FELEAF1,KDC-AR7508R3-PCS-FELEAF1, KDC-AR7508R3-PCS-FELEAF1, KDC-AR7508R3-PCS-FELEAF2, KDC-AR7508R3-PCS-FELEAF2,KDC-AR7508R3-PCS-FELEAF2, KDC-AR7508R3-PCS-FELEAF2]
+        profile: loadbalancer
+        port_channel:
+        # The port-channel name on the endpoint that will be used in the port-channel description.
+          endpoint_port_channel: Bond1
+          # Port channel mode for LACP.
+          mode: active
+          channel_id: 1640
+  - name: '02'
+    adapters:
+      - endpoint_ports: ['3.0', '5.0', '7.0', '9.0', '4.0', '6.0', '8.0', '10.0']
+        switch_ports: [Ethernet6/42/1, Ethernet6/43/1, Ethernet7/42/1, Ethernet7/43/1, Ethernet6/42/1, Ethernet6/43/1, Ethernet7/42/1, Ethernet7/43/1]
+        # Device names where the server ports are connected.
+        switches: [KDC-AR7508R3-PCS-FELEAF1, KDC-AR7508R3-PCS-FELEAF1,KDC-AR7508R3-PCS-FELEAF1, KDC-AR7508R3-PCS-FELEAF1, KDC-AR7508R3-PCS-FELEAF2, KDC-AR7508R3-PCS-FELEAF2,KDC-AR7508R3-PCS-FELEAF2, KDC-AR7508R3-PCS-FELEAF2]
+        profile: loadbalancer
+        port_channel:
+        # The port-channel name on the endpoint that will be used in the port-channel description.
+          endpoint_port_channel: Bond1
+          # Port channel mode for LACP.
+          mode: active
+          channel_id: 1642
+
+firewalls:
+  - name: perimerter-01
+    adapters:
+        # Name of the server interfaces that will be used in the description of each interface
+      - endpoint_ports: ['23', '23']
+        # Device ports where the server ports are connected.
+        switch_ports: [Ethernet6/46/1, Ethernet7/46/1]
+        # Device names where the server ports are connected.
+        switches: [KDC-AR7508R3-PCS-FELEAF2, KDC-AR7508R3-PCS-FELEAF1]
+        profile: Perimeter_FW
+        port_channel:
+        # The port-channel name on the endpoint that will be used in the port-channel description.
+          endpoint_port_channel: Bond1
+          # Port channel mode for LACP.
+          mode: active
+          channel_id: 1646
+        storm_control:
+          broadcast: 
+            level: 10
+          unknown_unicast:
+            level: 10
+  - name: perimerter-02
+    adapters:
+       # Name of the server interfaces that will be used in the description of each interface
+      - endpoint_ports: ['24', '24']
+        # Device ports where the server ports are connected.
+        switch_ports: [Ethernet7/46/1, Ethernet6/46/1]
+        # Device names where the server ports are connected.
+        switches: [KDC-AR7508R3-PCS-FELEAF2, KDC-AR7508R3-PCS-FELEAF1]
+        profile: Perimeter_FW
+        port_channel:
+        # The port-channel name on the endpoint that will be used in the port-channel description.
+          endpoint_port_channel: Bond1
+          # Port channel mode for LACP.
+          mode: active
+          channel_id: 1746
+
+  - name: DC-01
+    adapters:
+        # Name of the server interfaces that will be used in the description of each interface
+      - endpoint_ports: ['27', '28','29', '30']
+        # Device ports where the server ports are connected.
+        switch_ports: [Ethernet6/44/1, Ethernet7/44/1, Ethernet6/44/1, Ethernet7/44/1]
+        # Device names where the server ports are connected.
+        switches: [KDC-AR7508R3-PCS-FELEAF1, KDC-AR7508R3-PCS-FELEAF1,KDC-AR7508R3-PCS-FELEAF2, KDC-AR7508R3-PCS-FELEAF2]
+        profile: Perimeter_FW
+        port_channel:
+        # The port-channel name on the endpoint that will be used in the port-channel description.
+          endpoint_port_channel: Bond1
+          # Port channel mode for LACP.
+          mode: active
+          channel_id: 1644
+  - name: DC-02
+    adapters:
+        # Name of the server interfaces that will be used in the description of each interface
+      - endpoint_ports: ['27', '28','29', '30']
+        # Device ports where the server ports are connected.
+        switch_ports: [Ethernet6/45/1, Ethernet7/45/1, Ethernet6/45/1, Ethernet7/45/1]
+        # Device names where the server ports are connected.
+        switches: [KDC-AR7508R3-PCS-FELEAF1, KDC-AR7508R3-PCS-FELEAF1,KDC-AR7508R3-PCS-FELEAF2, KDC-AR7508R3-PCS-FELEAF2]
+        profile: DC-FW
+        port_channel:
+        # The port-channel name on the endpoint that will be used in the port-channel description.
+          endpoint_port_channel: Bond1
+          # Port channel mode for LACP.
+          mode: active
+          channel_id: 1645
+
 servers:
   # Name of the defined server.
   - name: dc1-leaf1-server1
@@ -33,21 +214,24 @@ servers:
         mode: access
         spanning_tree_portfast: edge
 
-  - name: dc1-leaf2-server1
+  - name: gpu1-01
     adapters:
-      - endpoint_ports: [PCI1, PCI2]
-        switch_ports: [Ethernet5/1, Ethernet5/1]
+      - endpoint_ports: [2/1, 7/1]
+        switch_ports: [Ethernet1/1, Ethernet1/1]
         switches: [KDC-AR7060X6-PCS-BELEAF1, KDC-AR7060X6-PCS-BELEAF2]
-        vlans: 1004, 1006, 1009, 1011–1016, 1019, 1022–1024, 1027, 1051, 1053, 1056
-        native_vlan: 4092
-        mode: trunk
-        spanning_tree_portfast: edge
-        port_channel:
-          mode: active
+        qos_profile: RDMA-QOS-TH-FABRIC-PROFILE-1
+        profile: back-end-gpu-ports
 
-      - endpoint_ports: [iLO]
-        switch_ports: [Ethernet5]
-        switches: [dc1-leaf2c]
-        vlans: 11
-        mode: access
-        spanning_tree_portfast: edge
+  - name: gpu1-02
+    adapters:
+      - endpoint_ports: [2/1, 7/1]
+        switch_ports: [Ethernet1/2, Ethernet1/2]
+        switches: [KDC-AR7060X6-PCS-BELEAF1, KDC-AR7060X6-PCS-BELEAF2]
+        profile: back-end-gpu-ports
+
+  - name: gpu2-01
+    adapters:
+      - endpoint_ports: [32/1, 33/1, 34/1, 35/1]
+        switch_ports: [Ethernet9/1, Ethernet8/1, Ethernet7/1, Ethernet6/1]
+        switches: [KDC-AR7060X6-PCS-BELEAF1, KDC-AR7060X6-PCS-BELEAF1, KDC-AR7060X6-PCS-BELEAF1, KDC-AR7060X6-PCS-BELEAF1]
+        profile: back-end-gpu-ports

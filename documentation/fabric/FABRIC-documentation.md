@@ -17,10 +17,11 @@
 
 | POD | Type | Node | Management IP | Platform | Provisioned in CloudVision | Serial Number |
 | --- | ---- | ---- | ------------- | -------- | -------------------------- | ------------- |
-| FABRIC | l2leaf | dc1-leaf1c | 10.118.5.18/24 | vEOS-lab | Provisioned | - |
-| FABRIC | l2leaf | dc1-leaf2c | 10.118.5.19/24 | vEOS-lab | Provisioned | - |
 | FABRIC | spine | dc1-spine1 | 10.118.5.11/24 | vEOS-lab | Provisioned | - |
 | FABRIC | spine | dc1-spine2 | 10.118.5.12/24 | vEOS-lab | Provisioned | - |
+| FABRIC | l2leaf | KDC-AR7010TX-PCS-OOB1 | 10.118.5.41/24 | vEOS-lab | Provisioned | - |
+| FABRIC | l2leaf | KDC-AR7010TX-PCS-OOB2 | 10.118.5.42/24 | vEOS-lab | Provisioned | - |
+| FABRIC | l2leaf | KDC-AR7010TX-PCS-OOB3 | 10.118.5.43/24 | vEOS-lab | Provisioned | - |
 | FABRIC | l3leaf | KDC-AR7060X6-PCS-BELEAF1 | 10.118.5.116/24 | vEOS-lab | Provisioned | - |
 | FABRIC | l3leaf | KDC-AR7060X6-PCS-BELEAF2 | 10.118.5.117/24 | vEOS-lab | Provisioned | - |
 | FABRIC | l3leaf | KDC-AR7508R3-PCS-FELEAF1 | 10.118.5.16/24 | vEOS-lab | Provisioned | - |
@@ -37,22 +38,24 @@
 
 | Type | Node | Node Interface | Peer Type | Peer Node | Peer Interface |
 | ---- | ---- | -------------- | --------- | ----------| -------------- |
-| l2leaf | dc1-leaf1c | Ethernet1 | l3leaf | KDC-AR7508R3-PCS-FELEAF1 | Ethernet8 |
-| l2leaf | dc1-leaf1c | Ethernet2 | l3leaf | KDC-AR7508R3-PCS-FELEAF2 | Ethernet8 |
-| l2leaf | dc1-leaf2c | Ethernet1 | l3leaf | KDC-AR7060X6-PCS-BELEAF1 | Ethernet8 |
-| l2leaf | dc1-leaf2c | Ethernet2 | l3leaf | KDC-AR7060X6-PCS-BELEAF2 | Ethernet8 |
-| spine | dc1-spine1 | Ethernet1 | l3leaf | KDC-AR7508R3-PCS-FELEAF1 | Ethernet1 |
-| spine | dc1-spine1 | Ethernet2 | l3leaf | KDC-AR7508R3-PCS-FELEAF2 | Ethernet1 |
-| spine | dc1-spine1 | Ethernet3 | l3leaf | KDC-AR7060X6-PCS-BELEAF1 | Ethernet1 |
-| spine | dc1-spine1 | Ethernet4 | l3leaf | KDC-AR7060X6-PCS-BELEAF2 | Ethernet1 |
-| spine | dc1-spine2 | Ethernet1 | l3leaf | KDC-AR7508R3-PCS-FELEAF1 | Ethernet2 |
-| spine | dc1-spine2 | Ethernet2 | l3leaf | KDC-AR7508R3-PCS-FELEAF2 | Ethernet2 |
-| spine | dc1-spine2 | Ethernet3 | l3leaf | KDC-AR7060X6-PCS-BELEAF1 | Ethernet2 |
-| spine | dc1-spine2 | Ethernet4 | l3leaf | KDC-AR7060X6-PCS-BELEAF2 | Ethernet2 |
-| l3leaf | KDC-AR7060X6-PCS-BELEAF1 | Ethernet3 | mlag_peer | KDC-AR7060X6-PCS-BELEAF2 | Ethernet3 |
-| l3leaf | KDC-AR7060X6-PCS-BELEAF1 | Ethernet4 | mlag_peer | KDC-AR7060X6-PCS-BELEAF2 | Ethernet4 |
-| l3leaf | KDC-AR7508R3-PCS-FELEAF1 | Ethernet3 | mlag_peer | KDC-AR7508R3-PCS-FELEAF2 | Ethernet3 |
-| l3leaf | KDC-AR7508R3-PCS-FELEAF1 | Ethernet4 | mlag_peer | KDC-AR7508R3-PCS-FELEAF2 | Ethernet4 |
+| l3leaf | KDC-AR7060X6-PCS-BELEAF1 | Ethernet23/1 | mlag_peer | KDC-AR7060X6-PCS-BELEAF2 | Ethernet23/1 |
+| l3leaf | KDC-AR7060X6-PCS-BELEAF1 | Ethernet24/1 | mlag_peer | KDC-AR7060X6-PCS-BELEAF2 | Ethernet24/1 |
+| l3leaf | KDC-AR7060X6-PCS-BELEAF1 | Ethernet25/1 | mlag_peer | KDC-AR7060X6-PCS-BELEAF2 | Ethernet25/1 |
+| l3leaf | KDC-AR7060X6-PCS-BELEAF1 | Ethernet26/1 | mlag_peer | KDC-AR7060X6-PCS-BELEAF2 | Ethernet26/1 |
+| l3leaf | KDC-AR7060X6-PCS-BELEAF1 | Ethernet27/1 | mlag_peer | KDC-AR7060X6-PCS-BELEAF2 | Ethernet27/1 |
+| l3leaf | KDC-AR7060X6-PCS-BELEAF1 | Ethernet28/1 | mlag_peer | KDC-AR7060X6-PCS-BELEAF2 | Ethernet28/1 |
+| l3leaf | KDC-AR7060X6-PCS-BELEAF1 | Ethernet29/1 | mlag_peer | KDC-AR7060X6-PCS-BELEAF2 | Ethernet29/1 |
+| l3leaf | KDC-AR7060X6-PCS-BELEAF1 | Ethernet30/1 | mlag_peer | KDC-AR7060X6-PCS-BELEAF2 | Ethernet30/1 |
+| l3leaf | KDC-AR7060X6-PCS-BELEAF1 | Ethernet31/1 | mlag_peer | KDC-AR7060X6-PCS-BELEAF2 | Ethernet31/1 |
+| l3leaf | KDC-AR7060X6-PCS-BELEAF1 | Ethernet32/1 | mlag_peer | KDC-AR7060X6-PCS-BELEAF2 | Ethernet32/1 |
+| l3leaf | KDC-AR7508R3-PCS-FELEAF1 | Ethernet3/21/1 | mlag_peer | KDC-AR7508R3-PCS-FELEAF2 | Ethernet3/21/1 |
+| l3leaf | KDC-AR7508R3-PCS-FELEAF1 | Ethernet3/22/1 | mlag_peer | KDC-AR7508R3-PCS-FELEAF2 | Ethernet3/22/1 |
+| l3leaf | KDC-AR7508R3-PCS-FELEAF1 | Ethernet3/23/1 | mlag_peer | KDC-AR7508R3-PCS-FELEAF2 | Ethernet3/23/1 |
+| l3leaf | KDC-AR7508R3-PCS-FELEAF1 | Ethernet3/24/1 | mlag_peer | KDC-AR7508R3-PCS-FELEAF2 | Ethernet3/24/1 |
+| l3leaf | KDC-AR7508R3-PCS-FELEAF1 | Ethernet6/49/1 | mlag_peer | KDC-AR7508R3-PCS-FELEAF2 | Ethernet6/49/1 |
+| l3leaf | KDC-AR7508R3-PCS-FELEAF1 | Ethernet6/50/1 | mlag_peer | KDC-AR7508R3-PCS-FELEAF2 | Ethernet6/50/1 |
+| l3leaf | KDC-AR7508R3-PCS-FELEAF1 | Ethernet7/49/1 | mlag_peer | KDC-AR7508R3-PCS-FELEAF2 | Ethernet7/49/1 |
+| l3leaf | KDC-AR7508R3-PCS-FELEAF1 | Ethernet7/50/1 | mlag_peer | KDC-AR7508R3-PCS-FELEAF2 | Ethernet7/50/1 |
 
 ## Fabric IP Allocation
 
@@ -60,20 +63,12 @@
 
 | Uplink IPv4 Pool | Available Addresses | Assigned addresses | Assigned Address % |
 | ---------------- | ------------------- | ------------------ | ------------------ |
-| 10.255.255.0/26 | 64 | 16 | 25.0 % |
+| 10.255.255.0/26 | 64 | 0 | 0.0 % |
 
 ### Point-To-Point Links Node Allocation
 
 | Node | Node Interface | Node IP Address | Peer Node | Peer Interface | Peer IP Address |
 | ---- | -------------- | --------------- | --------- | -------------- | --------------- |
-| dc1-spine1 | Ethernet1 | 10.255.255.0/31 | KDC-AR7508R3-PCS-FELEAF1 | Ethernet1 | 10.255.255.1/31 |
-| dc1-spine1 | Ethernet2 | 10.255.255.4/31 | KDC-AR7508R3-PCS-FELEAF2 | Ethernet1 | 10.255.255.5/31 |
-| dc1-spine1 | Ethernet3 | 10.255.255.8/31 | KDC-AR7060X6-PCS-BELEAF1 | Ethernet1 | 10.255.255.9/31 |
-| dc1-spine1 | Ethernet4 | 10.255.255.12/31 | KDC-AR7060X6-PCS-BELEAF2 | Ethernet1 | 10.255.255.13/31 |
-| dc1-spine2 | Ethernet1 | 10.255.255.2/31 | KDC-AR7508R3-PCS-FELEAF1 | Ethernet2 | 10.255.255.3/31 |
-| dc1-spine2 | Ethernet2 | 10.255.255.6/31 | KDC-AR7508R3-PCS-FELEAF2 | Ethernet2 | 10.255.255.7/31 |
-| dc1-spine2 | Ethernet3 | 10.255.255.10/31 | KDC-AR7060X6-PCS-BELEAF1 | Ethernet2 | 10.255.255.11/31 |
-| dc1-spine2 | Ethernet4 | 10.255.255.14/31 | KDC-AR7060X6-PCS-BELEAF2 | Ethernet2 | 10.255.255.15/31 |
 
 ### Loopback Interfaces (BGP EVPN Peering)
 

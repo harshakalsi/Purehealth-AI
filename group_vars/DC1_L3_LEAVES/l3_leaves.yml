@@ -21,11 +21,13 @@ l3leaf:
     # Definition of pool of IPs to be used for MLAG peer-link connectivity
     mlag_peer_ipv4_pool: 10.118.4.248/29
     # iBGP Peering between MLAG peers
-    mlag_peer_l3_ipv4_pool: 10.118.4.244/27
     # Virtual router mac for VNIs assigned to Leaf switches in format xx:xx:xx:xx:xx:xx
     virtual_router_mac_address: 00:1c:73:00:00:99
     spanning_tree_priority: 4096
     spanning_tree_mode: mstp
+    mlag_dual_primary_detection: true
+    mlag_port_channel_id: 1000
+    mlag_peer_l3_vlan: 4093
 
 # If two nodes (and only two) are in the same node_group, they will automatically form an MLAG pair
   node_groups:
@@ -34,20 +36,29 @@ l3leaf:
     - group: FE_LEAF
       # ASN to be used by BGP for the group. Both devices in the MLAG pair will use the same BGP ASN
       bgp_as: 65371
+      mlag_peer_l3_ipv4_pool: 10.118.4.252/31
+      filter:
+        tags: [FE-Leaf]
       nodes:
         # Definition of hostnames under the node_group
         - name: KDC-AR7508R3-PCS-FELEAF1
           id: 1
+          mgmt_interface: Management1/1
           mgmt_ip: 10.118.5.16/24
-          # Definition of the port to be used in the uplink device facing this device.
-          # Note that the number of elements in this list must match the length of 'uplink_switches' as well as 'uplink_interfaces'
-          uplink_switch_interfaces: [Ethernet1, Ethernet1]
+          uplink_switch_interfaces: []
+          mlag_domain_id: "MLAG_FE_LEAF_01"
+          
+          mlag_interfaces: [Ethernet3/21/1, Ethernet3/22/1, Ethernet3/23/1, Ethernet3/24/1, Ethernet6/49/1, Ethernet6/50/1, Ethernet7/49/1, Ethernet7/50/1]
         - name: KDC-AR7508R3-PCS-FELEAF2
           id: 2
           mgmt_ip: 10.118.5.17/24
-          uplink_switch_interfaces: [Ethernet2, Ethernet2]
+          mgmt_interface: Management1/1
+          uplink_switch_interfaces: []
+          mlag_domain_id: "MLAG_FE_LEAF_01"
+          mlag_interfaces: [Ethernet3/21/1, Ethernet3/22/1, Ethernet3/23/1, Ethernet3/24/1, Ethernet6/49/1, Ethernet6/50/1, Ethernet7/49/1, Ethernet7/50/1]
     - group: BE_LEAF
       bgp_as: 65372
+      mlag_peer_l3_ipv4_pool: 10.118.4.244/28
       filter:
         tags: [BE-Leaf]
       nodes:
@@ -56,10 +67,15 @@ l3leaf:
             deny_vrfs: [PCS-MPLS-INTRANET,PCS-SHARED-INTERNET]
           id: 3
           mgmt_ip: 10.118.5.116/24
-          uplink_switch_interfaces: [Ethernet3, Ethernet3]
+          uplink_switch_interfaces: []
+          mlag_domain_id: "MLAG_BE_LEAF_01"
+          mlag_interfaces: [Ethernet23/1, Ethernet24/1, Ethernet25/1, Ethernet26/1, Ethernet27/1, Ethernet28/1, Ethernet29/1, Ethernet30/1, Ethernet31/1, Ethernet32/1]
         - name: KDC-AR7060X6-PCS-BELEAF2
           id: 4
           filter:
             deny_vrfs: [PCS-MPLS-INTRANET,PCS-SHARED-INTERNET]
           mgmt_ip: 10.118.5.117/24
-          uplink_switch_interfaces: [Ethernet4, Ethernet4]
+          uplink_switch_interfaces: []
+          mlag_dual_primary_detection: true
+          mlag_domain_id: "MLAG_BE_LEAF_01"
+          mlag_interfaces: [Ethernet23/1, Ethernet24/1, Ethernet25/1, Ethernet26/1, Ethernet27/1, Ethernet28/1, Ethernet29/1, Ethernet30/1, Ethernet31/1, Ethernet32/1]
