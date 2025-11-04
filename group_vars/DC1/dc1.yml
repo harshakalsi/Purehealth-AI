@@ -1,7 +1,7 @@
 ---
 queue_monitor_length:
   enabled: true
-  log: 30
+  log: 300
   notifying: true
 queue_monitor_streaming:
   enable: true
@@ -9,6 +9,9 @@ management_console:
   idle_timeout: 20
 terminal:
   length: 20
+vlans:
+  - id: 1
+    state: suspend
 # Default gateway used for the management interface
 mgmt_gateway: 10.118.5.254
 mgmt_interface_vrf: PCS-NETINFRA-OOB

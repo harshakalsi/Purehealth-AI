@@ -19,9 +19,9 @@
 | --- | ---- | ---- | ------------- | -------- | -------------------------- | ------------- |
 | FABRIC | spine | dc1-spine1 | 10.118.5.11/24 | vEOS-lab | Provisioned | - |
 | FABRIC | spine | dc1-spine2 | 10.118.5.12/24 | vEOS-lab | Provisioned | - |
-| FABRIC | l2leaf | KDC-AR7010TX-PCS-OOB1 | 10.118.5.41/24 | vEOS-lab | Provisioned | - |
+| FABRIC | l2leaf | KDC-AR7010TX-PCS-OOB1 | 10.118.5.42/24 | vEOS-lab | Provisioned | - |
 | FABRIC | l2leaf | KDC-AR7010TX-PCS-OOB2 | 10.118.5.42/24 | vEOS-lab | Provisioned | - |
-| FABRIC | l2leaf | KDC-AR7010TX-PCS-OOB3 | 10.118.5.43/24 | vEOS-lab | Provisioned | - |
+| FABRIC | l2leaf | KDC-AR7010TX-PCS-OOB3 | 10.118.5.42/24 | vEOS-lab | Provisioned | - |
 | FABRIC | l3leaf | KDC-AR7060X6-PCS-BELEAF1 | 10.118.5.116/24 | vEOS-lab | Provisioned | - |
 | FABRIC | l3leaf | KDC-AR7060X6-PCS-BELEAF2 | 10.118.5.117/24 | vEOS-lab | Provisioned | - |
 | FABRIC | l3leaf | KDC-AR7508R3-PCS-FELEAF1 | 10.118.5.16/24 | vEOS-lab | Provisioned | - |
@@ -33,6 +33,9 @@
 
 | POD | Type | Node | Management IP | Inband Interface |
 | --- | ---- | ---- | ------------- | ---------------- |
+| FABRIC | l2leaf | KDC-AR7010TX-PCS-OOB1 | 10.118.5.41/24 | Vlan1005 |
+| FABRIC | l2leaf | KDC-AR7010TX-PCS-OOB2 | 10.118.5.42/24 | Vlan1005 |
+| FABRIC | l2leaf | KDC-AR7010TX-PCS-OOB3 | 10.118.5.43/24 | Vlan1005 |
 
 ## Fabric Topology
 

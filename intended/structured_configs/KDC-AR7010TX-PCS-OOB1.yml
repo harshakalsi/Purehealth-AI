@@ -4,7 +4,7 @@ aaa_accounting:
       type: start-stop
       methods:
       - method: group
-        group: PCSAUTHGRP local
+        group: PCSAUTHGRP
   commands:
     default:
     - commands: all
@@ -81,7 +81,7 @@ ethernet_interfaces:
   switchport:
     enabled: true
     mode: access
-    access_vlan: 5
+    access_vlan: 1005
 hostname: KDC-AR7010TX-PCS-OOB1
 ip_domain_lookup:
   source_interfaces:
@@ -115,7 +115,7 @@ management_interfaces:
   description: OOB_MANAGEMENT
   shutdown: false
   vrf: PCS-NETINFRA-OOB
-  ip_address: 10.118.5.41/24
+  ip_address: 10.118.5.42/24
   type: oob
   gateway: 10.118.5.254
 management_ssh:
@@ -142,10 +142,10 @@ port_channel_interfaces:
     enabled: true
     mode: trunk
     trunk:
-      allowed_vlan: '5'
+      allowed_vlan: '1005'
 queue_monitor_length:
   enabled: true
-  log: 30
+  log: 300
 queue_monitor_streaming:
   enable: true
 service_routing_protocols_model: multi-agent
@@ -168,15 +168,23 @@ tacacs_servers:
     key: 03321F0D3807361E04014A0104
   policy_unknown_mandatory_attribute_ignore: false
 transceiver_qsfp_default_mode_4x10: true
+vlan_interfaces:
+- name: Vlan1005
+  description: PureCS_Network_Infra_nodes_OOB
+  shutdown: false
+  vrf: PCS-NETINFRA-OOB
+  ip_address: 10.118.5.41/24
+  mtu: 1500
+  type: inband_mgmt
 vlan_internal_order:
   allocation: ascending
   range:
     beginning: 1006
     ending: 1199
 vlans:
-- id: 5
-  name: PureCS_Network_Infra_nodes_OOB
-  tenant: TENANT1
+- id: 1005
+  name: INBAND_MGMT
+  tenant: system
 vrfs:
 - name: PCS-NETINFRA-OOB
   ip_routing: false

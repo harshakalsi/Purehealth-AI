@@ -23,6 +23,8 @@
   - [AAA Accounting](#aaa-accounting)
 - [Monitoring](#monitoring)
   - [TerminAttr Daemon](#terminattr-daemon)
+  - [Logging](#logging)
+  - [SNMP](#snmp)
 - [Spanning Tree](#spanning-tree)
   - [Spanning Tree Summary](#spanning-tree-summary)
   - [Spanning Tree Device Configuration](#spanning-tree-device-configuration)
@@ -33,8 +35,10 @@
   - [VLANs Summary](#vlans-summary)
   - [VLANs Device Configuration](#vlans-device-configuration)
 - [Interfaces](#interfaces)
+  - [Interface Defaults](#interface-defaults)
   - [Ethernet Interfaces](#ethernet-interfaces)
   - [Port-Channel Interfaces](#port-channel-interfaces)
+  - [VLAN Interfaces](#vlan-interfaces)
 - [Routing](#routing)
   - [Service Routing Protocols Model](#service-routing-protocols-model)
   - [IP Routing](#ip-routing)
@@ -60,7 +64,7 @@
 
 | Management Interface | Description | Type | VRF | IP Address | Gateway |
 | -------------------- | ----------- | ---- | --- | ---------- | ------- |
-| Management1 | OOB_MANAGEMENT | oob | PCS-NETINFRA-OOB | 10.118.5.43/24 | 10.118.5.254 |
+| Management1 | OOB_MANAGEMENT | oob | PCS-NETINFRA-OOB | 10.118.5.42/24 | 10.118.5.254 |
 
 ##### IPv6
 
@@ -76,7 +80,7 @@ interface Management1
    description OOB_MANAGEMENT
    no shutdown
    vrf PCS-NETINFRA-OOB
-   ip address 10.118.5.43/24
+   ip address 10.118.5.42/24
 ```
 
 ### DNS Domain
@@ -339,13 +343,13 @@ aaa authorization commands all default group PCSAUTHGRP local
 
 | Type | Commands | Record type | Groups | Logging |
 | ---- | -------- | ----------- | ------ | ------- |
-| Exec - Default | - | start-stop | PCSAUTHGRP local | False |
+| Exec - Default | - | start-stop | PCSAUTHGRP | False |
 | Commands - Default | all | start-stop | PCSAUTHGRP | False |
 
 #### AAA Accounting Device Configuration
 
 ```eos
-aaa accounting exec default start-stop group PCSAUTHGRP local
+aaa accounting exec default start-stop group PCSAUTHGRP
 aaa accounting commands all default start-stop group PCSAUTHGRP
 ```
 
@@ -366,6 +370,107 @@ aaa accounting commands all default start-stop group PCSAUTHGRP
 daemon TerminAttr
    exec /usr/bin/TerminAttr -cvaddr=10.113.5.1:9910,10.113.5.2:9910,10.113.5.3:9910 -cvauth=token,/tmp/token -cvvrf=PCS-NETINFRA-OOB -disableaaa -smashexcludes=ale,flexCounter,hardware,kni,pulse,strata -taillogs -cvsourceintf=Management1
    no shutdown
+```
+
+### Logging
+
+#### Logging Servers and Features Summary
+
+| Type | Level |
+| -----| ----- |
+| Console | warnings |
+| Buffer | informational |
+
+| Format Type | Setting |
+| ----------- | ------- |
+| Timestamp | high-resolution |
+| Hostname | hostname |
+| Sequence-numbers | false |
+| RFC5424 | False |
+
+| VRF | Source Interface |
+| --- | ---------------- |
+| - | Management1 |
+| PCS-NETINFRA-OOB | Management1 |
+
+| VRF | Hosts | Ports | Protocol | SSL-profile |
+| --- | ----- | ----- | -------- | ----------- |
+| PCS-NETINFRA-OOB | 10.115.4.100 | Default | UDP | - |
+
+#### Logging Servers and Features Device Configuration
+
+```eos
+!
+logging buffered 100000 informational
+logging console warnings
+logging vrf PCS-NETINFRA-OOB host 10.115.4.100
+logging format timestamp high-resolution
+logging source-interface Management1
+logging vrf PCS-NETINFRA-OOB source-interface Management1
+```
+
+### SNMP
+
+#### SNMP Configuration Summary
+
+| Contact | Location | SNMP Traps | State |
+| ------- | -------- | ---------- | ----- |
+| Saleem Nawaz Khan | KDC | All | Enabled |
+| Saleem Nawaz Khan | KDC | bgp | Enabled |
+| Saleem Nawaz Khan | KDC |  | Disabled |
+
+#### SNMP EngineID Configuration
+
+| Type | EngineID (Hex) | IP | Port |
+| ---- | -------------- | -- | ---- |
+| local | f5717ffc59c065f52900 | - | - |
+| remote | 1234567890 | server1 | - |
+
+#### SNMP ACLs
+
+| IP | ACL | VRF |
+| -- | --- | --- |
+| IPv4 | ACL-SNMP | PCS-NETINFRA-OOB |
+
+#### SNMP VRF Status
+
+| VRF | Status |
+| --- | ------ |
+| PCS-NETINFRA-OOB | Enabled |
+
+#### SNMP Hosts Configuration
+
+| Host | VRF | Community | Username | Authentication level | SNMP Version |
+| ---- |---- | --------- | -------- | -------------------- | ------------ |
+
+#### SNMP Groups Configuration
+
+| Group | SNMP Version | Authentication | Read | Write | Notify |
+| ----- | ------------ | -------------- | ---- | ----- | ------ |
+| group1 | v3 | priv | - | - | - |
+| group2 | v3 | priv | - | - | - |
+
+#### SNMP Users Configuration
+
+| User | Group | Version | Authentication | Privacy | Remote Address | Remote Port | Engine ID |
+| ---- | ----- | ------- | -------------- | ------- | -------------- | ----------- | --------- |
+| SVC_ITOM.Entuity | group2 | v3 | sha256 | aes256 | - | - | f5717ffc59c065f52900 |
+
+#### SNMP Device Configuration
+
+```eos
+!
+snmp-server ipv4 access-list ACL-SNMP vrf PCS-NETINFRA-OOB
+snmp-server engineID local f5717ffc59c065f52900
+snmp-server contact Saleem Nawaz Khan
+snmp-server location KDC
+snmp-server group group1 v3 priv
+snmp-server group group2 v3 priv
+snmp-server user SVC_ITOM.Entuity group2 v3 localized f5717ffc59c065f52900 auth sha256 <removed> priv aes256 <removed>
+snmp-server engineID remote server1 1234567890
+snmp-server enable traps
+snmp-server enable traps bgp
+snmp-server vrf PCS-NETINFRA-OOB
 ```
 
 ## Spanning Tree
@@ -409,17 +514,32 @@ vlan internal order ascending range 1006 1199
 
 | VLAN ID | Name | Trunk Groups |
 | ------- | ---- | ------------ |
-| 5 | PureCS_Network_Infra_nodes_OOB | - |
+| 1005 | INBAND_MGMT | - |
 
 ### VLANs Device Configuration
 
 ```eos
 !
-vlan 5
-   name PureCS_Network_Infra_nodes_OOB
+vlan 1005
+   name INBAND_MGMT
 ```
 
 ## Interfaces
+
+### Interface Defaults
+
+#### Interface Defaults Summary
+
+- Default Ethernet Interface Shutdown: True
+
+#### Interface Defaults Device Configuration
+
+```eos
+!
+interface defaults
+   ethernet
+      shutdown
+```
 
 ### Ethernet Interfaces
 
@@ -429,8 +549,8 @@ vlan 5
 
 | Interface | Description | Mode | VLANs | Native VLAN | Trunk Group | Channel-Group |
 | --------- | ----------- | ---- | ----- | ----------- | ----------- | ------------- |
-| Ethernet49 | L2_KDC-AR7508R3-PCS-FELEAF1_Ethernet7/39/1 | *trunk | *5 | *- | *- | 49 |
-| Ethernet50 | L2_KDC-AR7508R3-PCS-FELEAF2_Ethernet7/37/1 | *trunk | *5 | *- | *- | 49 |
+| Ethernet49 | L2_KDC-AR7508R3-PCS-FELEAF1_Ethernet7/39/1 | *trunk | *1005 | *- | *- | 49 |
+| Ethernet50 | L2_KDC-AR7508R3-PCS-FELEAF2_Ethernet7/37/1 | *trunk | *1005 | *- | *- | 49 |
 
 *Inherited from Port-Channel Interface
 
@@ -457,18 +577,44 @@ interface Ethernet50
 
 | Interface | Description | Mode | VLANs | Native VLAN | Trunk Group | LACP Fallback Timeout | LACP Fallback Mode | MLAG ID | EVPN ESI |
 | --------- | ----------- | ---- | ----- | ----------- | ------------| --------------------- | ------------------ | ------- | -------- |
-| Port-Channel49 | L2_FE_LEAF_Port-Channel1637 | trunk | 5 | - | - | - | - | - | - |
+| Port-Channel49 | L2_FE_LEAF_Port-Channel1639 | trunk | 1005 | - | - | - | - | - | - |
 
 #### Port-Channel Interfaces Device Configuration
 
 ```eos
 !
 interface Port-Channel49
-   description L2_FE_LEAF_Port-Channel1637
+   description L2_FE_LEAF_Port-Channel1639
    no shutdown
-   switchport trunk allowed vlan 5
+   switchport trunk allowed vlan 1005
    switchport mode trunk
    switchport
+```
+
+### VLAN Interfaces
+
+#### VLAN Interfaces Summary
+
+| Interface | Description | VRF |  MTU | Shutdown |
+| --------- | ----------- | --- | ---- | -------- |
+| Vlan1005 | PureCS_Network_Infra_nodes_OOB | PCS-NETINFRA-OOB | 1500 | False |
+
+##### IPv4
+
+| Interface | VRF | IP Address | IP Address Virtual | IP Router Virtual Address | ACL In | ACL Out |
+| --------- | --- | ---------- | ------------------ | ------------------------- | ------ | ------- |
+| Vlan1005 |  PCS-NETINFRA-OOB  |  10.118.5.43/24  |  -  |  -  |  -  |  -  |
+
+#### VLAN Interfaces Device Configuration
+
+```eos
+!
+interface Vlan1005
+   description PureCS_Network_Infra_nodes_OOB
+   no shutdown
+   mtu 1500
+   vrf PCS-NETINFRA-OOB
+   ip address 10.118.5.43/24
 ```
 
 ## Routing
@@ -527,7 +673,7 @@ ip route vrf PCS-NETINFRA-OOB 0.0.0.0/0 10.118.5.254
 
 | Enabled | Logging Interval | Default Thresholds High | Default Thresholds Low | Notifying | TX Latency | CPU Thresholds High | CPU Thresholds Low | Mirroring Enabled | Mirror destinations |
 | ------- | ---------------- | ----------------------- | ---------------------- | --------- | ---------- | ------------------- | ------------------ | ----------------- | ------------------ |
-| True | 30 | - | - | disabled | disabled | - | - | - | - |
+| True | 300 | - | - | disabled | disabled | - | - | - | - |
 
 ### Queue Monitor Streaming
 
@@ -541,7 +687,7 @@ ip route vrf PCS-NETINFRA-OOB 0.0.0.0/0 10.118.5.254
 !
 queue-monitor length
 !
-queue-monitor length log 30
+queue-monitor length log 300
 !
 queue-monitor streaming
    no shutdown

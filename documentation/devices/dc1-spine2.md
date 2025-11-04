@@ -23,12 +23,17 @@
   - [AAA Accounting](#aaa-accounting)
 - [Monitoring](#monitoring)
   - [TerminAttr Daemon](#terminattr-daemon)
+  - [Logging](#logging)
+  - [SNMP](#snmp)
 - [Spanning Tree](#spanning-tree)
   - [Spanning Tree Summary](#spanning-tree-summary)
   - [Spanning Tree Device Configuration](#spanning-tree-device-configuration)
 - [Internal VLAN Allocation Policy](#internal-vlan-allocation-policy)
   - [Internal VLAN Allocation Policy Summary](#internal-vlan-allocation-policy-summary)
   - [Internal VLAN Allocation Policy Device Configuration](#internal-vlan-allocation-policy-device-configuration)
+- [VLANs](#vlans)
+  - [VLANs Summary](#vlans-summary)
+  - [VLANs Device Configuration](#vlans-device-configuration)
 - [Interfaces](#interfaces)
   - [Loopback Interfaces](#loopback-interfaces)
 - [Routing](#routing)
@@ -339,13 +344,13 @@ aaa authorization commands all default group PCSAUTHGRP local
 
 | Type | Commands | Record type | Groups | Logging |
 | ---- | -------- | ----------- | ------ | ------- |
-| Exec - Default | - | start-stop | PCSAUTHGRP local | False |
+| Exec - Default | - | start-stop | PCSAUTHGRP | False |
 | Commands - Default | all | start-stop | PCSAUTHGRP | False |
 
 #### AAA Accounting Device Configuration
 
 ```eos
-aaa accounting exec default start-stop group PCSAUTHGRP local
+aaa accounting exec default start-stop group PCSAUTHGRP
 aaa accounting commands all default start-stop group PCSAUTHGRP
 ```
 
@@ -366,6 +371,107 @@ aaa accounting commands all default start-stop group PCSAUTHGRP
 daemon TerminAttr
    exec /usr/bin/TerminAttr -cvaddr=10.113.5.1:9910,10.113.5.2:9910,10.113.5.3:9910 -cvauth=token,/tmp/token -cvvrf=PCS-NETINFRA-OOB -disableaaa -smashexcludes=ale,flexCounter,hardware,kni,pulse,strata -taillogs -cvsourceintf=Management1
    no shutdown
+```
+
+### Logging
+
+#### Logging Servers and Features Summary
+
+| Type | Level |
+| -----| ----- |
+| Console | warnings |
+| Buffer | informational |
+
+| Format Type | Setting |
+| ----------- | ------- |
+| Timestamp | high-resolution |
+| Hostname | hostname |
+| Sequence-numbers | false |
+| RFC5424 | False |
+
+| VRF | Source Interface |
+| --- | ---------------- |
+| - | Management1 |
+| PCS-NETINFRA-OOB | Management1 |
+
+| VRF | Hosts | Ports | Protocol | SSL-profile |
+| --- | ----- | ----- | -------- | ----------- |
+| PCS-NETINFRA-OOB | 10.115.4.100 | Default | UDP | - |
+
+#### Logging Servers and Features Device Configuration
+
+```eos
+!
+logging buffered 100000 informational
+logging console warnings
+logging vrf PCS-NETINFRA-OOB host 10.115.4.100
+logging format timestamp high-resolution
+logging source-interface Management1
+logging vrf PCS-NETINFRA-OOB source-interface Management1
+```
+
+### SNMP
+
+#### SNMP Configuration Summary
+
+| Contact | Location | SNMP Traps | State |
+| ------- | -------- | ---------- | ----- |
+| Saleem Nawaz Khan | KDC | All | Enabled |
+| Saleem Nawaz Khan | KDC | bgp | Enabled |
+| Saleem Nawaz Khan | KDC |  | Disabled |
+
+#### SNMP EngineID Configuration
+
+| Type | EngineID (Hex) | IP | Port |
+| ---- | -------------- | -- | ---- |
+| local | f5717ffc59c065f52900 | - | - |
+| remote | 1234567890 | server1 | - |
+
+#### SNMP ACLs
+
+| IP | ACL | VRF |
+| -- | --- | --- |
+| IPv4 | ACL-SNMP | PCS-NETINFRA-OOB |
+
+#### SNMP VRF Status
+
+| VRF | Status |
+| --- | ------ |
+| PCS-NETINFRA-OOB | Enabled |
+
+#### SNMP Hosts Configuration
+
+| Host | VRF | Community | Username | Authentication level | SNMP Version |
+| ---- |---- | --------- | -------- | -------------------- | ------------ |
+
+#### SNMP Groups Configuration
+
+| Group | SNMP Version | Authentication | Read | Write | Notify |
+| ----- | ------------ | -------------- | ---- | ----- | ------ |
+| group1 | v3 | priv | - | - | - |
+| group2 | v3 | priv | - | - | - |
+
+#### SNMP Users Configuration
+
+| User | Group | Version | Authentication | Privacy | Remote Address | Remote Port | Engine ID |
+| ---- | ----- | ------- | -------------- | ------- | -------------- | ----------- | --------- |
+| SVC_ITOM.Entuity | group2 | v3 | sha256 | aes256 | - | - | f5717ffc59c065f52900 |
+
+#### SNMP Device Configuration
+
+```eos
+!
+snmp-server ipv4 access-list ACL-SNMP vrf PCS-NETINFRA-OOB
+snmp-server engineID local f5717ffc59c065f52900
+snmp-server contact Saleem Nawaz Khan
+snmp-server location KDC
+snmp-server group group1 v3 priv
+snmp-server group group2 v3 priv
+snmp-server user SVC_ITOM.Entuity group2 v3 localized f5717ffc59c065f52900 auth sha256 <removed> priv aes256 <removed>
+snmp-server engineID remote server1 1234567890
+snmp-server enable traps
+snmp-server enable traps bgp
+snmp-server vrf PCS-NETINFRA-OOB
 ```
 
 ## Spanning Tree
@@ -394,6 +500,22 @@ spanning-tree mode none
 ```eos
 !
 vlan internal order ascending range 1006 1199
+```
+
+## VLANs
+
+### VLANs Summary
+
+| VLAN ID | Name | Trunk Groups |
+| ------- | ---- | ------------ |
+| 1 | - | - |
+
+### VLANs Device Configuration
+
+```eos
+!
+vlan 1
+   state suspend
 ```
 
 ## Interfaces
@@ -602,7 +724,7 @@ router bfd
 
 | Enabled | Logging Interval | Default Thresholds High | Default Thresholds Low | Notifying | TX Latency | CPU Thresholds High | CPU Thresholds Low | Mirroring Enabled | Mirror destinations |
 | ------- | ---------------- | ----------------------- | ---------------------- | --------- | ---------- | ------------------- | ------------------ | ----------------- | ------------------ |
-| True | 30 | - | - | disabled | disabled | - | - | - | - |
+| True | 300 | - | - | disabled | disabled | - | - | - | - |
 
 ### Queue Monitor Streaming
 
@@ -616,7 +738,7 @@ router bfd
 !
 queue-monitor length
 !
-queue-monitor length log 30
+queue-monitor length log 300
 !
 queue-monitor streaming
    no shutdown

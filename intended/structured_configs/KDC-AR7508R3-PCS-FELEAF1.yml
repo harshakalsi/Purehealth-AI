@@ -4,7 +4,7 @@ aaa_accounting:
       type: start-stop
       methods:
       - method: group
-        group: PCSAUTHGRP local
+        group: PCSAUTHGRP
   commands:
     default:
     - commands: all
@@ -145,7 +145,7 @@ ethernet_interfaces:
   description: L2_KDC-AR7010TX-PCS-OOB3_Ethernet49
   shutdown: false
   channel_group:
-    id: 1637
+    id: 1639
     mode: active
   peer: KDC-AR7010TX-PCS-OOB3
   peer_interface: Ethernet49
@@ -159,24 +159,24 @@ ethernet_interfaces:
   peer: dc1-leaf1-server1
   peer_interface: PCI1
   peer_type: server
-- name: Ethernet7/46/1
-  description: FIREWALL_perimerter-01_23
+- name: Ethernet6/46/1
+  description: FIREWALL_perimerter-01_32
   shutdown: false
   channel_group:
     id: 1646
     mode: active
   peer: perimerter-01
-  peer_interface: '23'
+  peer_interface: '32'
   peer_type: firewall
   port_profile: Perimeter_FW
-- name: Ethernet6/46/1
-  description: FIREWALL_perimerter-02_24
+- name: Ethernet7/46/1
+  description: FIREWALL_perimerter-02_32
   shutdown: false
   channel_group:
     id: 1746
     mode: active
   peer: perimerter-02
-  peer_interface: '24'
+  peer_interface: '32'
   peer_type: firewall
   port_profile: Perimeter_FW
 - name: Ethernet6/44/1
@@ -413,7 +413,7 @@ port_channel_interfaces:
     enabled: true
     mode: trunk
     trunk:
-      allowed_vlan: '5'
+      allowed_vlan: '1005'
 - name: Port-Channel1648
   description: L2_KDC-AR7010TX-PCS-OOB2_Port-Channel49
   shutdown: false
@@ -422,16 +422,16 @@ port_channel_interfaces:
     enabled: true
     mode: trunk
     trunk:
-      allowed_vlan: '5'
-- name: Port-Channel1637
+      allowed_vlan: '1005'
+- name: Port-Channel1639
   description: L2_KDC-AR7010TX-PCS-OOB3_Port-Channel49
   shutdown: false
-  mlag: 1637
+  mlag: 1639
   switchport:
     enabled: true
     mode: trunk
     trunk:
-      allowed_vlan: '5'
+      allowed_vlan: '1005'
 - name: Port-Channel5
   description: SERVER_dc1-leaf1-server1_Bond1
   shutdown: false
@@ -518,7 +518,7 @@ prefix_lists:
     action: permit 10.118.4.250/31
 queue_monitor_length:
   enabled: true
-  log: 30
+  log: 300
 queue_monitor_streaming:
   enable: true
 route_maps:
@@ -1007,12 +1007,12 @@ router_bgp:
       - 10014:10014
     redistribute_routes:
     - learned
-  - id: 5
+  - id: 1005
     tenant: TENANT1
-    rd: 10.118.0.3:10005
+    rd: 10.118.0.3:11005
     route_targets:
       both:
-      - 10005:10005
+      - 11005:11005
     redistribute_routes:
     - learned
   - id: 1311
@@ -1393,7 +1393,7 @@ spanning_tree:
   mode: mstp
   mst_instances:
   - id: '0'
-    priority: 4096
+    priority: 8192
   no_spanning_tree_vlan: 4093-4094
 static_routes:
 - vrf: PCS-NETINFRA-OOB
@@ -1715,9 +1715,6 @@ vlans:
   trunk_groups:
   - MLAG
   tenant: TENANT1
-- id: 5
-  name: PureCS_Network_Infra_nodes_OOB
-  tenant: TENANT1
 - id: 7
   name: MPLS_Outside_DC_firewall
   tenant: TENANT1
@@ -1738,6 +1735,9 @@ vlans:
   tenant: TENANT1
 - id: 1000
   name: native_vlan
+  tenant: TENANT1
+- id: 1005
+  name: PureCS_Network_Infra_nodes_OOB
   tenant: TENANT1
 - id: 1017
   name: MPLS_Intranet_VDOM_Outside_P_FW_
@@ -1987,8 +1987,6 @@ vxlan_interface:
         vni: 11013
       - id: 1016
         vni: 11016
-      - id: 5
-        vni: 10005
       - id: 7
         vni: 10007
       - id: 8
@@ -2003,6 +2001,8 @@ vxlan_interface:
         vni: 10303
       - id: 1000
         vni: 11000
+      - id: 1005
+        vni: 11005
       - id: 1017
         vni: 11017
       - id: 1018

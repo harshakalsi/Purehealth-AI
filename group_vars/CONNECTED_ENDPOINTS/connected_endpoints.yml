@@ -1,4 +1,8 @@
 ---
+interface_defaults:
+  ethernet:
+    shutdown: true
+
 port_profiles:
 
   - profile: Perimeter_FW
@@ -41,7 +45,7 @@ port_profiles:
         level: 10
 
   - profile: oob-ports
-    vlans: 5
+    vlans: 1005
     mode: access
     storm_control:
       all: 
@@ -119,9 +123,9 @@ firewalls:
   - name: perimerter-01
     adapters:
         # Name of the server interfaces that will be used in the description of each interface
-      - endpoint_ports: ['23', '23']
+      - endpoint_ports: ['31', '32']
         # Device ports where the server ports are connected.
-        switch_ports: [Ethernet6/46/1, Ethernet7/46/1]
+        switch_ports: [Ethernet6/46/1, Ethernet6/46/1]
         # Device names where the server ports are connected.
         switches: [KDC-AR7508R3-PCS-FELEAF2, KDC-AR7508R3-PCS-FELEAF1]
         profile: Perimeter_FW
@@ -131,17 +135,13 @@ firewalls:
           # Port channel mode for LACP.
           mode: active
           channel_id: 1646
-        storm_control:
-          broadcast: 
-            level: 10
-          unknown_unicast:
-            level: 10
+
   - name: perimerter-02
     adapters:
        # Name of the server interfaces that will be used in the description of each interface
-      - endpoint_ports: ['24', '24']
+      - endpoint_ports: ['31', '32']
         # Device ports where the server ports are connected.
-        switch_ports: [Ethernet7/46/1, Ethernet6/46/1]
+        switch_ports: [Ethernet7/46/1, Ethernet7/46/1]
         # Device names where the server ports are connected.
         switches: [KDC-AR7508R3-PCS-FELEAF2, KDC-AR7508R3-PCS-FELEAF1]
         profile: Perimeter_FW
@@ -208,13 +208,6 @@ servers:
           endpoint_port_channel: Bond1
           # Port channel mode for LACP.
           mode: active
-
-      - endpoint_ports: [iLO]
-        switch_ports: [Ethernet5]
-        switches: [dc1-leaf1c]
-        vlans: 11
-        mode: access
-        spanning_tree_portfast: edge
 
   - name: gpu1-01
     adapters:

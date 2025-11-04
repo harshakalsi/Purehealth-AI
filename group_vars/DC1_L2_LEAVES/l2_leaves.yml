@@ -14,7 +14,12 @@ l2leaf:
           filter:
             tags: [MGMT]
           id: 1
-          mgmt_ip: 10.118.5.41/24
+          mgmt_ip: 10.118.5.42/24
+          inband_mgmt_vlan: 1005
+          inband_mgmt_description: PureCS_Network_Infra_nodes_OOB
+          inband_mgmt_ip: 10.118.5.41/24
+          inband_mgmt_interface: Vlan1005
+          inband_mgmt_vrf: PCS-NETINFRA-OOB
           uplink_switch_interfaces: [Ethernet6/47/1, Ethernet6/47/1]
           uplink_switch_port_channel_id: 1647
     - group: OOB_LEAF2
@@ -25,6 +30,11 @@ l2leaf:
             tags: [MGMT]
           id: 2
           mgmt_ip: 10.118.5.42/24
+          inband_mgmt_vlan: 1005
+          inband_mgmt_ip: 10.118.5.42/24
+          inband_mgmt_description: PureCS_Network_Infra_nodes_OOB
+          inband_mgmt_interface: Vlan1005
+          inband_mgmt_vrf: PCS-NETINFRA-OOB
           uplink_switch_interfaces: [Ethernet6/48/1, Ethernet6/48/1]
           uplink_switch_port_channel_id: 1648
     - group: OOB_LEAF3
@@ -34,6 +44,11 @@ l2leaf:
           filter:
             tags: [MGMT]
           id: 3
-          mgmt_ip: 10.118.5.43/24
+          mgmt_ip: 10.118.5.42/24
+          inband_mgmt_vlan: 1005
+          inband_mgmt_description: PureCS_Network_Infra_nodes_OOB
+          inband_mgmt_ip: 10.118.5.43/24
+          inband_mgmt_interface: Vlan1005
+          inband_mgmt_vrf: PCS-NETINFRA-OOB
           uplink_switch_interfaces: [Ethernet7/39/1, Ethernet7/37/1]
-          uplink_switch_port_channel_id: 1637
+          uplink_switch_port_channel_id: 1639

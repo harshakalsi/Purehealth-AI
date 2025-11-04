@@ -4,7 +4,7 @@ aaa_accounting:
       type: start-stop
       methods:
       - method: group
-        group: PCSAUTHGRP local
+        group: PCSAUTHGRP
   commands:
     default:
     - commands: all
@@ -113,7 +113,7 @@ prefix_lists:
     action: permit 10.255.0.0/27 eq 32
 queue_monitor_length:
   enabled: true
-  log: 30
+  log: 300
 queue_monitor_streaming:
   enable: true
 route_maps:

@@ -266,9 +266,9 @@ tenants:
       tags: [BE-Leaf]
       name: BE_TEST-VLAN
     -
-      id: 5
+      id: 1005
       name: PureCS_Network_Infra_nodes_OOB
-      tags: [FE-Leaf, MGMT]
+      tags: [ FE-Leaf, MGMT]
     -
       id: 7
       name: MPLS_Outside_DC_firewall

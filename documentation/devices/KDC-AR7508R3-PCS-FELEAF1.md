@@ -23,6 +23,8 @@
   - [AAA Accounting](#aaa-accounting)
 - [Monitoring](#monitoring)
   - [TerminAttr Daemon](#terminattr-daemon)
+  - [Logging](#logging)
+  - [SNMP](#snmp)
 - [MLAG](#mlag)
   - [MLAG Summary](#mlag-summary)
   - [MLAG Device Configuration](#mlag-device-configuration)
@@ -36,6 +38,7 @@
   - [VLANs Summary](#vlans-summary)
   - [VLANs Device Configuration](#vlans-device-configuration)
 - [Interfaces](#interfaces)
+  - [Interface Defaults](#interface-defaults)
   - [Ethernet Interfaces](#ethernet-interfaces)
   - [Port-Channel Interfaces](#port-channel-interfaces)
   - [Loopback Interfaces](#loopback-interfaces)
@@ -352,13 +355,13 @@ aaa authorization commands all default group PCSAUTHGRP local
 
 | Type | Commands | Record type | Groups | Logging |
 | ---- | -------- | ----------- | ------ | ------- |
-| Exec - Default | - | start-stop | PCSAUTHGRP local | False |
+| Exec - Default | - | start-stop | PCSAUTHGRP | False |
 | Commands - Default | all | start-stop | PCSAUTHGRP | False |
 
 #### AAA Accounting Device Configuration
 
 ```eos
-aaa accounting exec default start-stop group PCSAUTHGRP local
+aaa accounting exec default start-stop group PCSAUTHGRP
 aaa accounting commands all default start-stop group PCSAUTHGRP
 ```
 
@@ -379,6 +382,107 @@ aaa accounting commands all default start-stop group PCSAUTHGRP
 daemon TerminAttr
    exec /usr/bin/TerminAttr -cvaddr=10.113.5.1:9910,10.113.5.2:9910,10.113.5.3:9910 -cvauth=token,/tmp/token -cvvrf=PCS-NETINFRA-OOB -disableaaa -smashexcludes=ale,flexCounter,hardware,kni,pulse,strata -taillogs -cvsourceintf=Management1/1
    no shutdown
+```
+
+### Logging
+
+#### Logging Servers and Features Summary
+
+| Type | Level |
+| -----| ----- |
+| Console | warnings |
+| Buffer | informational |
+
+| Format Type | Setting |
+| ----------- | ------- |
+| Timestamp | high-resolution |
+| Hostname | hostname |
+| Sequence-numbers | false |
+| RFC5424 | False |
+
+| VRF | Source Interface |
+| --- | ---------------- |
+| - | Management1 |
+| PCS-NETINFRA-OOB | Management1 |
+
+| VRF | Hosts | Ports | Protocol | SSL-profile |
+| --- | ----- | ----- | -------- | ----------- |
+| PCS-NETINFRA-OOB | 10.115.4.100 | Default | UDP | - |
+
+#### Logging Servers and Features Device Configuration
+
+```eos
+!
+logging buffered 100000 informational
+logging console warnings
+logging vrf PCS-NETINFRA-OOB host 10.115.4.100
+logging format timestamp high-resolution
+logging source-interface Management1
+logging vrf PCS-NETINFRA-OOB source-interface Management1
+```
+
+### SNMP
+
+#### SNMP Configuration Summary
+
+| Contact | Location | SNMP Traps | State |
+| ------- | -------- | ---------- | ----- |
+| Saleem Nawaz Khan | KDC | All | Enabled |
+| Saleem Nawaz Khan | KDC | bgp | Enabled |
+| Saleem Nawaz Khan | KDC |  | Disabled |
+
+#### SNMP EngineID Configuration
+
+| Type | EngineID (Hex) | IP | Port |
+| ---- | -------------- | -- | ---- |
+| local | f5717ffc59c065f52900 | - | - |
+| remote | 1234567890 | server1 | - |
+
+#### SNMP ACLs
+
+| IP | ACL | VRF |
+| -- | --- | --- |
+| IPv4 | ACL-SNMP | PCS-NETINFRA-OOB |
+
+#### SNMP VRF Status
+
+| VRF | Status |
+| --- | ------ |
+| PCS-NETINFRA-OOB | Enabled |
+
+#### SNMP Hosts Configuration
+
+| Host | VRF | Community | Username | Authentication level | SNMP Version |
+| ---- |---- | --------- | -------- | -------------------- | ------------ |
+
+#### SNMP Groups Configuration
+
+| Group | SNMP Version | Authentication | Read | Write | Notify |
+| ----- | ------------ | -------------- | ---- | ----- | ------ |
+| group1 | v3 | priv | - | - | - |
+| group2 | v3 | priv | - | - | - |
+
+#### SNMP Users Configuration
+
+| User | Group | Version | Authentication | Privacy | Remote Address | Remote Port | Engine ID |
+| ---- | ----- | ------- | -------------- | ------- | -------------- | ----------- | --------- |
+| SVC_ITOM.Entuity | group2 | v3 | sha256 | aes256 | - | - | f5717ffc59c065f52900 |
+
+#### SNMP Device Configuration
+
+```eos
+!
+snmp-server ipv4 access-list ACL-SNMP vrf PCS-NETINFRA-OOB
+snmp-server engineID local f5717ffc59c065f52900
+snmp-server contact Saleem Nawaz Khan
+snmp-server location KDC
+snmp-server group group1 v3 priv
+snmp-server group group2 v3 priv
+snmp-server user SVC_ITOM.Entuity group2 v3 localized f5717ffc59c065f52900 auth sha256 <removed> priv aes256 <removed>
+snmp-server engineID remote server1 1234567890
+snmp-server enable traps
+snmp-server enable traps bgp
+snmp-server vrf PCS-NETINFRA-OOB
 ```
 
 ## MLAG
@@ -416,7 +520,7 @@ STP mode: **mstp**
 
 | Instance(s) | Priority |
 | -------- | -------- |
-| 0 | 4096 |
+| 0 | 8192 |
 
 #### Global Spanning-Tree Settings
 
@@ -428,7 +532,7 @@ STP mode: **mstp**
 !
 spanning-tree mode mstp
 no spanning-tree vlan-id 4093-4094
-spanning-tree mst 0 priority 4096
+spanning-tree mst 0 priority 8192
 ```
 
 ## Internal VLAN Allocation Policy
@@ -452,7 +556,6 @@ vlan internal order ascending range 1006 1199
 
 | VLAN ID | Name | Trunk Groups |
 | ------- | ---- | ------------ |
-| 5 | PureCS_Network_Infra_nodes_OOB | - |
 | 7 | MPLS_Outside_DC_firewall | - |
 | 8 | Internet_HIS_VDOM_outside_DC_Fir | - |
 | 14 | PURE_VRF_MPLS | - |
@@ -461,6 +564,7 @@ vlan internal order ascending range 1006 1199
 | 303 | SEHA_VPLS_HCF | - |
 | 1000 | native_vlan | - |
 | 1004 | PC-MGMT-MPLS | - |
+| 1005 | PureCS_Network_Infra_nodes_OOB | - |
 | 1006 | MPLS_PC-MPLS_VDOM_outside_DC_FW | - |
 | 1009 | Internet_PC-MGMT_VDOM_Outside_DC | - |
 | 1010 | Internet_PC-WLD_VDOM_outside_DC_ | - |
@@ -552,9 +656,6 @@ vlan internal order ascending range 1006 1199
 
 ```eos
 !
-vlan 5
-   name PureCS_Network_Infra_nodes_OOB
-!
 vlan 7
    name MPLS_Outside_DC_firewall
 !
@@ -578,6 +679,9 @@ vlan 1000
 !
 vlan 1004
    name PC-MGMT-MPLS
+!
+vlan 1005
+   name PureCS_Network_Infra_nodes_OOB
 !
 vlan 1006
    name MPLS_PC-MPLS_VDOM_outside_DC_FW
@@ -844,6 +948,21 @@ vlan 4094
 
 ## Interfaces
 
+### Interface Defaults
+
+#### Interface Defaults Summary
+
+- Default Ethernet Interface Shutdown: True
+
+#### Interface Defaults Device Configuration
+
+```eos
+!
+interface defaults
+   ethernet
+      shutdown
+```
+
 ### Ethernet Interfaces
 
 #### Ethernet Interfaces Summary
@@ -863,19 +982,19 @@ vlan 4094
 | Ethernet6/43/1 | LOAD_BALANCER_02_5.0 | *trunk | *140 | *1000 | *- | 1642 |
 | Ethernet6/44/1 | FIREWALL_DC-01_27 | *trunk | *1004-1006,1009,1011-1013,1025 | *1000 | *- | 1644 |
 | Ethernet6/45/1 | FIREWALL_DC-02_27 | *trunk | *1004-1006,1009,1011-1013,1025 | *1000 | *- | 1645 |
-| Ethernet6/46/1 | FIREWALL_perimerter-02_24 | *trunk | *15-16 | *1000 | *- | 1746 |
-| Ethernet6/47/1 | L2_KDC-AR7010TX-PCS-OOB1_Ethernet49 | *trunk | *5 | *- | *- | 1647 |
-| Ethernet6/48/1 | L2_KDC-AR7010TX-PCS-OOB2_Ethernet49 | *trunk | *5 | *- | *- | 1648 |
+| Ethernet6/46/1 | FIREWALL_perimerter-01_32 | *trunk | *15-16 | *1000 | *- | 1646 |
+| Ethernet6/47/1 | L2_KDC-AR7010TX-PCS-OOB1_Ethernet49 | *trunk | *1005 | *- | *- | 1647 |
+| Ethernet6/48/1 | L2_KDC-AR7010TX-PCS-OOB2_Ethernet49 | *trunk | *1005 | *- | *- | 1648 |
 | Ethernet6/49/1 | MLAG_KDC-AR7508R3-PCS-FELEAF2_Ethernet6/49/1 | *trunk | *- | *- | *MLAG | 1000 |
 | Ethernet6/50/1 | MLAG_KDC-AR7508R3-PCS-FELEAF2_Ethernet6/50/1 | *trunk | *- | *- | *MLAG | 1000 |
-| Ethernet7/39/1 | L2_KDC-AR7010TX-PCS-OOB3_Ethernet49 | *trunk | *5 | *- | *- | 1637 |
+| Ethernet7/39/1 | L2_KDC-AR7010TX-PCS-OOB3_Ethernet49 | *trunk | *1005 | *- | *- | 1639 |
 | Ethernet7/40/1 | LOAD_BALANCER_01_7.0 | *trunk | *140 | *1000 | *- | 1640 |
 | Ethernet7/41/1 | LOAD_BALANCER_01_9.0 | *trunk | *140 | *1000 | *- | 1640 |
 | Ethernet7/42/1 | LOAD_BALANCER_02_7.0 | *trunk | *140 | *1000 | *- | 1642 |
 | Ethernet7/43/1 | LOAD_BALANCER_02_9.0 | *trunk | *140 | *1000 | *- | 1642 |
 | Ethernet7/44/1 | FIREWALL_DC-01_28 | *trunk | *1004-1006,1009,1011-1013,1025 | *1000 | *- | 1644 |
 | Ethernet7/45/1 | FIREWALL_DC-02_28 | *trunk | *1004-1006,1009,1011-1013,1025 | *1000 | *- | 1645 |
-| Ethernet7/46/1 | FIREWALL_perimerter-01_23 | *trunk | *15-16 | *1000 | *- | 1646 |
+| Ethernet7/46/1 | FIREWALL_perimerter-02_32 | *trunk | *15-16 | *1000 | *- | 1746 |
 | Ethernet7/47/1 | ROUTER_Internet-CPE-01_2 | access | 18 | - | - | - |
 | Ethernet7/48/1 | ROUTER_MPLS-CPE-01_5 | access | 17 | - | - | - |
 | Ethernet7/49/1 | MLAG_KDC-AR7508R3-PCS-FELEAF2_Ethernet7/49/1 | *trunk | *- | *- | *MLAG | 1000 |
@@ -943,9 +1062,9 @@ interface Ethernet6/45/1
    channel-group 1645 mode active
 !
 interface Ethernet6/46/1
-   description FIREWALL_perimerter-02_24
+   description FIREWALL_perimerter-01_32
    no shutdown
-   channel-group 1746 mode active
+   channel-group 1646 mode active
 !
 interface Ethernet6/47/1
    description L2_KDC-AR7010TX-PCS-OOB1_Ethernet49
@@ -970,7 +1089,7 @@ interface Ethernet6/50/1
 interface Ethernet7/39/1
    description L2_KDC-AR7010TX-PCS-OOB3_Ethernet49
    no shutdown
-   channel-group 1637 mode active
+   channel-group 1639 mode active
 !
 interface Ethernet7/40/1
    description LOAD_BALANCER_01_7.0
@@ -1003,9 +1122,9 @@ interface Ethernet7/45/1
    channel-group 1645 mode active
 !
 interface Ethernet7/46/1
-   description FIREWALL_perimerter-01_23
+   description FIREWALL_perimerter-02_32
    no shutdown
-   channel-group 1646 mode active
+   channel-group 1746 mode active
 !
 interface Ethernet7/47/1
    description ROUTER_Internet-CPE-01_2
@@ -1042,14 +1161,14 @@ interface Ethernet7/50/1
 | --------- | ----------- | ---- | ----- | ----------- | ------------| --------------------- | ------------------ | ------- | -------- |
 | Port-Channel5 | SERVER_dc1-leaf1-server1_Bond1 | trunk | 11-12,21-22 | 1000 | - | - | - | 5 | - |
 | Port-Channel1000 | MLAG_KDC-AR7508R3-PCS-FELEAF2_Port-Channel1000 | trunk | - | - | MLAG | - | - | - | - |
-| Port-Channel1637 | L2_KDC-AR7010TX-PCS-OOB3_Port-Channel49 | trunk | 5 | - | - | - | - | 1637 | - |
+| Port-Channel1639 | L2_KDC-AR7010TX-PCS-OOB3_Port-Channel49 | trunk | 1005 | - | - | - | - | 1639 | - |
 | Port-Channel1640 | LOAD_BALANCER_01_Bond1 | trunk | 140 | 1000 | - | - | - | 1640 | - |
 | Port-Channel1642 | LOAD_BALANCER_02_Bond1 | trunk | 140 | 1000 | - | - | - | 1642 | - |
 | Port-Channel1644 | FIREWALL_DC-01_Bond1 | trunk | 1004-1006,1009,1011-1013,1025 | 1000 | - | - | - | 1644 | - |
 | Port-Channel1645 | FIREWALL_DC-02_Bond1 | trunk | 1004-1006,1009,1011-1013,1025 | 1000 | - | - | - | 1645 | - |
 | Port-Channel1646 | FIREWALL_perimerter-01_Bond1 | trunk | 15-16 | 1000 | - | - | - | 1646 | - |
-| Port-Channel1647 | L2_KDC-AR7010TX-PCS-OOB1_Port-Channel49 | trunk | 5 | - | - | - | - | 1647 | - |
-| Port-Channel1648 | L2_KDC-AR7010TX-PCS-OOB2_Port-Channel49 | trunk | 5 | - | - | - | - | 1648 | - |
+| Port-Channel1647 | L2_KDC-AR7010TX-PCS-OOB1_Port-Channel49 | trunk | 1005 | - | - | - | - | 1647 | - |
+| Port-Channel1648 | L2_KDC-AR7010TX-PCS-OOB2_Port-Channel49 | trunk | 1005 | - | - | - | - | 1648 | - |
 | Port-Channel1746 | FIREWALL_perimerter-02_Bond1 | trunk | 15-16 | 1000 | - | - | - | 1746 | - |
 
 #### Port-Channel Interfaces Device Configuration
@@ -1073,13 +1192,13 @@ interface Port-Channel1000
    switchport trunk group MLAG
    switchport
 !
-interface Port-Channel1637
+interface Port-Channel1639
    description L2_KDC-AR7010TX-PCS-OOB3_Port-Channel49
    no shutdown
-   switchport trunk allowed vlan 5
+   switchport trunk allowed vlan 1005
    switchport mode trunk
    switchport
-   mlag 1637
+   mlag 1639
 !
 interface Port-Channel1640
    description LOAD_BALANCER_01_Bond1
@@ -1129,7 +1248,7 @@ interface Port-Channel1646
 interface Port-Channel1647
    description L2_KDC-AR7010TX-PCS-OOB1_Port-Channel49
    no shutdown
-   switchport trunk allowed vlan 5
+   switchport trunk allowed vlan 1005
    switchport mode trunk
    switchport
    mlag 1647
@@ -1137,7 +1256,7 @@ interface Port-Channel1647
 interface Port-Channel1648
    description L2_KDC-AR7010TX-PCS-OOB2_Port-Channel49
    no shutdown
-   switchport trunk allowed vlan 5
+   switchport trunk allowed vlan 1005
    switchport mode trunk
    switchport
    mlag 1648
@@ -1431,7 +1550,6 @@ interface Vlan4094
 
 | VLAN | VNI | Flood List | Multicast Group |
 | ---- | --- | ---------- | --------------- |
-| 5 | 10005 | - | - |
 | 7 | 10007 | - | - |
 | 8 | 10008 | - | - |
 | 14 | 10014 | - | - |
@@ -1440,6 +1558,7 @@ interface Vlan4094
 | 303 | 10303 | - | - |
 | 1000 | 11000 | - | - |
 | 1004 | 11004 | - | - |
+| 1005 | 11005 | - | - |
 | 1006 | 11006 | - | - |
 | 1009 | 11009 | - | - |
 | 1010 | 11010 | - | - |
@@ -1539,7 +1658,6 @@ interface Vxlan1
    vxlan source-interface Loopback1
    vxlan virtual-router encapsulation mac-address mlag-system-id
    vxlan udp-port 4789
-   vxlan vlan 5 vni 10005
    vxlan vlan 7 vni 10007
    vxlan vlan 8 vni 10008
    vxlan vlan 14 vni 10014
@@ -1548,6 +1666,7 @@ interface Vxlan1
    vxlan vlan 303 vni 10303
    vxlan vlan 1000 vni 11000
    vxlan vlan 1004 vni 11004
+   vxlan vlan 1005 vni 11005
    vxlan vlan 1006 vni 11006
    vxlan vlan 1009 vni 11009
    vxlan vlan 1010 vni 11010
@@ -1776,7 +1895,6 @@ ASN Notation: asplain
 
 | VLAN | Route-Distinguisher | Both Route-Target | Import Route Target | Export Route-Target | Redistribute |
 | ---- | ------------------- | ----------------- | ------------------- | ------------------- | ------------ |
-| 5 | 10.118.0.3:10005 | 10005:10005 | - | - | learned |
 | 7 | 10.118.0.3:10007 | 10007:10007 | - | - | learned |
 | 8 | 10.118.0.3:10008 | 10008:10008 | - | - | learned |
 | 14 | 10.118.0.3:10014 | 10014:10014 | - | - | learned |
@@ -1785,6 +1903,7 @@ ASN Notation: asplain
 | 303 | 10.118.0.3:10303 | 10303:10303 | - | - | learned |
 | 1000 | 10.118.0.3:11000 | 11000:11000 | - | - | learned |
 | 1004 | 10.118.0.3:11004 | 11004:11004 | - | - | learned |
+| 1005 | 10.118.0.3:11005 | 11005:11005 | - | - | learned |
 | 1006 | 10.118.0.3:11006 | 11006:11006 | - | - | learned |
 | 1009 | 10.118.0.3:11009 | 11009:11009 | - | - | learned |
 | 1010 | 10.118.0.3:11010 | 11010:11010 | - | - | learned |
@@ -1915,11 +2034,6 @@ router bgp 65371
    neighbor 10.255.0.2 description dc1-spine2_Loopback0
    redistribute connected route-map RM-CONN-2-BGP
    !
-   vlan 5
-      rd 10.118.0.3:10005
-      route-target both 10005:10005
-      redistribute learned
-   !
    vlan 7
       rd 10.118.0.3:10007
       route-target both 10007:10007
@@ -1958,6 +2072,11 @@ router bgp 65371
    vlan 1004
       rd 10.118.0.3:11004
       route-target both 11004:11004
+      redistribute learned
+   !
+   vlan 1005
+      rd 10.118.0.3:11005
+      route-target both 11005:11005
       redistribute learned
    !
    vlan 1006
@@ -2421,7 +2540,7 @@ router bfd
 
 | Enabled | Logging Interval | Default Thresholds High | Default Thresholds Low | Notifying | TX Latency | CPU Thresholds High | CPU Thresholds Low | Mirroring Enabled | Mirror destinations |
 | ------- | ---------------- | ----------------------- | ---------------------- | --------- | ---------- | ------------------- | ------------------ | ----------------- | ------------------ |
-| True | 30 | - | - | disabled | disabled | - | - | - | - |
+| True | 300 | - | - | disabled | disabled | - | - | - | - |
 
 ### Queue Monitor Streaming
 
@@ -2435,7 +2554,7 @@ router bfd
 !
 queue-monitor length
 !
-queue-monitor length log 30
+queue-monitor length log 300
 !
 queue-monitor streaming
    no shutdown

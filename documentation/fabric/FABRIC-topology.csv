@@ -45,7 +45,7 @@ l3leaf,KDC-AR7508R3-PCS-FELEAF1,Ethernet6/42/1,load_balancer,02,3.0,True
 l3leaf,KDC-AR7508R3-PCS-FELEAF1,Ethernet6/43/1,load_balancer,02,5.0,True
 l3leaf,KDC-AR7508R3-PCS-FELEAF1,Ethernet6/44/1,firewall,DC-01,27,True
 l3leaf,KDC-AR7508R3-PCS-FELEAF1,Ethernet6/45/1,firewall,DC-02,27,True
-l3leaf,KDC-AR7508R3-PCS-FELEAF1,Ethernet6/46/1,firewall,perimerter-02,24,True
+l3leaf,KDC-AR7508R3-PCS-FELEAF1,Ethernet6/46/1,firewall,perimerter-01,32,True
 l3leaf,KDC-AR7508R3-PCS-FELEAF1,Ethernet6/47/1,l2leaf,KDC-AR7010TX-PCS-OOB1,Ethernet49,True
 l3leaf,KDC-AR7508R3-PCS-FELEAF1,Ethernet6/48/1,l2leaf,KDC-AR7010TX-PCS-OOB2,Ethernet49,True
 l3leaf,KDC-AR7508R3-PCS-FELEAF1,Ethernet6/49/1,mlag_peer,KDC-AR7508R3-PCS-FELEAF2,Ethernet6/49/1,True
@@ -57,7 +57,7 @@ l3leaf,KDC-AR7508R3-PCS-FELEAF1,Ethernet7/42/1,load_balancer,02,7.0,True
 l3leaf,KDC-AR7508R3-PCS-FELEAF1,Ethernet7/43/1,load_balancer,02,9.0,True
 l3leaf,KDC-AR7508R3-PCS-FELEAF1,Ethernet7/44/1,firewall,DC-01,28,True
 l3leaf,KDC-AR7508R3-PCS-FELEAF1,Ethernet7/45/1,firewall,DC-02,28,True
-l3leaf,KDC-AR7508R3-PCS-FELEAF1,Ethernet7/46/1,firewall,perimerter-01,23,True
+l3leaf,KDC-AR7508R3-PCS-FELEAF1,Ethernet7/46/1,firewall,perimerter-02,32,True
 l3leaf,KDC-AR7508R3-PCS-FELEAF1,Ethernet7/47/1,router,Internet-CPE-01,2,True
 l3leaf,KDC-AR7508R3-PCS-FELEAF1,Ethernet7/48/1,router,MPLS-CPE-01,5,True
 l3leaf,KDC-AR7508R3-PCS-FELEAF1,Ethernet7/49/1,mlag_peer,KDC-AR7508R3-PCS-FELEAF2,Ethernet7/49/1,True
@@ -73,7 +73,7 @@ l3leaf,KDC-AR7508R3-PCS-FELEAF2,Ethernet6/42/1,load_balancer,02,4.0,True
 l3leaf,KDC-AR7508R3-PCS-FELEAF2,Ethernet6/43/1,load_balancer,02,6.0,True
 l3leaf,KDC-AR7508R3-PCS-FELEAF2,Ethernet6/44/1,firewall,DC-01,29,True
 l3leaf,KDC-AR7508R3-PCS-FELEAF2,Ethernet6/45/1,firewall,DC-02,29,True
-l3leaf,KDC-AR7508R3-PCS-FELEAF2,Ethernet6/46/1,firewall,perimerter-01,23,True
+l3leaf,KDC-AR7508R3-PCS-FELEAF2,Ethernet6/46/1,firewall,perimerter-01,31,True
 l3leaf,KDC-AR7508R3-PCS-FELEAF2,Ethernet6/47/1,l2leaf,KDC-AR7010TX-PCS-OOB1,Ethernet50,True
 l3leaf,KDC-AR7508R3-PCS-FELEAF2,Ethernet6/48/1,l2leaf,KDC-AR7010TX-PCS-OOB2,Ethernet50,True
 l3leaf,KDC-AR7508R3-PCS-FELEAF2,Ethernet6/49/1,mlag_peer,KDC-AR7508R3-PCS-FELEAF1,Ethernet6/49/1,True
@@ -85,7 +85,7 @@ l3leaf,KDC-AR7508R3-PCS-FELEAF2,Ethernet7/42/1,load_balancer,02,8.0,True
 l3leaf,KDC-AR7508R3-PCS-FELEAF2,Ethernet7/43/1,load_balancer,02,10.0,True
 l3leaf,KDC-AR7508R3-PCS-FELEAF2,Ethernet7/44/1,firewall,DC-01,30,True
 l3leaf,KDC-AR7508R3-PCS-FELEAF2,Ethernet7/45/1,firewall,DC-02,30,True
-l3leaf,KDC-AR7508R3-PCS-FELEAF2,Ethernet7/46/1,firewall,perimerter-02,24,True
+l3leaf,KDC-AR7508R3-PCS-FELEAF2,Ethernet7/46/1,firewall,perimerter-02,31,True
 l3leaf,KDC-AR7508R3-PCS-FELEAF2,Ethernet7/47/1,router,Internet-CPE-02,2,True
 l3leaf,KDC-AR7508R3-PCS-FELEAF2,Ethernet7/48/1,router,MPLS-CPE-02,5,True
 l3leaf,KDC-AR7508R3-PCS-FELEAF2,Ethernet7/49/1,mlag_peer,KDC-AR7508R3-PCS-FELEAF1,Ethernet7/49/1,True

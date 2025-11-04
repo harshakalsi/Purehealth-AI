@@ -60,7 +60,7 @@ aaa_settings:
         type: "start-stop"
         methods:
           - method: group
-            group: PCSAUTHGRP local
+            group: PCSAUTHGRP
     commands:
       default:
         - commands: all
@@ -112,7 +112,8 @@ dns_settings:
   servers:
     - ip_address: 10.113.200.12
     - ip_address: 10.118.200.12
-
+  vrfs:
+    - name: PCS-NETINFRA-OOB
 # NTP Servers IP or DNS name, first NTP server will be preferred, and sourced from Management VRF
 ntp_settings:
   server_vrf: PCS-NETINFRA-OOB
@@ -128,3 +129,85 @@ ssh_settings:
 
 # Clock timezone like "CET" or "US/Pacific".
 timezone: Asia/Dubai
+
+logging:
+  # Console logging severity level.
+  console: "warnings" 
+  buffered:
+    size: 100000
+    level: "informational"
+  format:
+    timestamp: "high-resolution"
+  source_interface: Management1
+  vrfs:
+      # VRF name.
+    - name: PCS-NETINFRA-OOB
+      # Source interface name.
+      source_interface: Management1
+      hosts:
+          # Syslog server name.
+        - name: 10.115.4.100
+
+# SNMP settings.
+snmp_server:
+  engine_ids:
+    # Engine ID in hexadecimal.
+    local: f5717ffc59c065f52900
+    remotes:
+        # Remote engine ID in hexadecimal.
+      - id: '1234567890'
+        # Hostname or IP of remote engine.
+        address: server1
+  # SNMP contact.
+  contact: Saleem Nawaz Khan
+  # SNMP location.
+  location: KDC
+  ipv4_acls:
+      # IPv4 access list name.
+    - name: ACL-SNMP
+      vrf: PCS-NETINFRA-OOB
+  groups:
+
+      # Group name.
+    - name: group1
+      version: "v3"
+      authentication: "priv"
+    - name: group2
+      version: "v3"
+      authentication: "priv"
+  users:
+      # Username.
+    - name: SVC_ITOM.Entuity
+      # Group name.
+      group: group2
+      version: "v3"
+      # Engine ID in hexadecimal for localizing auth and/or priv.
+      localized: f5717ffc59c065f52900
+      # Hash algorithm.
+      auth: sha256
+      # Hashed authentication passphrase if localized is used else cleartext authentication passphrase.
+      auth_passphrase: c2eaf023e7dc0aa65b9aea7375980a10bc7758e65e8fd36eb0494c255c945200
+      # Encryption algorithm.
+      priv: aes256
+      # Hashed privacy passphrase if localized is used else cleartext privacy passphrase.
+      priv_passphrase: c2eaf023e7dc0aa65b9aea7375980a10bc7758e65e8fd36eb0494c255c945200
+  hosts:
+      # Host IP address or name.
+    - host: 10.115.18.81
+      vrf: PCS-NETINFRA-OOB
+      version: "3"
+  traps:
+    # Enable or disable all snmp-traps.
+    enable: true
+    snmp_traps:
+        # Enable or disable specific snmp-traps and their sub_traps.
+        # Examples:
+        # - "bgp"
+        # - "bgp established"
+      - name: bgp
+        # The trap is enabled unless this is set to false.
+        enabled: true
+  vrfs:
+      # VRF name.
+    - name: PCS-NETINFRA-OOB
+      enable: true
