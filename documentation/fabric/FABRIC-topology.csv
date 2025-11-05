@@ -38,7 +38,8 @@ l3leaf,KDC-AR7508R3-PCS-FELEAF1,Ethernet3/21/1,mlag_peer,KDC-AR7508R3-PCS-FELEAF
 l3leaf,KDC-AR7508R3-PCS-FELEAF1,Ethernet3/22/1,mlag_peer,KDC-AR7508R3-PCS-FELEAF2,Ethernet3/22/1,True
 l3leaf,KDC-AR7508R3-PCS-FELEAF1,Ethernet3/23/1,mlag_peer,KDC-AR7508R3-PCS-FELEAF2,Ethernet3/23/1,True
 l3leaf,KDC-AR7508R3-PCS-FELEAF1,Ethernet3/24/1,mlag_peer,KDC-AR7508R3-PCS-FELEAF2,Ethernet3/24/1,True
-l3leaf,KDC-AR7508R3-PCS-FELEAF1,Ethernet5,server,dc1-leaf1-server1,PCI1,True
+l3leaf,KDC-AR7508R3-PCS-FELEAF1,Ethernet4/1/1,server,CPU1-01,6/1,True
+l3leaf,KDC-AR7508R3-PCS-FELEAF1,Ethernet6/1,server,CPU1-01,0/1,True
 l3leaf,KDC-AR7508R3-PCS-FELEAF1,Ethernet6/40/1,load_balancer,01,3.0,True
 l3leaf,KDC-AR7508R3-PCS-FELEAF1,Ethernet6/41/1,load_balancer,01,5.0,True
 l3leaf,KDC-AR7508R3-PCS-FELEAF1,Ethernet6/42/1,load_balancer,02,3.0,True
@@ -66,7 +67,8 @@ l3leaf,KDC-AR7508R3-PCS-FELEAF2,Ethernet3/21/1,mlag_peer,KDC-AR7508R3-PCS-FELEAF
 l3leaf,KDC-AR7508R3-PCS-FELEAF2,Ethernet3/22/1,mlag_peer,KDC-AR7508R3-PCS-FELEAF1,Ethernet3/22/1,True
 l3leaf,KDC-AR7508R3-PCS-FELEAF2,Ethernet3/23/1,mlag_peer,KDC-AR7508R3-PCS-FELEAF1,Ethernet3/23/1,True
 l3leaf,KDC-AR7508R3-PCS-FELEAF2,Ethernet3/24/1,mlag_peer,KDC-AR7508R3-PCS-FELEAF1,Ethernet3/24/1,True
-l3leaf,KDC-AR7508R3-PCS-FELEAF2,Ethernet5,server,dc1-leaf1-server1,PCI2,True
+l3leaf,KDC-AR7508R3-PCS-FELEAF2,Ethernet4/1/1,server,CPU1-01,6/2,True
+l3leaf,KDC-AR7508R3-PCS-FELEAF2,Ethernet6/1,server,CPU1-01,0/,True
 l3leaf,KDC-AR7508R3-PCS-FELEAF2,Ethernet6/40/1,load_balancer,01,4.0,True
 l3leaf,KDC-AR7508R3-PCS-FELEAF2,Ethernet6/41/1,load_balancer,01,6.0,True
 l3leaf,KDC-AR7508R3-PCS-FELEAF2,Ethernet6/42/1,load_balancer,02,4.0,True

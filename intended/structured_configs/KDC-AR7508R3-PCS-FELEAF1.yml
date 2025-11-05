@@ -150,18 +150,36 @@ ethernet_interfaces:
   peer: KDC-AR7010TX-PCS-OOB3
   peer_interface: Ethernet49
   peer_type: l2leaf
-- name: Ethernet5
-  description: SERVER_dc1-leaf1-server1_PCI1
+- name: Ethernet6/1
+  description: SERVER_CPU1-01_0/1
   shutdown: false
-  channel_group:
-    id: 5
-    mode: active
-  peer: dc1-leaf1-server1
-  peer_interface: PCI1
+  spanning_tree_portfast: edge
+  peer: CPU1-01
+  peer_interface: 0/1
   peer_type: server
+  port_profile: FE-converged-fabric
+  switchport:
+    enabled: true
+    mode: trunk
+    trunk:
+      native_vlan: 1000
+- name: Ethernet4/1/1
+  description: SERVER_CPU1-01_6/1
+  shutdown: false
+  spanning_tree_portfast: edge
+  peer: CPU1-01
+  peer_interface: 6/1
+  peer_type: server
+  port_profile: FE-converged-fabric
+  switchport:
+    enabled: true
+    mode: trunk
+    trunk:
+      native_vlan: 1000
 - name: Ethernet6/46/1
   description: FIREWALL_perimerter-01_32
   shutdown: false
+  speed: forced 10000full
   channel_group:
     id: 1646
     mode: active
@@ -172,6 +190,7 @@ ethernet_interfaces:
 - name: Ethernet7/46/1
   description: FIREWALL_perimerter-02_32
   shutdown: false
+  speed: forced 10000full
   channel_group:
     id: 1746
     mode: active
@@ -182,6 +201,7 @@ ethernet_interfaces:
 - name: Ethernet6/44/1
   description: FIREWALL_DC-01_27
   shutdown: false
+  speed: forced 10000full
   channel_group:
     id: 1644
     mode: active
@@ -192,6 +212,7 @@ ethernet_interfaces:
 - name: Ethernet7/44/1
   description: FIREWALL_DC-01_28
   shutdown: false
+  speed: forced 10000full
   channel_group:
     id: 1644
     mode: active
@@ -202,6 +223,7 @@ ethernet_interfaces:
 - name: Ethernet6/45/1
   description: FIREWALL_DC-02_27
   shutdown: false
+  speed: forced 10000full
   channel_group:
     id: 1645
     mode: active
@@ -212,6 +234,7 @@ ethernet_interfaces:
 - name: Ethernet7/45/1
   description: FIREWALL_DC-02_28
   shutdown: false
+  speed: forced 10000full
   channel_group:
     id: 1645
     mode: active
@@ -222,6 +245,7 @@ ethernet_interfaces:
 - name: Ethernet7/47/1
   description: ROUTER_Internet-CPE-01_2
   shutdown: false
+  speed: forced 1000full
   peer: Internet-CPE-01
   peer_interface: '2'
   peer_type: router
@@ -229,10 +253,11 @@ ethernet_interfaces:
   switchport:
     enabled: true
     mode: access
-    access_vlan: 18
+    access_vlan: 1018
 - name: Ethernet7/48/1
   description: ROUTER_MPLS-CPE-01_5
   shutdown: false
+  speed: forced 1000full
   peer: MPLS-CPE-01
   peer_interface: '5'
   peer_type: router
@@ -240,7 +265,7 @@ ethernet_interfaces:
   switchport:
     enabled: true
     mode: access
-    access_vlan: 17
+    access_vlan: 1017
 - name: Ethernet6/40/1
   description: LOAD_BALANCER_01_3.0
   shutdown: false
@@ -432,17 +457,6 @@ port_channel_interfaces:
     mode: trunk
     trunk:
       allowed_vlan: '1005'
-- name: Port-Channel5
-  description: SERVER_dc1-leaf1-server1_Bond1
-  shutdown: false
-  mlag: 5
-  spanning_tree_portfast: edge
-  switchport:
-    enabled: true
-    mode: trunk
-    trunk:
-      allowed_vlan: 11-12,21-22
-      native_vlan: 1000
 - name: Port-Channel1646
   description: FIREWALL_perimerter-01_Bond1
   shutdown: false
@@ -451,7 +465,7 @@ port_channel_interfaces:
     enabled: true
     mode: trunk
     trunk:
-      allowed_vlan: 15,16
+      allowed_vlan: 1015,1016
       native_vlan: 1000
 - name: Port-Channel1746
   description: FIREWALL_perimerter-02_Bond1
@@ -461,7 +475,7 @@ port_channel_interfaces:
     enabled: true
     mode: trunk
     trunk:
-      allowed_vlan: 15,16
+      allowed_vlan: 1015,1016
       native_vlan: 1000
 - name: Port-Channel1644
   description: FIREWALL_DC-01_Bond1
@@ -491,7 +505,6 @@ port_channel_interfaces:
     enabled: true
     mode: trunk
     trunk:
-      allowed_vlan: '140'
       native_vlan: 1000
 - name: Port-Channel1642
   description: LOAD_BALANCER_02_Bond1
@@ -501,7 +514,6 @@ port_channel_interfaces:
     enabled: true
     mode: trunk
     trunk:
-      allowed_vlan: '140'
       native_vlan: 1000
 prefix_lists:
 - name: PL-LOOPBACKS-EVPN-OVERLAY
@@ -783,14 +795,6 @@ router_bgp:
       - 11166:11166
     redistribute_routes:
     - learned
-  - id: 18
-    tenant: TENANT1
-    rd: 10.118.0.3:10018
-    route_targets:
-      both:
-      - 10018:10018
-    redistribute_routes:
-    - learned
   - id: 1028
     tenant: TENANT1
     rd: 10.118.0.3:11028
@@ -815,12 +819,12 @@ router_bgp:
       - 12006:12006
     redistribute_routes:
     - learned
-  - id: 8
+  - id: 1008
     tenant: TENANT1
-    rd: 10.118.0.3:10008
+    rd: 10.118.0.3:11008
     route_targets:
       both:
-      - 10008:10008
+      - 11008:11008
     redistribute_routes:
     - learned
   - id: 1018
@@ -863,12 +867,12 @@ router_bgp:
       - 11301:11301
     redistribute_routes:
     - learned
-  - id: 7
+  - id: 1007
     tenant: TENANT1
-    rd: 10.118.0.3:10007
+    rd: 10.118.0.3:11007
     route_targets:
       both:
-      - 10007:10007
+      - 11007:11007
     redistribute_routes:
     - learned
   - id: 2016
@@ -917,14 +921,6 @@ router_bgp:
     route_targets:
       both:
       - 11201:11201
-    redistribute_routes:
-    - learned
-  - id: 17
-    tenant: TENANT1
-    rd: 10.118.0.3:10017
-    route_targets:
-      both:
-      - 10017:10017
     redistribute_routes:
     - learned
   - id: 1058
@@ -997,14 +993,6 @@ router_bgp:
     route_targets:
       both:
       - 11203:11203
-    redistribute_routes:
-    - learned
-  - id: 14
-    tenant: TENANT1
-    rd: 10.118.0.3:10014
-    route_targets:
-      both:
-      - 10014:10014
     redistribute_routes:
     - learned
   - id: 1005
@@ -1715,21 +1703,6 @@ vlans:
   trunk_groups:
   - MLAG
   tenant: TENANT1
-- id: 7
-  name: MPLS_Outside_DC_firewall
-  tenant: TENANT1
-- id: 8
-  name: Internet_HIS_VDOM_outside_DC_Fir
-  tenant: TENANT1
-- id: 14
-  name: PURE_VRF_MPLS
-  tenant: TENANT1
-- id: 17
-  name: PCS_AAN_MPLS
-  tenant: TENANT1
-- id: 18
-  name: EMAC-VLAN-For-Internet
-  tenant: TENANT1
 - id: 303
   name: SEHA_VPLS_HCF
   tenant: TENANT1
@@ -1738,6 +1711,12 @@ vlans:
   tenant: TENANT1
 - id: 1005
   name: PureCS_Network_Infra_nodes_OOB
+  tenant: TENANT1
+- id: 1007
+  name: MPLS_Outside_DC_firewall
+  tenant: TENANT1
+- id: 1008
+  name: Internet_HIS_VDOM_outside_DC_Fir
   tenant: TENANT1
 - id: 1017
   name: MPLS_Intranet_VDOM_Outside_P_FW_
@@ -1987,22 +1966,16 @@ vxlan_interface:
         vni: 11013
       - id: 1016
         vni: 11016
-      - id: 7
-        vni: 10007
-      - id: 8
-        vni: 10008
-      - id: 14
-        vni: 10014
-      - id: 17
-        vni: 10017
-      - id: 18
-        vni: 10018
       - id: 303
         vni: 10303
       - id: 1000
         vni: 11000
       - id: 1005
         vni: 11005
+      - id: 1007
+        vni: 11007
+      - id: 1008
+        vni: 11008
       - id: 1017
         vni: 11017
       - id: 1018

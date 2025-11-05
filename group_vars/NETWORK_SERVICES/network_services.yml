@@ -270,24 +270,12 @@ tenants:
       name: PureCS_Network_Infra_nodes_OOB
       tags: [ FE-Leaf, MGMT]
     -
-      id: 7
+      id: 1007
       name: MPLS_Outside_DC_firewall
       tags: [FE-Leaf]
     -
-      id: 8
+      id: 1008
       name: Internet_HIS_VDOM_outside_DC_Fir
-      tags: [FE-Leaf]
-    -
-      id: 14
-      name: PURE_VRF_MPLS
-      tags: [FE-Leaf]
-    -
-      id: 17
-      name: PCS_AAN_MPLS
-      tags: [FE-Leaf]
-    -
-      id: 18
-      name: EMAC-VLAN-For-Internet
       tags: [FE-Leaf]
     -
       id: 1163

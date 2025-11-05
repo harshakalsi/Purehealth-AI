@@ -8,7 +8,8 @@ port_profiles:
   - profile: Perimeter_FW
     mode: trunk
     native_vlan: 1000
-    vlans: "15,16"
+    speed: 'forced 10000full'
+    vlans: "1015,1016"
     storm_control:
       broadcast: 
         level: 10
@@ -19,6 +20,7 @@ port_profiles:
     mode: trunk
     native_vlan: 1000
     vlans: "1004-1006,1009,1011-1013,1025"
+    speed: 'forced 10000full'
     storm_control:
       broadcast: 
         level: 10
@@ -28,10 +30,10 @@ port_profiles:
   - profile: loadbalancer
     mode: trunk
     native_vlan: 1000
-    vlans: "140"
   
   - profile: CPE
     mode: access
+    speed: 'forced 1000full'
     native_vlan: 1000
   
   - profile: back-end-gpu-ports
@@ -39,6 +41,15 @@ port_profiles:
     native_vlan: 1000
     mode: trunk
     qos_profile: RDMA-QOS-TH-FABRIC-PROFILE-1
+    spanning_tree_portfast: edge
+    storm_control:
+      all: 
+        level: 10
+
+  - profile: FE-converged-fabric
+    native_vlan: 1000
+    mode: trunk
+    #qos_profile: RDMA-QOS-TH-FABRIC-PROFILE-1
     spanning_tree_portfast: edge
     storm_control:
       all: 
@@ -62,7 +73,7 @@ routers:
         # Device names where the server ports are connected.
         switches: [KDC-AR7508R3-PCS-FELEAF1]
         profile: CPE
-        vlans: "18"
+        vlans: "1018"
   
   - name: Internet-CPE-02
     adapters:
@@ -71,7 +82,7 @@ routers:
         # Device names where the server ports are connected.
         switches: [KDC-AR7508R3-PCS-FELEAF2]
         profile: CPE
-        vlans: "18"
+        vlans: "1018"
 
   - name: MPLS-CPE-01
     adapters:
@@ -80,7 +91,7 @@ routers:
         # Device names where the server ports are connected.
         switches: [KDC-AR7508R3-PCS-FELEAF1]
         profile: CPE
-        vlans: "17"
+        vlans: "1017"
   
   - name: MPLS-CPE-02
     adapters:
@@ -89,7 +100,7 @@ routers:
         # Device names where the server ports are connected.
         switches: [KDC-AR7508R3-PCS-FELEAF2]
         profile: CPE
-        vlans: "17"
+        vlans: "1017"
 
 load_balancers:
   - name: '01'
@@ -185,29 +196,17 @@ firewalls:
 
 servers:
   # Name of the defined server.
-  - name: dc1-leaf1-server1
+  - name: CPU1-01
     # Definition of adapters on the server.
     adapters:
         # Name of the server interfaces that will be used in the description of each interface
-      - endpoint_ports: [PCI1, PCI2]
+      - endpoint_ports: [0/1, 0/, 6/1, 6/2]
         # Device ports where the server ports are connected.
-        switch_ports: [Ethernet5, Ethernet5]
+        switch_ports: [Ethernet6/1, Ethernet6/1, Ethernet4/1/1, Ethernet4/1/1]
         # Device names where the server ports are connected.
-        switches: [KDC-AR7508R3-PCS-FELEAF1, KDC-AR7508R3-PCS-FELEAF2]
-        # VLANs that will be configured on these ports.
-        vlans: 11-12,21-22
-        # Native VLAN to be used on these ports.
-        native_vlan: 1000
-        # L2 mode of the port.
-        mode: trunk
-        # Spanning tree portfast configuration on this port.
-        spanning_tree_portfast: edge
-        # Definition of the pair of ports as port channel.
-        port_channel:
-          # The port-channel name on the endpoint that will be used in the port-channel description.
-          endpoint_port_channel: Bond1
-          # Port channel mode for LACP.
-          mode: active
+        switches: [KDC-AR7508R3-PCS-FELEAF1, KDC-AR7508R3-PCS-FELEAF2, KDC-AR7508R3-PCS-FELEAF1, KDC-AR7508R3-PCS-FELEAF2]
+        profile: FE-converged-fabric
+        
 
   - name: gpu1-01
     adapters:

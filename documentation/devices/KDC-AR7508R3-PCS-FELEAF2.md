@@ -556,16 +556,13 @@ vlan internal order ascending range 1006 1199
 
 | VLAN ID | Name | Trunk Groups |
 | ------- | ---- | ------------ |
-| 7 | MPLS_Outside_DC_firewall | - |
-| 8 | Internet_HIS_VDOM_outside_DC_Fir | - |
-| 14 | PURE_VRF_MPLS | - |
-| 17 | PCS_AAN_MPLS | - |
-| 18 | EMAC-VLAN-For-Internet | - |
 | 303 | SEHA_VPLS_HCF | - |
 | 1000 | native_vlan | - |
 | 1004 | PC-MGMT-MPLS | - |
 | 1005 | PureCS_Network_Infra_nodes_OOB | - |
 | 1006 | MPLS_PC-MPLS_VDOM_outside_DC_FW | - |
+| 1007 | MPLS_Outside_DC_firewall | - |
+| 1008 | Internet_HIS_VDOM_outside_DC_Fir | - |
 | 1009 | Internet_PC-MGMT_VDOM_Outside_DC | - |
 | 1010 | Internet_PC-WLD_VDOM_outside_DC_ | - |
 | 1011 | PC-Shared-INT | - |
@@ -656,21 +653,6 @@ vlan internal order ascending range 1006 1199
 
 ```eos
 !
-vlan 7
-   name MPLS_Outside_DC_firewall
-!
-vlan 8
-   name Internet_HIS_VDOM_outside_DC_Fir
-!
-vlan 14
-   name PURE_VRF_MPLS
-!
-vlan 17
-   name PCS_AAN_MPLS
-!
-vlan 18
-   name EMAC-VLAN-For-Internet
-!
 vlan 303
    name SEHA_VPLS_HCF
 !
@@ -685,6 +667,12 @@ vlan 1005
 !
 vlan 1006
    name MPLS_PC-MPLS_VDOM_outside_DC_FW
+!
+vlan 1007
+   name MPLS_Outside_DC_firewall
+!
+vlan 1008
+   name Internet_HIS_VDOM_outside_DC_Fir
 !
 vlan 1009
    name Internet_PC-MGMT_VDOM_Outside_DC
@@ -975,28 +963,29 @@ interface defaults
 | Ethernet3/22/1 | MLAG_KDC-AR7508R3-PCS-FELEAF1_Ethernet3/22/1 | *trunk | *- | *- | *MLAG | 1000 |
 | Ethernet3/23/1 | MLAG_KDC-AR7508R3-PCS-FELEAF1_Ethernet3/23/1 | *trunk | *- | *- | *MLAG | 1000 |
 | Ethernet3/24/1 | MLAG_KDC-AR7508R3-PCS-FELEAF1_Ethernet3/24/1 | *trunk | *- | *- | *MLAG | 1000 |
-| Ethernet5 | SERVER_dc1-leaf1-server1_PCI2 | *trunk | *11-12,21-22 | *1000 | *- | 5 |
-| Ethernet6/40/1 | LOAD_BALANCER_01_4.0 | *trunk | *140 | *1000 | *- | 1640 |
-| Ethernet6/41/1 | LOAD_BALANCER_01_6.0 | *trunk | *140 | *1000 | *- | 1640 |
-| Ethernet6/42/1 | LOAD_BALANCER_02_4.0 | *trunk | *140 | *1000 | *- | 1642 |
-| Ethernet6/43/1 | LOAD_BALANCER_02_6.0 | *trunk | *140 | *1000 | *- | 1642 |
+| Ethernet4/1/1 | SERVER_CPU1-01_6/2 | trunk | - | 1000 | - | - |
+| Ethernet6/1 | SERVER_CPU1-01_0/ | trunk | - | 1000 | - | - |
+| Ethernet6/40/1 | LOAD_BALANCER_01_4.0 | *trunk | *- | *1000 | *- | 1640 |
+| Ethernet6/41/1 | LOAD_BALANCER_01_6.0 | *trunk | *- | *1000 | *- | 1640 |
+| Ethernet6/42/1 | LOAD_BALANCER_02_4.0 | *trunk | *- | *1000 | *- | 1642 |
+| Ethernet6/43/1 | LOAD_BALANCER_02_6.0 | *trunk | *- | *1000 | *- | 1642 |
 | Ethernet6/44/1 | FIREWALL_DC-01_29 | *trunk | *1004-1006,1009,1011-1013,1025 | *1000 | *- | 1644 |
 | Ethernet6/45/1 | FIREWALL_DC-02_29 | *trunk | *1004-1006,1009,1011-1013,1025 | *1000 | *- | 1645 |
-| Ethernet6/46/1 | FIREWALL_perimerter-01_31 | *trunk | *15-16 | *1000 | *- | 1646 |
+| Ethernet6/46/1 | FIREWALL_perimerter-01_31 | *trunk | *1015-1016 | *1000 | *- | 1646 |
 | Ethernet6/47/1 | L2_KDC-AR7010TX-PCS-OOB1_Ethernet50 | *trunk | *1005 | *- | *- | 1647 |
 | Ethernet6/48/1 | L2_KDC-AR7010TX-PCS-OOB2_Ethernet50 | *trunk | *1005 | *- | *- | 1648 |
 | Ethernet6/49/1 | MLAG_KDC-AR7508R3-PCS-FELEAF1_Ethernet6/49/1 | *trunk | *- | *- | *MLAG | 1000 |
 | Ethernet6/50/1 | MLAG_KDC-AR7508R3-PCS-FELEAF1_Ethernet6/50/1 | *trunk | *- | *- | *MLAG | 1000 |
 | Ethernet7/37/1 | L2_KDC-AR7010TX-PCS-OOB3_Ethernet50 | *trunk | *1005 | *- | *- | 1639 |
-| Ethernet7/40/1 | LOAD_BALANCER_01_8.0 | *trunk | *140 | *1000 | *- | 1640 |
-| Ethernet7/41/1 | LOAD_BALANCER_01_10.0 | *trunk | *140 | *1000 | *- | 1640 |
-| Ethernet7/42/1 | LOAD_BALANCER_02_8.0 | *trunk | *140 | *1000 | *- | 1642 |
-| Ethernet7/43/1 | LOAD_BALANCER_02_10.0 | *trunk | *140 | *1000 | *- | 1642 |
+| Ethernet7/40/1 | LOAD_BALANCER_01_8.0 | *trunk | *- | *1000 | *- | 1640 |
+| Ethernet7/41/1 | LOAD_BALANCER_01_10.0 | *trunk | *- | *1000 | *- | 1640 |
+| Ethernet7/42/1 | LOAD_BALANCER_02_8.0 | *trunk | *- | *1000 | *- | 1642 |
+| Ethernet7/43/1 | LOAD_BALANCER_02_10.0 | *trunk | *- | *1000 | *- | 1642 |
 | Ethernet7/44/1 | FIREWALL_DC-01_30 | *trunk | *1004-1006,1009,1011-1013,1025 | *1000 | *- | 1644 |
 | Ethernet7/45/1 | FIREWALL_DC-02_30 | *trunk | *1004-1006,1009,1011-1013,1025 | *1000 | *- | 1645 |
-| Ethernet7/46/1 | FIREWALL_perimerter-02_31 | *trunk | *15-16 | *1000 | *- | 1746 |
-| Ethernet7/47/1 | ROUTER_Internet-CPE-02_2 | access | 18 | - | - | - |
-| Ethernet7/48/1 | ROUTER_MPLS-CPE-02_5 | access | 17 | - | - | - |
+| Ethernet7/46/1 | FIREWALL_perimerter-02_31 | *trunk | *1015-1016 | *1000 | *- | 1746 |
+| Ethernet7/47/1 | ROUTER_Internet-CPE-02_2 | access | 1018 | - | - | - |
+| Ethernet7/48/1 | ROUTER_MPLS-CPE-02_5 | access | 1017 | - | - | - |
 | Ethernet7/49/1 | MLAG_KDC-AR7508R3-PCS-FELEAF1_Ethernet7/49/1 | *trunk | *- | *- | *MLAG | 1000 |
 | Ethernet7/50/1 | MLAG_KDC-AR7508R3-PCS-FELEAF1_Ethernet7/50/1 | *trunk | *- | *- | *MLAG | 1000 |
 
@@ -1026,10 +1015,21 @@ interface Ethernet3/24/1
    no shutdown
    channel-group 1000 mode active
 !
-interface Ethernet5
-   description SERVER_dc1-leaf1-server1_PCI2
+interface Ethernet4/1/1
+   description SERVER_CPU1-01_6/2
    no shutdown
-   channel-group 5 mode active
+   switchport trunk native vlan 1000
+   switchport mode trunk
+   switchport
+   spanning-tree portfast
+!
+interface Ethernet6/1
+   description SERVER_CPU1-01_0/
+   no shutdown
+   switchport trunk native vlan 1000
+   switchport mode trunk
+   switchport
+   spanning-tree portfast
 !
 interface Ethernet6/40/1
    description LOAD_BALANCER_01_4.0
@@ -1054,16 +1054,19 @@ interface Ethernet6/43/1
 interface Ethernet6/44/1
    description FIREWALL_DC-01_29
    no shutdown
+   speed forced 10000full
    channel-group 1644 mode active
 !
 interface Ethernet6/45/1
    description FIREWALL_DC-02_29
    no shutdown
+   speed forced 10000full
    channel-group 1645 mode active
 !
 interface Ethernet6/46/1
    description FIREWALL_perimerter-01_31
    no shutdown
+   speed forced 10000full
    channel-group 1646 mode active
 !
 interface Ethernet6/47/1
@@ -1114,29 +1117,34 @@ interface Ethernet7/43/1
 interface Ethernet7/44/1
    description FIREWALL_DC-01_30
    no shutdown
+   speed forced 10000full
    channel-group 1644 mode active
 !
 interface Ethernet7/45/1
    description FIREWALL_DC-02_30
    no shutdown
+   speed forced 10000full
    channel-group 1645 mode active
 !
 interface Ethernet7/46/1
    description FIREWALL_perimerter-02_31
    no shutdown
+   speed forced 10000full
    channel-group 1746 mode active
 !
 interface Ethernet7/47/1
    description ROUTER_Internet-CPE-02_2
    no shutdown
-   switchport access vlan 18
+   speed forced 1000full
+   switchport access vlan 1018
    switchport mode access
    switchport
 !
 interface Ethernet7/48/1
    description ROUTER_MPLS-CPE-02_5
    no shutdown
-   switchport access vlan 17
+   speed forced 1000full
+   switchport access vlan 1017
    switchport mode access
    switchport
 !
@@ -1159,31 +1167,20 @@ interface Ethernet7/50/1
 
 | Interface | Description | Mode | VLANs | Native VLAN | Trunk Group | LACP Fallback Timeout | LACP Fallback Mode | MLAG ID | EVPN ESI |
 | --------- | ----------- | ---- | ----- | ----------- | ------------| --------------------- | ------------------ | ------- | -------- |
-| Port-Channel5 | SERVER_dc1-leaf1-server1_Bond1 | trunk | 11-12,21-22 | 1000 | - | - | - | 5 | - |
 | Port-Channel1000 | MLAG_KDC-AR7508R3-PCS-FELEAF1_Port-Channel1000 | trunk | - | - | MLAG | - | - | - | - |
 | Port-Channel1639 | L2_KDC-AR7010TX-PCS-OOB3_Port-Channel49 | trunk | 1005 | - | - | - | - | 1639 | - |
-| Port-Channel1640 | LOAD_BALANCER_01_Bond1 | trunk | 140 | 1000 | - | - | - | 1640 | - |
-| Port-Channel1642 | LOAD_BALANCER_02_Bond1 | trunk | 140 | 1000 | - | - | - | 1642 | - |
+| Port-Channel1640 | LOAD_BALANCER_01_Bond1 | trunk | - | 1000 | - | - | - | 1640 | - |
+| Port-Channel1642 | LOAD_BALANCER_02_Bond1 | trunk | - | 1000 | - | - | - | 1642 | - |
 | Port-Channel1644 | FIREWALL_DC-01_Bond1 | trunk | 1004-1006,1009,1011-1013,1025 | 1000 | - | - | - | 1644 | - |
 | Port-Channel1645 | FIREWALL_DC-02_Bond1 | trunk | 1004-1006,1009,1011-1013,1025 | 1000 | - | - | - | 1645 | - |
-| Port-Channel1646 | FIREWALL_perimerter-01_Bond1 | trunk | 15-16 | 1000 | - | - | - | 1646 | - |
+| Port-Channel1646 | FIREWALL_perimerter-01_Bond1 | trunk | 1015-1016 | 1000 | - | - | - | 1646 | - |
 | Port-Channel1647 | L2_KDC-AR7010TX-PCS-OOB1_Port-Channel49 | trunk | 1005 | - | - | - | - | 1647 | - |
 | Port-Channel1648 | L2_KDC-AR7010TX-PCS-OOB2_Port-Channel49 | trunk | 1005 | - | - | - | - | 1648 | - |
-| Port-Channel1746 | FIREWALL_perimerter-02_Bond1 | trunk | 15-16 | 1000 | - | - | - | 1746 | - |
+| Port-Channel1746 | FIREWALL_perimerter-02_Bond1 | trunk | 1015-1016 | 1000 | - | - | - | 1746 | - |
 
 #### Port-Channel Interfaces Device Configuration
 
 ```eos
-!
-interface Port-Channel5
-   description SERVER_dc1-leaf1-server1_Bond1
-   no shutdown
-   switchport trunk native vlan 1000
-   switchport trunk allowed vlan 11-12,21-22
-   switchport mode trunk
-   switchport
-   mlag 5
-   spanning-tree portfast
 !
 interface Port-Channel1000
    description MLAG_KDC-AR7508R3-PCS-FELEAF1_Port-Channel1000
@@ -1204,7 +1201,6 @@ interface Port-Channel1640
    description LOAD_BALANCER_01_Bond1
    no shutdown
    switchport trunk native vlan 1000
-   switchport trunk allowed vlan 140
    switchport mode trunk
    switchport
    mlag 1640
@@ -1213,7 +1209,6 @@ interface Port-Channel1642
    description LOAD_BALANCER_02_Bond1
    no shutdown
    switchport trunk native vlan 1000
-   switchport trunk allowed vlan 140
    switchport mode trunk
    switchport
    mlag 1642
@@ -1240,7 +1235,7 @@ interface Port-Channel1646
    description FIREWALL_perimerter-01_Bond1
    no shutdown
    switchport trunk native vlan 1000
-   switchport trunk allowed vlan 15,16
+   switchport trunk allowed vlan 1015,1016
    switchport mode trunk
    switchport
    mlag 1646
@@ -1265,7 +1260,7 @@ interface Port-Channel1746
    description FIREWALL_perimerter-02_Bond1
    no shutdown
    switchport trunk native vlan 1000
-   switchport trunk allowed vlan 15,16
+   switchport trunk allowed vlan 1015,1016
    switchport mode trunk
    switchport
    mlag 1746
@@ -1550,16 +1545,13 @@ interface Vlan4094
 
 | VLAN | VNI | Flood List | Multicast Group |
 | ---- | --- | ---------- | --------------- |
-| 7 | 10007 | - | - |
-| 8 | 10008 | - | - |
-| 14 | 10014 | - | - |
-| 17 | 10017 | - | - |
-| 18 | 10018 | - | - |
 | 303 | 10303 | - | - |
 | 1000 | 11000 | - | - |
 | 1004 | 11004 | - | - |
 | 1005 | 11005 | - | - |
 | 1006 | 11006 | - | - |
+| 1007 | 11007 | - | - |
+| 1008 | 11008 | - | - |
 | 1009 | 11009 | - | - |
 | 1010 | 11010 | - | - |
 | 1011 | 11011 | - | - |
@@ -1658,16 +1650,13 @@ interface Vxlan1
    vxlan source-interface Loopback1
    vxlan virtual-router encapsulation mac-address mlag-system-id
    vxlan udp-port 4789
-   vxlan vlan 7 vni 10007
-   vxlan vlan 8 vni 10008
-   vxlan vlan 14 vni 10014
-   vxlan vlan 17 vni 10017
-   vxlan vlan 18 vni 10018
    vxlan vlan 303 vni 10303
    vxlan vlan 1000 vni 11000
    vxlan vlan 1004 vni 11004
    vxlan vlan 1005 vni 11005
    vxlan vlan 1006 vni 11006
+   vxlan vlan 1007 vni 11007
+   vxlan vlan 1008 vni 11008
    vxlan vlan 1009 vni 11009
    vxlan vlan 1010 vni 11010
    vxlan vlan 1011 vni 11011
@@ -1895,16 +1884,13 @@ ASN Notation: asplain
 
 | VLAN | Route-Distinguisher | Both Route-Target | Import Route Target | Export Route-Target | Redistribute |
 | ---- | ------------------- | ----------------- | ------------------- | ------------------- | ------------ |
-| 7 | 10.118.0.4:10007 | 10007:10007 | - | - | learned |
-| 8 | 10.118.0.4:10008 | 10008:10008 | - | - | learned |
-| 14 | 10.118.0.4:10014 | 10014:10014 | - | - | learned |
-| 17 | 10.118.0.4:10017 | 10017:10017 | - | - | learned |
-| 18 | 10.118.0.4:10018 | 10018:10018 | - | - | learned |
 | 303 | 10.118.0.4:10303 | 10303:10303 | - | - | learned |
 | 1000 | 10.118.0.4:11000 | 11000:11000 | - | - | learned |
 | 1004 | 10.118.0.4:11004 | 11004:11004 | - | - | learned |
 | 1005 | 10.118.0.4:11005 | 11005:11005 | - | - | learned |
 | 1006 | 10.118.0.4:11006 | 11006:11006 | - | - | learned |
+| 1007 | 10.118.0.4:11007 | 11007:11007 | - | - | learned |
+| 1008 | 10.118.0.4:11008 | 11008:11008 | - | - | learned |
 | 1009 | 10.118.0.4:11009 | 11009:11009 | - | - | learned |
 | 1010 | 10.118.0.4:11010 | 11010:11010 | - | - | learned |
 | 1011 | 10.118.0.4:11011 | 11011:11011 | - | - | learned |
@@ -2034,31 +2020,6 @@ router bgp 65371
    neighbor 10.255.0.2 description dc1-spine2_Loopback0
    redistribute connected route-map RM-CONN-2-BGP
    !
-   vlan 7
-      rd 10.118.0.4:10007
-      route-target both 10007:10007
-      redistribute learned
-   !
-   vlan 8
-      rd 10.118.0.4:10008
-      route-target both 10008:10008
-      redistribute learned
-   !
-   vlan 14
-      rd 10.118.0.4:10014
-      route-target both 10014:10014
-      redistribute learned
-   !
-   vlan 17
-      rd 10.118.0.4:10017
-      route-target both 10017:10017
-      redistribute learned
-   !
-   vlan 18
-      rd 10.118.0.4:10018
-      route-target both 10018:10018
-      redistribute learned
-   !
    vlan 303
       rd 10.118.0.4:10303
       route-target both 10303:10303
@@ -2082,6 +2043,16 @@ router bgp 65371
    vlan 1006
       rd 10.118.0.4:11006
       route-target both 11006:11006
+      redistribute learned
+   !
+   vlan 1007
+      rd 10.118.0.4:11007
+      route-target both 11007:11007
+      redistribute learned
+   !
+   vlan 1008
+      rd 10.118.0.4:11008
+      route-target both 11008:11008
       redistribute learned
    !
    vlan 1009
